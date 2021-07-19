@@ -6,7 +6,7 @@ test('should initialize pagination', () => {
 
   expect(result.current.page).toBe(0)
   expect(result.current.search).toBe('')
-  expect(result.current.page).toBe(0)
+  expect(result.current.size).toBe(15)
 })
 
 test('should change page', () => {
