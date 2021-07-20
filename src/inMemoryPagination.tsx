@@ -1,7 +1,7 @@
 import { useState, useCallback, useMemo } from 'react'
 import { UseSearchAndPagination } from './types'
 
-const useSearchAndPaginationInMemory = (): UseSearchAndPagination => {
+const useSearchAndPagination = (): UseSearchAndPagination => {
   const initialState = useMemo(
     () => ({
       page: 0,
@@ -50,4 +50,4 @@ const useSearchAndPaginationInMemory = (): UseSearchAndPagination => {
   }
 }
 
-export { useSearchAndPaginationInMemory }
+export { useSearchAndPagination }

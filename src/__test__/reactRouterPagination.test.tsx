@@ -1,15 +1,12 @@
 import React from 'react'
 import { act, renderHook } from '@testing-library/react-hooks'
 import { BrowserRouter as Router } from 'react-router-dom'
-import { useSearchAndPaginationQueryUrlParameters } from '../reactRouterPagination'
+import { useSearchAndPagination } from '../reactRouterPagination'
 
 const wrapper: React.FC = ({ children }) => <Router>{children}</Router>
 
 test('should initialize pagination', () => {
-  const { result } = renderHook(
-    () => useSearchAndPaginationQueryUrlParameters(),
-    { wrapper }
-  )
+  const { result } = renderHook(() => useSearchAndPagination(), { wrapper })
 
   expect(result.current.page).toBe(0)
   expect(result.current.search).toBe('')
@@ -17,10 +14,7 @@ test('should initialize pagination', () => {
 })
 
 test('should change page', () => {
-  const { result } = renderHook(
-    () => useSearchAndPaginationQueryUrlParameters(),
-    { wrapper }
-  )
+  const { result } = renderHook(() => useSearchAndPagination(), { wrapper })
 
   act(() => {
     result.current.paginationActions.setPage(2)
@@ -31,10 +25,7 @@ test('should change page', () => {
 })
 
 test('should change search', () => {
-  const { result } = renderHook(
-    () => useSearchAndPaginationQueryUrlParameters(),
-    { wrapper }
-  )
+  const { result } = renderHook(() => useSearchAndPagination(), { wrapper })
 
   act(() => {
     result.current.searchActions.search('Max')
@@ -45,10 +36,7 @@ test('should change search', () => {
 })
 
 test('on search change -> page should be reset', () => {
-  const { result } = renderHook(
-    () => useSearchAndPaginationQueryUrlParameters(),
-    { wrapper }
-  )
+  const { result } = renderHook(() => useSearchAndPagination(), { wrapper })
 
   act(() => {
     result.current.paginationActions.setPage(2)
@@ -66,10 +54,7 @@ test('on search change -> page should be reset', () => {
 })
 
 test('clear pagination should reset search and page', () => {
-  const { result } = renderHook(
-    () => useSearchAndPaginationQueryUrlParameters(),
-    { wrapper }
-  )
+  const { result } = renderHook(() => useSearchAndPagination(), { wrapper })
 
   act(() => {
     result.current.searchActions.search('Max')

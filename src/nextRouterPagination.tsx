@@ -10,7 +10,7 @@ function getSingleParameterValue(
   return Array.isArray(parameter) ? parameter[0] : parameter
 }
 
-export function useSearchQueryUrlParameters(): UseSearchQuery {
+export function useSearch(): UseSearchQuery {
   const router = useRouter()
 
   return {
@@ -46,7 +46,7 @@ export function useSearchQueryUrlParameters(): UseSearchQuery {
   }
 }
 
-export function usePaginationQueryUrlParameters(): UsePagination {
+export function usePagination(): UsePagination {
   const router = useRouter()
 
   const setPage = useCallback(
@@ -72,9 +72,9 @@ export function usePaginationQueryUrlParameters(): UsePagination {
   }
 }
 
-export function useSearchAndPaginationQueryUrlParameters(): UseSearchAndPagination {
-  const searchParameters = useSearchQueryUrlParameters()
-  const paginationParameters = usePaginationQueryUrlParameters()
+export function useSearchAndPagination(): UseSearchAndPagination {
+  const searchParameters = useSearch()
+  const paginationParameters = usePagination()
 
   return {
     ...searchParameters,

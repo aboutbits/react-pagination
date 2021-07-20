@@ -4,7 +4,7 @@ import { useHistory, useLocation, useRouteMatch } from 'react-router-dom'
 import { UseSearchQuery, UsePagination, UseSearchAndPagination } from './types'
 import { convert } from './utils'
 
-export function useSearchQueryUrlParameters(): UseSearchQuery {
+export function useSearch(): UseSearchQuery {
   const routerHistory = useHistory()
   const { url: routerUrl } = useRouteMatch()
   const { search: routeQuery } = useLocation()
@@ -42,7 +42,7 @@ export function useSearchQueryUrlParameters(): UseSearchQuery {
   }
 }
 
-export function usePaginationQueryUrlParameters(): UsePagination {
+export function usePagination(): UsePagination {
   const routerHistory = useHistory()
   const { search: routeQuery } = useLocation()
   const { url: routerUrl } = useRouteMatch()
@@ -69,9 +69,9 @@ export function usePaginationQueryUrlParameters(): UsePagination {
   }
 }
 
-export function useSearchAndPaginationQueryUrlParameters(): UseSearchAndPagination {
-  const searchParameters = useSearchQueryUrlParameters()
-  const paginationParameters = usePaginationQueryUrlParameters()
+export function useSearchAndPagination(): UseSearchAndPagination {
+  const searchParameters = useSearch()
+  const paginationParameters = usePagination()
 
   return {
     ...searchParameters,
