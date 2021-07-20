@@ -140,7 +140,7 @@ Use this pagination hook if you want to keep track of the pagination in memory.
 This is very handy for dialogs.
 
 ```tsx
-import { useSearchAndPaginationInMemory } from '@aboutbits/react-pagination'
+import { useSearchAndPagination } from '@aboutbits/react-pagination/inMemoryPagination'
 ```
 
 ### React-Router based pagination
