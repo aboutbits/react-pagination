@@ -1,10 +1,13 @@
 import { useCallback, useMemo } from 'react'
 import { useHistory, useLocation, useRouteMatch } from 'react-router-dom'
 
-import { UseSearchAndPagination } from './types'
+import { IndexType, IUseSearchAndPagination } from './types'
 import { convert } from './utils'
 
-export function useSearchAndPagination(): UseSearchAndPagination {
+export const useSearchAndPagination: IUseSearchAndPagination = function (
+  config
+) {
+  const { indexType = IndexType.ZERO_BASED, pageSize = 15 } = config || {}
   const routerHistory = useHistory()
   const { url: routerUrl } = useRouteMatch()
   const { search: routeQuery } = useLocation()
@@ -53,8 +56,11 @@ export function useSearchAndPagination(): UseSearchAndPagination {
 
   return {
     search: params.get('search') || '',
-    page: convert(params.get('page'), 0),
-    size: convert(params.get('size'), 15),
+    page: convert(
+      params.get('page'),
+      indexType === IndexType.ZERO_BASED ? 0 : 1
+    ),
+    size: convert(params.get('size'), pageSize),
     actions: {
       search,
       clear,

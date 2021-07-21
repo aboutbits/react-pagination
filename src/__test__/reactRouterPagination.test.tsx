@@ -2,6 +2,7 @@ import React from 'react'
 import { act, renderHook } from '@testing-library/react-hooks'
 import { BrowserRouter as Router } from 'react-router-dom'
 import { useSearchAndPagination } from '../reactRouterPagination'
+import { IndexType } from '../types'
 
 const wrapper: React.FC = ({ children }) => <Router>{children}</Router>
 
@@ -74,4 +75,15 @@ test('clear pagination should reset search and page', () => {
   expect(result.current.search).toBe('')
   expect(result.current.page).toBe(0)
   expect(window.location.search).toBe('')
+})
+
+test('change default parameters', () => {
+  const { result } = renderHook(
+    () =>
+      useSearchAndPagination({ indexType: IndexType.ONE_BASED, pageSize: 10 }),
+    { wrapper }
+  )
+
+  expect(result.current.page).toBe(1)
+  expect(result.current.size).toBe(10)
 })

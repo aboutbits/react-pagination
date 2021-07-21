@@ -4,6 +4,7 @@ import { act, renderHook } from '@testing-library/react-hooks'
 import router from 'next/router'
 
 import { useSearchAndPagination } from '../nextRouterPagination'
+import { IndexType } from '../types'
 
 jest.mock('next/router', () => require('next-router-mock'))
 
@@ -79,4 +80,13 @@ test('clear pagination should reset search and page', () => {
   expect(result.current.page).toBe(0)
   expect(router.query.search).toBeUndefined()
   expect(router.query.page).toBeUndefined()
+})
+
+test('change default parameters', () => {
+  const { result } = renderHook(() =>
+    useSearchAndPagination({ indexType: IndexType.ONE_BASED, pageSize: 10 })
+  )
+
+  expect(result.current.page).toBe(1)
+  expect(result.current.size).toBe(10)
 })

@@ -1,3 +1,13 @@
+export enum IndexType {
+  ZERO_BASED = 0,
+  ONE_BASED = 1,
+}
+
+export type Config = {
+  indexType?: IndexType
+  pageSize?: number
+}
+
 export type Actions = {
   search: (query: string) => void
   clear: () => void
@@ -9,4 +19,8 @@ export type UseSearchAndPagination = {
   page: number
   size: number
   actions: Actions
+}
+
+export interface IUseSearchAndPagination {
+  (config?: Config): UseSearchAndPagination
 }

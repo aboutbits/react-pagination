@@ -1,5 +1,6 @@
 import { act, renderHook } from '@testing-library/react-hooks'
 import { useSearchAndPagination } from '../inMemoryPagination'
+import { IndexType } from '../types'
 
 test('should initialize pagination', () => {
   const { result } = renderHook(() => useSearchAndPagination())
@@ -66,4 +67,13 @@ test('clear pagination should reset search and page', () => {
 
   expect(result.current.search).toBe('')
   expect(result.current.page).toBe(0)
+})
+
+test('change default parameters', () => {
+  const { result } = renderHook(() =>
+    useSearchAndPagination({ indexType: IndexType.ONE_BASED, pageSize: 10 })
+  )
+
+  expect(result.current.page).toBe(1)
+  expect(result.current.size).toBe(10)
 })

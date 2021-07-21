@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router'
 import { useCallback } from 'react'
 
-import { UseSearchAndPagination } from './types'
+import { IndexType, IUseSearchAndPagination } from './types'
 import { convert } from './utils'
 
 function getSingleParameterValue(
@@ -10,7 +10,10 @@ function getSingleParameterValue(
   return Array.isArray(parameter) ? parameter[0] : parameter
 }
 
-export function useSearchAndPagination(): UseSearchAndPagination {
+export const useSearchAndPagination: IUseSearchAndPagination = function (
+  config
+) {
+  const { indexType = IndexType.ZERO_BASED, pageSize = 15 } = config || {}
   const router = useRouter()
 
   const setPage = useCallback(
@@ -60,8 +63,11 @@ export function useSearchAndPagination(): UseSearchAndPagination {
 
   return {
     search: getSingleParameterValue(router.query.search) || '',
-    page: convert(getSingleParameterValue(router.query.page) || null, 0),
-    size: convert(getSingleParameterValue(router.query.size) || null, 15),
+    page: convert(
+      getSingleParameterValue(router.query.page) || null,
+      indexType === IndexType.ZERO_BASED ? 0 : 1
+    ),
+    size: convert(getSingleParameterValue(router.query.size) || null, pageSize),
     actions: {
       search,
       clear,

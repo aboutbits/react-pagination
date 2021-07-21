@@ -1,11 +1,15 @@
-import { useState, useCallback, useMemo } from 'react'
-import { UseSearchAndPagination } from './types'
+import { useCallback, useMemo, useState } from 'react'
+import { IndexType, IUseSearchAndPagination } from './types'
 
-const useSearchAndPagination = (): UseSearchAndPagination => {
+export const useSearchAndPagination: IUseSearchAndPagination = function (
+  config
+) {
+  const { indexType = IndexType.ZERO_BASED, pageSize = 15 } = config || {}
+  const firstPage = indexType === IndexType.ZERO_BASED ? 0 : 1
   const initialState = useMemo(
     () => ({
-      page: 0,
-      size: 15,
+      page: firstPage,
+      size: pageSize,
       searchQuery: '',
     }),
     []
@@ -49,5 +53,3 @@ const useSearchAndPagination = (): UseSearchAndPagination => {
     size: state.size,
   }
 }
-
-export { useSearchAndPagination }
