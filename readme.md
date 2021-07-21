@@ -46,7 +46,7 @@ The hook returns the following object:
 |actions|object|object with 3 functions: search, setPage, clear|
 
 ```tsx
-import { useSearchAndPagination } from '@aboutbits/react-pagination/nextRouterPagination'
+import { useSearchAndPagination } from '@aboutbits/react-pagination/dist/nextRouterPagination'
 
 const users = [
     'Alex', 'Simon', 'Natan', 'Nadia', 'Moritz', 'Marie'
@@ -87,7 +87,7 @@ This package includes 3 different implementations of the above hook.
 Use this pagination hook if you want to keep track of the pagination in memory. This is very handy for dialogs.
 
 ```tsx
-import { useSearchAndPagination } from '@aboutbits/react-pagination/inMemoryPagination'
+import { useSearchAndPagination } from '@aboutbits/react-pagination/dist/inMemoryPagination'
 ```
 
 ### React-Router based pagination
@@ -95,7 +95,7 @@ import { useSearchAndPagination } from '@aboutbits/react-pagination/inMemoryPagi
 These are specific hooks for applications that use [React Router](https://reactrouter.com/) for routing.
 
 ```tsx
-import { useSearchAndPagination } from '@aboutbits/react-pagination/reactRouterPagination'
+import { useSearchAndPagination } from '@aboutbits/react-pagination/dist/reactRouterPagination'
 ```
 
 ### NextJS Router based pagination
@@ -104,7 +104,7 @@ These are specific hooks for applications that use [NextJS Router](https://nextj
 for routing.
 
 ```tsx
-import { useSearchAndPagination } from '@aboutbits/react-pagination/nextRouterPagination'
+import { useSearchAndPagination } from '@aboutbits/react-pagination/dist/nextRouterPagination'
 ```
 
 ## Build & Publish
