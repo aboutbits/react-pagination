@@ -19,7 +19,7 @@ test('should change page', () => {
   const { result } = renderHook(() => useSearchAndPagination())
 
   act(() => {
-    result.current.paginationActions.setPage(2)
+    result.current.actions.setPage(2)
   })
 
   expect(result.current.page).toBe(2)
@@ -30,7 +30,7 @@ test('should change search', () => {
   const { result } = renderHook(() => useSearchAndPagination())
 
   act(() => {
-    result.current.searchActions.search('Max')
+    result.current.actions.search('Max')
   })
 
   expect(result.current.search).toBe('Max')
@@ -41,14 +41,14 @@ test('on search change -> page should be reset', () => {
   const { result } = renderHook(() => useSearchAndPagination())
 
   act(() => {
-    result.current.paginationActions.setPage(2)
+    result.current.actions.setPage(2)
   })
 
   expect(result.current.page).toBe(2)
   expect(router.query.page).toBe('2')
 
   act(() => {
-    result.current.searchActions.search('Max')
+    result.current.actions.search('Max')
   })
 
   expect(result.current.search).toBe('Max')
@@ -61,18 +61,18 @@ test('clear pagination should reset search and page', () => {
   const { result } = renderHook(() => useSearchAndPagination())
 
   act(() => {
-    result.current.searchActions.search('Max')
+    result.current.actions.search('Max')
   })
 
   act(() => {
-    result.current.paginationActions.setPage(2)
+    result.current.actions.setPage(2)
   })
 
   expect(router.query.search).toBe('Max')
   expect(router.query.page).toBe('2')
 
   act(() => {
-    result.current.searchActions.clear()
+    result.current.actions.clear()
   })
 
   expect(result.current.search).toBe('')

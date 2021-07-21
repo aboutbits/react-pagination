@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router'
 import { useCallback } from 'react'
 
-import { UseSearchQuery, UsePagination, UseSearchAndPagination } from './types'
+import { UseSearchAndPagination } from './types'
 import { convert } from './utils'
 
 function getSingleParameterValue(
@@ -10,43 +10,7 @@ function getSingleParameterValue(
   return Array.isArray(parameter) ? parameter[0] : parameter
 }
 
-export function useSearch(): UseSearchQuery {
-  const router = useRouter()
-
-  return {
-    search: getSingleParameterValue(router.query.search) || '',
-    searchActions: {
-      search: (query: string) => {
-        const params: { page?: string; size?: string; search?: string } = {
-          ...router.query,
-          search: query === '' ? undefined : query,
-        }
-
-        delete params['page']
-        delete params['size']
-
-        router.push({
-          query: params,
-        })
-      },
-      clear: () => {
-        const params = {
-          ...router.query,
-        }
-
-        delete params['search']
-        delete params['page']
-        delete params['size']
-
-        router.push({
-          query: params,
-        })
-      },
-    },
-  }
-}
-
-export function usePagination(): UsePagination {
+export function useSearchAndPagination(): UseSearchAndPagination {
   const router = useRouter()
 
   const setPage = useCallback(
@@ -63,21 +27,45 @@ export function usePagination(): UsePagination {
     [router]
   )
 
+  const search = useCallback(
+    (query: string) => {
+      const params: { page?: string; size?: string; search?: string } = {
+        ...router.query,
+        search: query === '' ? undefined : query,
+      }
+
+      delete params['page']
+      delete params['size']
+
+      router.push({
+        query: params,
+      })
+    },
+    [router]
+  )
+
+  const clear = useCallback(() => {
+    const params = {
+      ...router.query,
+    }
+
+    delete params['search']
+    delete params['page']
+    delete params['size']
+
+    router.push({
+      query: params,
+    })
+  }, [router])
+
   return {
+    search: getSingleParameterValue(router.query.search) || '',
     page: convert(getSingleParameterValue(router.query.page) || null, 0),
     size: convert(getSingleParameterValue(router.query.size) || null, 15),
-    paginationActions: {
+    actions: {
+      search,
+      clear,
       setPage,
     },
-  }
-}
-
-export function useSearchAndPagination(): UseSearchAndPagination {
-  const searchParameters = useSearch()
-  const paginationParameters = usePagination()
-
-  return {
-    ...searchParameters,
-    ...paginationParameters,
   }
 }

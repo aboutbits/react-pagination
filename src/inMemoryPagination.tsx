@@ -40,13 +40,13 @@ const useSearchAndPagination = (): UseSearchAndPagination => {
 
   return {
     search: state.searchQuery,
-    searchActions: {
+    actions: {
       search,
       clear,
+      setPage,
     },
     page: state.page,
     size: state.size,
-    paginationActions: { setPage },
   }
 }
 

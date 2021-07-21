@@ -1,10 +1,10 @@
-import { useCallback, useMemo } from 'react'
+import { useMemo } from 'react'
 import { useHistory, useLocation, useRouteMatch } from 'react-router-dom'
 
-import { UseSearchQuery, UsePagination, UseSearchAndPagination } from './types'
+import { UseSearchAndPagination } from './types'
 import { convert } from './utils'
 
-export function useSearch(): UseSearchQuery {
+export function useSearchAndPagination(): UseSearchAndPagination {
   const routerHistory = useHistory()
   const { url: routerUrl } = useRouteMatch()
   const { search: routeQuery } = useLocation()
@@ -13,7 +13,9 @@ export function useSearch(): UseSearchQuery {
 
   return {
     search: params.get('search') || '',
-    searchActions: {
+    page: convert(params.get('page'), 0),
+    size: convert(params.get('size'), 15),
+    actions: {
       search: (query: string) => {
         if (query === '') {
           params.delete('search')
@@ -38,43 +40,13 @@ export function useSearch(): UseSearchQuery {
           search: params.toString(),
         })
       },
+      setPage: (page: number) => {
+        params.set('page', page.toString())
+        routerHistory.push({
+          pathname: routerUrl,
+          search: params.toString(),
+        })
+      },
     },
-  }
-}
-
-export function usePagination(): UsePagination {
-  const routerHistory = useHistory()
-  const { search: routeQuery } = useLocation()
-  const { url: routerUrl } = useRouteMatch()
-
-  const params = useMemo(() => new URLSearchParams(routeQuery), [routeQuery])
-
-  const setPage = useCallback(
-    (page: number) => {
-      params.set('page', page.toString())
-      routerHistory.push({
-        pathname: routerUrl,
-        search: params.toString(),
-      })
-    },
-    [params, routerHistory, routerUrl]
-  )
-
-  return {
-    page: convert(params.get('page'), 0),
-    size: convert(params.get('size'), 15),
-    paginationActions: {
-      setPage,
-    },
-  }
-}
-
-export function useSearchAndPagination(): UseSearchAndPagination {
-  const searchParameters = useSearch()
-  const paginationParameters = usePagination()
-
-  return {
-    ...searchParameters,
-    ...paginationParameters,
   }
 }
