@@ -36,14 +36,14 @@ Second, you can make use of the `useSearchAndPagination` hook. This package impl
 This hook supports the combination of a search value and pagination and manages the state of the search value, and the
 pagination values.
 
-The hook supports following configuration parameter object:
+#### The hook supports following configuration parameter object:
 
-|value|type|description|
-|---|---|---|
-|indexType|IndexType|It defines whether the pagination is zero or one based. default: 0|
-|pageSize|number|Page size of the pagination. default: 15|
+|value|type|default|description|
+|---|---|---|---|
+|indexType|IndexType|IndexType.ZERO_BASED|It defines whether the pagination is zero or one based.|
+|pageSize|number|15|Page size of the pagination.|
 
-The hook returns the following object:
+#### The hook returns the following object:
 
 |value|type|description|
 |---|---|---|
@@ -51,6 +51,8 @@ The hook returns the following object:
 |page|number|value of the current page|
 |size|number|max elements in a single page|
 |actions|object|object with 3 functions: search, setPage, clear|
+
+#### Example usage with NextJS
 
 ```tsx
 import { useSearchAndPagination } from '@aboutbits/react-pagination/dist/nextRouterPagination'
