@@ -36,6 +36,13 @@ Second, you can make use of the `useSearchAndPagination` hook. This package impl
 This hook supports the combination of a search value and pagination and manages the state of the search value, and the
 pagination values.
 
+The hook supports following configuration parameter object:
+
+|value|type|description|
+|---|---|---|
+|indexType|IndexType|It defines whether the pagination is zero or one based. default: 0|
+|pageSize|number|Page size of the pagination. default: 15|
+
 The hook returns the following object:
 
 |value|type|description|
@@ -53,7 +60,7 @@ const users = [
 ]
 
 function UserList() {
-    const { page, size, search, actions } = useSearchAndPagination()
+    const { page, size, search, actions } = useSearchAndPagination({pageSize: 2})
 
     return (
         <div>
