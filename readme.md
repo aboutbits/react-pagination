@@ -1,6 +1,9 @@
 React Pagination
 =============
 
+[![npm package](https://badge.fury.io/js/%40aboutbits%2Freact-pagination.svg)](https://badge.fury.io/js/%40aboutbits%2Freact-pagination)
+[![license](https://img.shields.io/github/license/aboutbits/react-pagination)](https://github.com/aboutbits/react-pagination/blob/main/license.md)
+
 This package includes pagination hooks for React. The hooks support saving the search and pagination values in local
 state or in the browser URL.
 
