@@ -1,17 +1,16 @@
 import { act, renderHook } from '@testing-library/react-hooks'
-import { useSearchAndPagination } from '../inMemoryPagination'
+import { useQueryAndPagination } from '../inMemoryPagination'
 import { IndexType } from '../types'
 
 test('should initialize pagination', () => {
-  const { result } = renderHook(() => useSearchAndPagination())
+  const { result } = renderHook(() => useQueryAndPagination())
 
   expect(result.current.page).toBe(0)
-  expect(result.current.search).toBe('')
   expect(result.current.size).toBe(15)
 })
 
 test('should change page', () => {
-  const { result } = renderHook(() => useSearchAndPagination())
+  const { result } = renderHook(() => useQueryAndPagination())
 
   act(() => {
     result.current.actions.setPage(2)
@@ -21,17 +20,21 @@ test('should change page', () => {
 })
 
 test('should change search', () => {
-  const { result } = renderHook(() => useSearchAndPagination())
+  const { result } = renderHook(() =>
+    useQueryAndPagination({ defaultQueryParameters: { query: '' } })
+  )
 
   act(() => {
-    result.current.actions.search('Max')
+    result.current.actions.query({ query: 'Max' })
   })
 
-  expect(result.current.search).toBe('Max')
+  expect(result.current.queryParameters.query).toBe('Max')
 })
 
 test('on search change -> page should be reset', () => {
-  const { result } = renderHook(() => useSearchAndPagination())
+  const { result } = renderHook(() =>
+    useQueryAndPagination({ defaultQueryParameters: { query: '' } })
+  )
 
   act(() => {
     result.current.actions.setPage(2)
@@ -40,38 +43,40 @@ test('on search change -> page should be reset', () => {
   expect(result.current.page).toBe(2)
 
   act(() => {
-    result.current.actions.search('Max')
+    result.current.actions.query({ query: 'Max' })
   })
 
-  expect(result.current.search).toBe('Max')
+  expect(result.current.queryParameters.query).toBe('Max')
   expect(result.current.page).toBe(0)
 })
 
 test('clear pagination should reset search and page', () => {
-  const { result } = renderHook(() => useSearchAndPagination())
+  const { result } = renderHook(() =>
+    useQueryAndPagination({ defaultQueryParameters: { query: '' } })
+  )
 
   act(() => {
-    result.current.actions.search('Max')
+    result.current.actions.query({ query: 'Max' })
   })
 
   act(() => {
     result.current.actions.setPage(2)
   })
 
-  expect(result.current.search).toBe('Max')
+  expect(result.current.queryParameters.query).toBe('Max')
   expect(result.current.page).toBe(2)
 
   act(() => {
     result.current.actions.clear()
   })
 
-  expect(result.current.search).toBe('')
+  expect(result.current.queryParameters.query).toBe('')
   expect(result.current.page).toBe(0)
 })
 
 test('change default parameters', () => {
   const { result } = renderHook(() =>
-    useSearchAndPagination({ indexType: IndexType.ONE_BASED, pageSize: 10 })
+    useQueryAndPagination({ indexType: IndexType.ONE_BASED, pageSize: 10 })
   )
 
   expect(result.current.page).toBe(1)

@@ -1,10 +1,10 @@
 import { useCallback, useMemo } from 'react'
 import { useHistory, useLocation, useRouteMatch } from 'react-router-dom'
 
-import { IndexType, IUseSearchAndPagination } from './types'
+import { IndexType, IUseQueryAndPagination } from './types'
 import { convert } from './utils'
 
-export const useSearchAndPagination: IUseSearchAndPagination = function (
+export const useSearchAndPagination: IUseQueryAndPagination = function (
   config
 ) {
   const { indexType = IndexType.ZERO_BASED, pageSize = 15 } = config || {}
