@@ -33,9 +33,7 @@ function extractCurrentQueryParameters(
   return result
 }
 
-export const useSearchAndPagination: IUseQueryAndPagination = function (
-  config
-) {
+export const useQueryAndPagination: IUseQueryAndPagination = function (config) {
   const { indexType = IndexType.ZERO_BASED, pageSize = 15 } = config || {}
   const router = useRouter()
 

@@ -3,7 +3,7 @@ import React from 'react'
 import { act, renderHook } from '@testing-library/react-hooks'
 import router from 'next/router'
 
-import { useSearchAndPagination } from '../nextRouterPagination'
+import { useQueryAndPagination } from '../nextRouterPagination'
 import { IndexType } from '../types'
 
 jest.mock('next/router', () => require('next-router-mock'))
@@ -13,14 +13,14 @@ beforeEach(() => {
 })
 
 test('should initialize pagination', () => {
-  const { result } = renderHook(() => useSearchAndPagination())
+  const { result } = renderHook(() => useQueryAndPagination())
 
   expect(result.current.page).toBe(0)
   expect(result.current.size).toBe(15)
 })
 
 test('should change page', () => {
-  const { result } = renderHook(() => useSearchAndPagination())
+  const { result } = renderHook(() => useQueryAndPagination())
 
   act(() => {
     result.current.actions.setPage(2)
@@ -32,7 +32,7 @@ test('should change page', () => {
 
 test('should change search', () => {
   const { result } = renderHook(() =>
-    useSearchAndPagination({ defaultQueryParameters: { search: '' } })
+    useQueryAndPagination({ defaultQueryParameters: { search: '' } })
   )
 
   act(() => {
@@ -45,7 +45,7 @@ test('should change search', () => {
 
 test('clear pagination should reset search and page', () => {
   const { result } = renderHook(() =>
-    useSearchAndPagination({ defaultQueryParameters: { search: '' } })
+    useQueryAndPagination({ defaultQueryParameters: { search: '' } })
   )
 
   act(() => {
@@ -71,7 +71,7 @@ test('clear pagination should reset search and page', () => {
 
 test('change default parameters', () => {
   const { result } = renderHook(() =>
-    useSearchAndPagination({ indexType: IndexType.ONE_BASED, pageSize: 10 })
+    useQueryAndPagination({ indexType: IndexType.ONE_BASED, pageSize: 10 })
   )
 
   expect(result.current.page).toBe(1)
@@ -80,7 +80,7 @@ test('change default parameters', () => {
 
 test('on search change -> page should be reset', () => {
   const { result } = renderHook(() =>
-    useSearchAndPagination({ defaultQueryParameters: { search: '' } })
+    useQueryAndPagination({ defaultQueryParameters: { search: '' } })
   )
 
   act(() => {
