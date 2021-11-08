@@ -109,6 +109,9 @@ test('query multiple different properties, should keep them all', () => {
 
   act(() => {
     result.current.actions.updateQuery({ search: 'Max' })
+  })
+
+  act(() => {
     result.current.actions.updateQuery({ department: 'IT' })
   })
 
