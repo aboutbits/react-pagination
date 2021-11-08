@@ -1,13 +1,13 @@
 React Pagination
 =============
 
-This package includes pagination hooks for React. The hooks support saving the search and pagination values in local
+This package includes pagination hooks for React. The hooks support saving the query and pagination values in local
 state or in the browser URL.
 
 ## Table of content
 
 - [Usage](#usage)
-    - [useSearchAndPagination](#usesearchandpagination)
+    - [useQueryAndPagination](#usequeryandpagination)
 - [Supported Implementations](#supported-implementations)
     - [In Memory Pagination](#in-memory-pagination)
     - [React-Router based pagination](#react-router-based-pagination)
@@ -23,7 +23,7 @@ First, you have to install the package:
 npm install @aboutbits/react-pagination
 ```
 
-Second, you can make use of the `useSearchAndPagination` hook. This package implements 3 versions of this hook:
+Second, you can make use of the `useQueryAndPagination` hook. This package implements 3 versions of this hook:
 
 - [In Memory](#in-memory-pagination): Use this hook where you don't want to modify browser history. e.g. Dialogs
 - [React Router](#react-router-based-pagination): Use this hook if you want to keep track of the state in the URL and
@@ -31,9 +31,9 @@ Second, you can make use of the `useSearchAndPagination` hook. This package impl
 - [NextJS Router](#nextjs-router-based-pagination): Use this hook if you want to keep track of the state in the URL and
   your project is using NextJS.
 
-### useSearchAndPagination
+### useQueryAndPagination
 
-This hook supports the combination of a search value and pagination and manages the state of the search value, and the
+This hook supports the combination of query parameters and pagination and manages the state of the query parameter values and the
 pagination values.
 
 #### The hook supports following configuration parameter object:
@@ -42,31 +42,32 @@ pagination values.
 |---|---|---|---|
 |indexType|IndexType|IndexType.ZERO_BASED|It defines whether the pagination is zero or one based.|
 |pageSize|number|15|Page size of the pagination.|
+|defaultQueryParameters/Record<string, string>|{}|It defines the default value for each query parameter. This is used to remove a query parameter from the URL and also to clear the query.
 
 #### The hook returns the following object:
 
 |value|type|description|
 |---|---|---|
-|search|string|value of your search parameter|
+|queryParameters|object|values of your query parameters|
 |page|number|value of the current page|
 |size|number|max elements in a single page|
-|actions|object|object with 3 functions: search, setPage, clear|
+|actions|object|object with 3 functions: updateQuery, setPage, clear|
 
 #### Example usage with NextJS
 
 ```tsx
-import { useSearchAndPagination } from '@aboutbits/react-pagination/dist/nextRouterPagination'
+import { useQueryAndPagination } from '@aboutbits/react-pagination/dist/nextRouterPagination'
 
 const users = [
     'Alex', 'Simon', 'Natan', 'Nadia', 'Moritz', 'Marie'
 ]
 
 function UserList() {
-    const { page, size, search, actions } = useSearchAndPagination({pageSize: 2})
+    const { page, size, queryParameters, actions } = useQueryAndPagination({pageSize: 2})
 
     return (
         <div>
-            <input onChange={(value) => actions.search(value)}/>
+            <input onChange={(value) => actions.updateQuery({search: value})}/>
             <button onClick={() => actions.clear()}>Clear Input</button>
             <select onSelect={(value) => actions.setPage(value)}>
                 <option value={0}>First Page</option>
@@ -74,7 +75,7 @@ function UserList() {
             </select>
 
             <ul>
-                {users.filter(user => user.startsWith(search))
+                {users.filter(user => user.startsWith(queryParameters.search))
                     .slice(page, page + size)
                     .map(user => <li>{user}</li>)}
             </ul>
@@ -96,7 +97,7 @@ This package includes 3 different implementations of the above hook.
 Use this pagination hook if you want to keep track of the pagination in memory. This is very handy for dialogs.
 
 ```tsx
-import { useSearchAndPagination } from '@aboutbits/react-pagination/dist/inMemoryPagination'
+import { useQueryAndPagination } from '@aboutbits/react-pagination/dist/inMemoryPagination'
 ```
 
 ### React-Router based pagination
@@ -104,7 +105,7 @@ import { useSearchAndPagination } from '@aboutbits/react-pagination/dist/inMemor
 These are specific hooks for applications that use [React Router](https://reactrouter.com/) for routing.
 
 ```tsx
-import { useSearchAndPagination } from '@aboutbits/react-pagination/dist/reactRouterPagination'
+import { useQueryAndPagination } from '@aboutbits/react-pagination/dist/reactRouterPagination'
 ```
 
 ### NextJS Router based pagination
@@ -113,7 +114,7 @@ These are specific hooks for applications that use [NextJS Router](https://nextj
 for routing.
 
 ```tsx
-import { useSearchAndPagination } from '@aboutbits/react-pagination/dist/nextRouterPagination'
+import { useQueryAndPagination } from '@aboutbits/react-pagination/dist/nextRouterPagination'
 ```
 
 ## Build & Publish
