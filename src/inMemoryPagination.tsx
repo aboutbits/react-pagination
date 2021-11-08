@@ -57,7 +57,10 @@ export const useQueryAndPagination: IUseQueryAndPagination = function (config) {
   }, [])
 
   return {
-    queryParameters: state.queryParameters,
+    queryParameters: {
+      ...(config?.defaultQueryParameters ? config.defaultQueryParameters : {}),
+      ...state.queryParameters,
+    },
     actions: {
       updateQuery,
       clear,
