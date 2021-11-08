@@ -3,24 +3,27 @@ export enum IndexType {
   ONE_BASED = 1,
 }
 
+export type QueryParameters = Record<string, string>
+
 export type Config = {
   indexType?: IndexType
   pageSize?: number
+  defaultQueryParameters?: QueryParameters
 }
 
 export type Actions = {
-  search: (query: string) => void
+  updateQuery: (query: QueryParameters) => void
   clear: () => void
   setPage: (page: number) => void
 }
 
-export type UseSearchAndPagination = {
-  search: string
+export type UseQueryAndPagination = {
+  queryParameters: QueryParameters
   page: number
   size: number
   actions: Actions
 }
 
-export interface IUseSearchAndPagination {
-  (config?: Config): UseSearchAndPagination
+export interface IUseQueryAndPagination {
+  (config?: Config): UseQueryAndPagination
 }

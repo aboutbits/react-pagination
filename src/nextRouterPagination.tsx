@@ -1,7 +1,8 @@
+import { ParsedUrlQuery } from 'querystring'
 import { useRouter } from 'next/router'
 import { useCallback } from 'react'
 
-import { IndexType, IUseSearchAndPagination } from './types'
+import { IndexType, IUseQueryAndPagination, QueryParameters } from './types'
 import { convert } from './utils'
 
 function getSingleParameterValue(
@@ -10,9 +11,29 @@ function getSingleParameterValue(
   return Array.isArray(parameter) ? parameter[0] : parameter
 }
 
-export const useSearchAndPagination: IUseSearchAndPagination = function (
-  config
+function extractCurrentQueryParameters(
+  query: ParsedUrlQuery,
+  defaultQueryParameters?: QueryParameters
 ) {
+  if (!defaultQueryParameters) {
+    return {}
+  }
+
+  const result: QueryParameters = { ...defaultQueryParameters }
+
+  for (const parameter in defaultQueryParameters) {
+    if (
+      query[parameter] &&
+      getSingleParameterValue(query[parameter]) !== undefined
+    ) {
+      result[parameter] = getSingleParameterValue(query[parameter]) as string
+    }
+  }
+
+  return result
+}
+
+export const useQueryAndPagination: IUseQueryAndPagination = function (config) {
   const { indexType = IndexType.ZERO_BASED, pageSize = 15 } = config || {}
   const router = useRouter()
 
@@ -30,11 +51,22 @@ export const useSearchAndPagination: IUseSearchAndPagination = function (
     [router]
   )
 
-  const search = useCallback(
-    (query: string) => {
-      const params: { page?: string; size?: string; search?: string } = {
+  const updateQuery = useCallback(
+    (queryParameters: QueryParameters) => {
+      const params = {
         ...router.query,
-        search: query === '' ? undefined : query,
+      }
+
+      for (const parameter in queryParameters) {
+        if (
+          config?.defaultQueryParameters &&
+          config.defaultQueryParameters[parameter] ===
+            queryParameters[parameter]
+        ) {
+          delete params[parameter]
+        } else {
+          params[parameter] = queryParameters[parameter].toString()
+        }
       }
 
       delete params['page']
@@ -52,9 +84,12 @@ export const useSearchAndPagination: IUseSearchAndPagination = function (
       ...router.query,
     }
 
-    delete params['search']
     delete params['page']
     delete params['size']
+
+    for (const parameter in config?.defaultQueryParameters) {
+      delete params[parameter]
+    }
 
     router.push({
       query: params,
@@ -62,14 +97,17 @@ export const useSearchAndPagination: IUseSearchAndPagination = function (
   }, [router])
 
   return {
-    search: getSingleParameterValue(router.query.search) || '',
+    queryParameters: extractCurrentQueryParameters(
+      router.query,
+      config?.defaultQueryParameters
+    ),
     page: convert(
       getSingleParameterValue(router.query.page) || null,
       indexType === IndexType.ZERO_BASED ? 0 : 1
     ),
     size: convert(getSingleParameterValue(router.query.size) || null, pageSize),
     actions: {
-      search,
+      updateQuery,
       clear,
       setPage,
     },
