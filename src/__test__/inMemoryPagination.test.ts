@@ -25,7 +25,7 @@ test('should change search', () => {
   )
 
   act(() => {
-    result.current.actions.query({ search: 'Max' })
+    result.current.actions.updateQuery({ search: 'Max' })
   })
 
   expect(result.current.queryParameters.search).toBe('Max')
@@ -43,7 +43,7 @@ test('on search change -> page should be reset', () => {
   expect(result.current.page).toBe(2)
 
   act(() => {
-    result.current.actions.query({ search: 'Max' })
+    result.current.actions.updateQuery({ search: 'Max' })
   })
 
   expect(result.current.queryParameters.search).toBe('Max')
@@ -56,7 +56,7 @@ test('clear pagination should reset search and page', () => {
   )
 
   act(() => {
-    result.current.actions.query({ search: 'Max' })
+    result.current.actions.updateQuery({ search: 'Max' })
   })
 
   act(() => {
@@ -91,8 +91,8 @@ test('query multiple different properties, should keep them all', () => {
   )
 
   act(() => {
-    result.current.actions.query({ search: 'Max' })
-    result.current.actions.query({ department: 'IT' })
+    result.current.actions.updateQuery({ search: 'Max' })
+    result.current.actions.updateQuery({ department: 'IT' })
   })
 
   expect(result.current.queryParameters.search).toBe('Max')
@@ -107,7 +107,7 @@ test('query a property that is not configured, should do nothing', () => {
   )
 
   act(() => {
-    result.current.actions.query({ department: 'IT' })
+    result.current.actions.updateQuery({ department: 'IT' })
   })
 
   expect(result.current.queryParameters.search).toBe('')

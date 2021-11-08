@@ -51,7 +51,7 @@ export const useQueryAndPagination: IUseQueryAndPagination = function (config) {
     [router]
   )
 
-  const query = useCallback(
+  const updateQuery = useCallback(
     (queryParameters: QueryParameters) => {
       const params = {
         ...router.query,
@@ -107,7 +107,7 @@ export const useQueryAndPagination: IUseQueryAndPagination = function (config) {
     ),
     size: convert(getSingleParameterValue(router.query.size) || null, pageSize),
     actions: {
-      query,
+      updateQuery,
       clear,
       setPage,
     },

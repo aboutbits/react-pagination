@@ -12,7 +12,7 @@ export type Config = {
 }
 
 export type Actions = {
-  query: (query: QueryParameters) => void
+  updateQuery: (query: QueryParameters) => void
   clear: () => void
   setPage: (page: number) => void
 }

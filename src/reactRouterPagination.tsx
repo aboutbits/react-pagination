@@ -31,7 +31,7 @@ export const useQueryAndPagination: IUseQueryAndPagination = function (config) {
 
   const params = useMemo(() => new URLSearchParams(routeQuery), [routeQuery])
 
-  const query = useCallback(
+  const updateQuery = useCallback(
     (queryParameters: QueryParameters) => {
       for (const parameter in queryParameters) {
         if (
@@ -92,7 +92,7 @@ export const useQueryAndPagination: IUseQueryAndPagination = function (config) {
     ),
     size: convert(params.get('size'), pageSize),
     actions: {
-      query,
+      updateQuery,
       clear,
       setPage,
     },

@@ -15,7 +15,7 @@ export const useQueryAndPagination: IUseQueryAndPagination = function (config) {
 
   const [state, setState] = useState(initialState)
 
-  const query = useCallback((queryParameters: QueryParameters) => {
+  const updateQuery = useCallback((queryParameters: QueryParameters) => {
     setState((currentState) => {
       const updatedQueryParameters = {
         ...currentState.queryParameters,
@@ -59,7 +59,7 @@ export const useQueryAndPagination: IUseQueryAndPagination = function (config) {
   return {
     queryParameters: state.queryParameters,
     actions: {
-      query,
+      updateQuery,
       clear,
       setPage,
     },
