@@ -82,3 +82,36 @@ test('change default parameters', () => {
   expect(result.current.page).toBe(1)
   expect(result.current.size).toBe(10)
 })
+
+test('query multiple different properties, should keep them all', () => {
+  const { result } = renderHook(() =>
+    useQueryAndPagination({
+      defaultQueryParameters: { query: '', department: '' },
+    })
+  )
+
+  act(() => {
+    result.current.actions.query({ query: 'Max' })
+    result.current.actions.query({ department: 'IT' })
+  })
+
+  expect(result.current.queryParameters.query).toBe('Max')
+  expect(result.current.queryParameters.department).toBe('IT')
+})
+
+test('query a property that is not configured, should do nothing', () => {
+  const { result } = renderHook(() =>
+    useQueryAndPagination({
+      defaultQueryParameters: { query: '' },
+    })
+  )
+
+  act(() => {
+    result.current.actions.query({ department: 'IT' })
+  })
+
+  expect(result.current.queryParameters.query).toBe('')
+  expect(result.current.queryParameters.department).toBeUndefined()
+})
+
+// test('properties in the URL, that are not part of the configuration should be left untouched', () => {})

@@ -12,7 +12,7 @@ function extractCurrentQueryParameters(
     return {}
   }
 
-  const result: QueryParameters = defaultQueryParameters
+  const result: QueryParameters = { ...defaultQueryParameters }
 
   for (const parameter in defaultQueryParameters) {
     if (query.get(parameter)) {

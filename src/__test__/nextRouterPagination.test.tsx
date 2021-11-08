@@ -99,3 +99,69 @@ test('on search change -> page should be reset', () => {
   expect(router.query.search).toBe('Max')
   expect(router.query.page).toBeUndefined()
 })
+
+test('query multiple different properties, should keep them all', () => {
+  const { result } = renderHook(() =>
+    useQueryAndPagination({
+      defaultQueryParameters: { search: '', department: '' },
+    })
+  )
+
+  act(() => {
+    result.current.actions.query({ search: 'Max' })
+    result.current.actions.query({ department: 'IT' })
+  })
+
+  expect(result.current.queryParameters.search).toBe('Max')
+  expect(result.current.queryParameters.department).toBe('IT')
+})
+
+test('query a property that is not configured, should do nothing', () => {
+  const { result } = renderHook(() =>
+    useQueryAndPagination({
+      defaultQueryParameters: { search: '' },
+    })
+  )
+
+  act(() => {
+    result.current.actions.query({ department: 'IT' })
+  })
+
+  expect(result.current.queryParameters.search).toBe('')
+  expect(result.current.queryParameters.department).toBeUndefined()
+})
+
+test('properties in the URL, that are not part of the configuration should be left untouched', () => {
+  router.query = { greeting: 'hello' }
+
+  const { result } = renderHook(() =>
+    useQueryAndPagination({
+      defaultQueryParameters: { search: '' },
+    })
+  )
+
+  act(() => {
+    result.current.actions.query({ search: 'Max' })
+  })
+
+  expect(result.current.queryParameters.search).toBe('Max')
+  expect(result.current.queryParameters.greeting).toBeUndefined()
+  expect(router.query.greeting).toBe('hello')
+})
+
+test('query property with default value, should remove it from url', () => {
+  router.query = { search: 'Max' }
+
+  const { result } = renderHook(() =>
+    useQueryAndPagination({
+      defaultQueryParameters: { search: '' },
+    })
+  )
+
+  act(() => {
+    result.current.actions.query({ search: '' })
+  })
+
+  expect(result.current.queryParameters.search).toBe('')
+  expect(router.query.search).toBeUndefined()
+})

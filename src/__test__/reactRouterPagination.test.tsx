@@ -47,8 +47,6 @@ test('clear pagination should reset search and page', () => {
     { wrapper }
   )
 
-  console.log(window.location.search)
-
   act(() => {
     result.current.actions.query({ search: 'Max' })
   })
@@ -78,4 +76,78 @@ test('change default parameters', () => {
 
   expect(result.current.page).toBe(1)
   expect(result.current.size).toBe(10)
+})
+
+test('query multiple different properties, should keep them all', () => {
+  const { result } = renderHook(
+    () =>
+      useQueryAndPagination({
+        defaultQueryParameters: { search: '', department: '' },
+      }),
+    { wrapper }
+  )
+
+  act(() => {
+    result.current.actions.query({ search: 'Max' })
+    result.current.actions.query({ department: 'IT' })
+  })
+
+  expect(result.current.queryParameters.search).toBe('Max')
+  expect(result.current.queryParameters.department).toBe('IT')
+})
+
+test('query a property that is not configured, should do nothing', () => {
+  const { result } = renderHook(
+    () =>
+      useQueryAndPagination({
+        defaultQueryParameters: { search: '' },
+      }),
+    { wrapper }
+  )
+
+  act(() => {
+    result.current.actions.query({ department: 'IT' })
+  })
+
+  expect(result.current.queryParameters.search).toBe('')
+  expect(result.current.queryParameters.department).toBeUndefined()
+})
+
+test('properties in the URL, that are not part of the configuration should be left untouched', () => {
+  window.history.pushState({}, '', '/?greeting=hello')
+
+  const { result } = renderHook(
+    () =>
+      useQueryAndPagination({
+        defaultQueryParameters: { search: '' },
+      }),
+    { wrapper }
+  )
+
+  act(() => {
+    result.current.actions.query({ search: 'Max' })
+  })
+
+  expect(result.current.queryParameters.search).toBe('Max')
+  expect(result.current.queryParameters.greeting).toBeUndefined()
+  expect(window.location.search).toBe('?greeting=hello&search=Max')
+})
+
+test('query property with default value, should remove it from url', () => {
+  window.history.pushState({}, '', '/?search=Anton')
+
+  const { result } = renderHook(
+    () =>
+      useQueryAndPagination({
+        defaultQueryParameters: { search: '' },
+      }),
+    { wrapper }
+  )
+
+  act(() => {
+    result.current.actions.query({ search: '' })
+  })
+
+  expect(result.current.queryParameters.search).toBe('')
+  expect(window.location.search).toBe('')
 })
