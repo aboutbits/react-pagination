@@ -17,13 +17,26 @@ export const useQueryAndPagination: IUseQueryAndPagination = function (config) {
 
   const query = useCallback((queryParameters: QueryParameters) => {
     setState((currentState) => {
+      const updatedQueryParameters = {
+        ...currentState.queryParameters,
+        ...queryParameters,
+      }
+
+      for (const parameter in queryParameters) {
+        if (
+          !!config?.defaultQueryParameters &&
+          (config.defaultQueryParameters[parameter] === undefined ||
+            config.defaultQueryParameters[parameter] ===
+              queryParameters[parameter])
+        ) {
+          delete updatedQueryParameters[parameter]
+        }
+      }
+
       return {
         ...currentState,
         page: 0,
-        queryParameters: {
-          ...currentState.queryParameters,
-          ...queryParameters,
-        },
+        queryParameters: updatedQueryParameters,
       }
     })
   }, [])

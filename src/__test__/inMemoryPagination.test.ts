@@ -21,19 +21,19 @@ test('should change page', () => {
 
 test('should change search', () => {
   const { result } = renderHook(() =>
-    useQueryAndPagination({ defaultQueryParameters: { query: '' } })
+    useQueryAndPagination({ defaultQueryParameters: { search: '' } })
   )
 
   act(() => {
-    result.current.actions.query({ query: 'Max' })
+    result.current.actions.query({ search: 'Max' })
   })
 
-  expect(result.current.queryParameters.query).toBe('Max')
+  expect(result.current.queryParameters.search).toBe('Max')
 })
 
 test('on search change -> page should be reset', () => {
   const { result } = renderHook(() =>
-    useQueryAndPagination({ defaultQueryParameters: { query: '' } })
+    useQueryAndPagination({ defaultQueryParameters: { search: '' } })
   )
 
   act(() => {
@@ -43,34 +43,34 @@ test('on search change -> page should be reset', () => {
   expect(result.current.page).toBe(2)
 
   act(() => {
-    result.current.actions.query({ query: 'Max' })
+    result.current.actions.query({ search: 'Max' })
   })
 
-  expect(result.current.queryParameters.query).toBe('Max')
+  expect(result.current.queryParameters.search).toBe('Max')
   expect(result.current.page).toBe(0)
 })
 
 test('clear pagination should reset search and page', () => {
   const { result } = renderHook(() =>
-    useQueryAndPagination({ defaultQueryParameters: { query: '' } })
+    useQueryAndPagination({ defaultQueryParameters: { search: '' } })
   )
 
   act(() => {
-    result.current.actions.query({ query: 'Max' })
+    result.current.actions.query({ search: 'Max' })
   })
 
   act(() => {
     result.current.actions.setPage(2)
   })
 
-  expect(result.current.queryParameters.query).toBe('Max')
+  expect(result.current.queryParameters.search).toBe('Max')
   expect(result.current.page).toBe(2)
 
   act(() => {
     result.current.actions.clear()
   })
 
-  expect(result.current.queryParameters.query).toBe('')
+  expect(result.current.queryParameters.search).toBe('')
   expect(result.current.page).toBe(0)
 })
 
@@ -86,23 +86,23 @@ test('change default parameters', () => {
 test('query multiple different properties, should keep them all', () => {
   const { result } = renderHook(() =>
     useQueryAndPagination({
-      defaultQueryParameters: { query: '', department: '' },
+      defaultQueryParameters: { search: '', department: '' },
     })
   )
 
   act(() => {
-    result.current.actions.query({ query: 'Max' })
+    result.current.actions.query({ search: 'Max' })
     result.current.actions.query({ department: 'IT' })
   })
 
-  expect(result.current.queryParameters.query).toBe('Max')
+  expect(result.current.queryParameters.search).toBe('Max')
   expect(result.current.queryParameters.department).toBe('IT')
 })
 
 test('query a property that is not configured, should do nothing', () => {
   const { result } = renderHook(() =>
     useQueryAndPagination({
-      defaultQueryParameters: { query: '' },
+      defaultQueryParameters: { search: '' },
     })
   )
 
@@ -110,8 +110,6 @@ test('query a property that is not configured, should do nothing', () => {
     result.current.actions.query({ department: 'IT' })
   })
 
-  expect(result.current.queryParameters.query).toBe('')
+  expect(result.current.queryParameters.search).toBe('')
   expect(result.current.queryParameters.department).toBeUndefined()
 })
-
-// test('properties in the URL, that are not part of the configuration should be left untouched', () => {})
