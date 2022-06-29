@@ -1,5 +1,5 @@
 import { useCallback, useMemo } from 'react'
-import { useHistory, useLocation, useRouteMatch } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 
 import { IndexType, IUseQueryAndPagination, QueryParameters } from './types'
 import { convert } from './utils'
@@ -25,9 +25,8 @@ function extractCurrentQueryParameters(
 
 export const useQueryAndPagination: IUseQueryAndPagination = function (config) {
   const { indexType = IndexType.ZERO_BASED, pageSize = 15 } = config || {}
-  const routerHistory = useHistory()
-  const { url: routerUrl } = useRouteMatch()
-  const { search: routeQuery } = useLocation()
+  const navigate = useNavigate()
+  const { pathname: routerUrl, search: routeQuery } = useLocation()
 
   const params = useMemo(() => new URLSearchParams(routeQuery), [routeQuery])
 
@@ -48,12 +47,12 @@ export const useQueryAndPagination: IUseQueryAndPagination = function (config) {
       params.delete('page')
       params.delete('size')
 
-      routerHistory.push({
+      navigate({
         pathname: routerUrl,
         search: params.toString(),
       })
     },
-    [routerHistory, params]
+    [navigate, params]
   )
 
   const clear = useCallback(() => {
@@ -64,21 +63,21 @@ export const useQueryAndPagination: IUseQueryAndPagination = function (config) {
     params.delete('page')
     params.delete('size')
 
-    routerHistory.push({
+    navigate({
       pathname: routerUrl,
       search: params.toString(),
     })
-  }, [routerHistory, params])
+  }, [navigate, params])
 
   const setPage = useCallback(
     (page: number) => {
       params.set('page', page.toString())
-      routerHistory.push({
+      navigate({
         pathname: routerUrl,
         search: params.toString(),
       })
     },
-    [routerHistory, params]
+    [navigate, params]
   )
 
   return {
