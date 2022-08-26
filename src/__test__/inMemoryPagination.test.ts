@@ -113,3 +113,17 @@ test('query a property that is not configured, should do nothing', () => {
   expect(result.current.queryParameters.search).toBe('')
   expect(result.current.queryParameters.department).toBeUndefined()
 })
+
+test('query property with empty value and different default value', () => {
+  const { result } = renderHook(() =>
+    useQueryAndPagination({
+      defaultQueryParameters: { search: 'Default search' },
+    })
+  )
+
+  act(() => {
+    result.current.actions.updateQuery({ search: '' })
+  })
+
+  expect(result.current.queryParameters.search).toBe('')
+})

@@ -15,8 +15,10 @@ function extractCurrentQueryParameters(
   const result: QueryParameters = { ...defaultQueryParameters }
 
   for (const parameter in defaultQueryParameters) {
-    if (query.get(parameter)) {
-      result[parameter] = query.get(parameter) as string
+    const queryParameter = query.get(parameter)
+
+    if (queryParameter !== null) {
+      result[parameter] = queryParameter
     }
   }
 

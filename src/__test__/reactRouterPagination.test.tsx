@@ -151,3 +151,20 @@ test('query property with default value, should remove it from url', () => {
   expect(result.current.queryParameters.search).toBe('')
   expect(window.location.search).toBe('')
 })
+
+test('query property with empty value and different default value', () => {
+  const { result } = renderHook(
+    () =>
+      useQueryAndPagination({
+        defaultQueryParameters: { search: 'Default search' },
+      }),
+    { wrapper }
+  )
+
+  act(() => {
+    result.current.actions.updateQuery({ search: '' })
+  })
+
+  expect(result.current.queryParameters.search).toBe('')
+  expect(window.location.search).toBe('?search=')
+})
