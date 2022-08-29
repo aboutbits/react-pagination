@@ -22,11 +22,10 @@ function extractCurrentQueryParameters(
   const result: QueryParameters = { ...defaultQueryParameters }
 
   for (const parameter in defaultQueryParameters) {
-    if (
-      query[parameter] &&
-      getSingleParameterValue(query[parameter]) !== undefined
-    ) {
-      result[parameter] = getSingleParameterValue(query[parameter]) as string
+    const queryParameter = getSingleParameterValue(query[parameter])
+
+    if (typeof queryParameter !== 'undefined') {
+      result[parameter] = queryParameter
     }
   }
 
