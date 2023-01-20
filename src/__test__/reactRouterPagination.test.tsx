@@ -1,9 +1,11 @@
-import React from 'react'
-import { act, renderHook } from '@testing-library/react-hooks'
+import React, { ReactNode } from 'react'
+import { act, renderHook } from '@testing-library/react'
 import { BrowserRouter as Router } from 'react-router-dom'
 import { useQueryAndPagination } from '../reactRouterPagination'
 import { IndexType } from '../types'
-const wrapper: React.FC = ({ children }) => <Router>{children}</Router>
+const wrapper: React.FC<{ children?: ReactNode }> = ({ children }) => (
+  <Router>{children}</Router>
+)
 
 beforeEach(() => {
   window.history.pushState({}, '', '/')
