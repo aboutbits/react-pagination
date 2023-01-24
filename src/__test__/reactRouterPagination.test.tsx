@@ -1,23 +1,30 @@
-import React from 'react'
-import { act, renderHook } from '@testing-library/react-hooks'
+import React, { ReactNode } from 'react'
+import { act, renderHook } from '@testing-library/react'
 import { BrowserRouter as Router } from 'react-router-dom'
 import { useQueryAndPagination } from '../reactRouterPagination'
 import { IndexType } from '../types'
-const wrapper: React.FC = ({ children }) => <Router>{children}</Router>
+
+function Wrapper({ children }: { children?: ReactNode }) {
+  return <Router>{children}</Router>
+}
 
 beforeEach(() => {
   window.history.pushState({}, '', '/')
 })
 
 test('should initialize pagination', () => {
-  const { result } = renderHook(() => useQueryAndPagination(), { wrapper })
+  const { result } = renderHook(() => useQueryAndPagination(), {
+    wrapper: Wrapper,
+  })
 
   expect(result.current.page).toBe(0)
   expect(result.current.size).toBe(15)
 })
 
 test('should change page', () => {
-  const { result } = renderHook(() => useQueryAndPagination(), { wrapper })
+  const { result } = renderHook(() => useQueryAndPagination(), {
+    wrapper: Wrapper,
+  })
 
   act(() => {
     result.current.actions.setPage(2)
@@ -30,7 +37,7 @@ test('should change page', () => {
 test('should change search', () => {
   const { result } = renderHook(
     () => useQueryAndPagination({ defaultQueryParameters: { search: '' } }),
-    { wrapper }
+    { wrapper: Wrapper }
   )
 
   act(() => {
@@ -44,7 +51,7 @@ test('should change search', () => {
 test('clear pagination should reset search and page', () => {
   const { result } = renderHook(
     () => useQueryAndPagination({ defaultQueryParameters: { search: '' } }),
-    { wrapper }
+    { wrapper: Wrapper }
   )
 
   act(() => {
@@ -71,7 +78,7 @@ test('change default parameters', () => {
   const { result } = renderHook(
     () =>
       useQueryAndPagination({ indexType: IndexType.ONE_BASED, pageSize: 10 }),
-    { wrapper }
+    { wrapper: Wrapper }
   )
 
   expect(result.current.page).toBe(1)
@@ -84,7 +91,7 @@ test('query multiple different properties, should keep them all', () => {
       useQueryAndPagination({
         defaultQueryParameters: { search: '', department: '' },
       }),
-    { wrapper }
+    { wrapper: Wrapper }
   )
 
   act(() => {
@@ -102,7 +109,7 @@ test('query a property that is not configured, should do nothing', () => {
       useQueryAndPagination({
         defaultQueryParameters: { search: '' },
       }),
-    { wrapper }
+    { wrapper: Wrapper }
   )
 
   act(() => {
@@ -121,7 +128,7 @@ test('properties in the URL, that are not part of the configuration should be le
       useQueryAndPagination({
         defaultQueryParameters: { search: '' },
       }),
-    { wrapper }
+    { wrapper: Wrapper }
   )
 
   act(() => {
@@ -141,7 +148,7 @@ test('query property with default value, should remove it from url', () => {
       useQueryAndPagination({
         defaultQueryParameters: { search: '' },
       }),
-    { wrapper }
+    { wrapper: Wrapper }
   )
 
   act(() => {
@@ -158,7 +165,7 @@ test('query property with empty value and different default value', () => {
       useQueryAndPagination({
         defaultQueryParameters: { search: 'Default search' },
       }),
-    { wrapper }
+    { wrapper: Wrapper }
   )
 
   act(() => {
