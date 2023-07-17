@@ -74,7 +74,7 @@ export const useQueryAndPagination: IUseQueryAndPagination = function (config) {
         query: params,
       })
     },
-    [router]
+    [router, config?.defaultQueryParameters]
   )
 
   const clear = useCallback(() => {
@@ -92,7 +92,7 @@ export const useQueryAndPagination: IUseQueryAndPagination = function (config) {
     router.push({
       query: params,
     })
-  }, [router])
+  }, [router, config?.defaultQueryParameters])
 
   return {
     queryParameters: extractCurrentQueryParameters(
