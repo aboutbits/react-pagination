@@ -1,12 +1,13 @@
 import { useCallback, useMemo } from 'react'
+import { queryValueToIntOrUndefined } from './utils'
 
 export type Query = Record<string, string | string[]>
 
-export type AbstractQueryValue = string | number | boolean
+export type AbstractQueryValueElement = string | number | boolean
 
 export type AbstractQuery = Record<
   string,
-  AbstractQueryValue | AbstractQueryValue[]
+  AbstractQueryValueElement | AbstractQueryValueElement[]
 >
 
 /**
@@ -28,11 +29,6 @@ export type Router = {
    * If the query is bound to the URL, the router navigates to the new URL.
    */
   setQuery: (query: Partial<Query>) => void
-
-  /**
-   * Completely clears the query.
-   */
-  clearQuery: () => void
 }
 
 export const useQuery = <T extends Query>(defaultQuery: T, router: Router) => {
@@ -41,49 +37,56 @@ export const useQuery = <T extends Query>(defaultQuery: T, router: Router) => {
     [router, defaultQuery]
   )
 
-  const clearQuery = useCallback(() => router.clearQuery(), [router])
-
   const query = useMemo(() => router.getQuery(), [router])
 
   return {
     query,
     setQuery: (query: Partial<T>) => router.setQuery(query),
     resetQuery,
-    clearQuery,
   }
 }
 
-const abstractQueryToQuery = <T extends Partial<AbstractQuery>>(
-  abstractQuery: T
-) => {
-  const query: Query = {}
-  for (const [key, value] of Object.entries(abstractQuery)) {
-    if (value !== undefined) {
-      query[key] = value.toString()
+type AbstractQueryOptions = {
+  convertToQuery: <T extends Partial<AbstractQuery>>(abstractQuery: T) => Query
+}
+
+const DEFAULT_ABSTRACT_QUERY_OPTIONS: AbstractQueryOptions = {
+  convertToQuery: (abstractQuery) => {
+    const query: Query = {}
+    for (const [key, value] of Object.entries(abstractQuery)) {
+      if (value !== undefined) {
+        query[key] = value.toString()
+      }
     }
-  }
-  return query
+    return query
+  },
 }
 
 export const useAbstractQuery = <T extends AbstractQuery>(
   defaultQuery: T,
+  parseQuery: ParseQuery<T>,
   router: Router,
-  parse: ParseQuery<T>
+  options?: Partial<AbstractQueryOptions>
 ) => {
-  const convertedDefaultQuery = useMemo(
-    () => abstractQueryToQuery(defaultQuery),
-    [defaultQuery]
+  const mergedOptions = useMemo(
+    () => ({ ...DEFAULT_ABSTRACT_QUERY_OPTIONS, ...options }),
+    [options]
   )
 
-  const { query, setQuery, resetQuery, clearQuery } = useQuery(
+  const convertedDefaultQuery = useMemo(
+    () => mergedOptions.convertToQuery(defaultQuery),
+    [mergedOptions, defaultQuery]
+  )
+
+  const { query, setQuery, resetQuery } = useQuery(
     convertedDefaultQuery,
     router
   )
 
-  const parsedQuery = useMemo(() => {
+  const parsedQuery: T = useMemo(() => {
     let parsed: Partial<T>
     try {
-      parsed = parse(query)
+      parsed = parseQuery(query)
     } catch (e) {
       parsed = {}
     }
@@ -91,40 +94,58 @@ export const useAbstractQuery = <T extends AbstractQuery>(
       ...defaultQuery,
       ...parsed,
     }
-  }, [defaultQuery, parse, query])
+  }, [defaultQuery, parseQuery, query])
 
   const setAbstractQuery = useCallback(
-    (query: Partial<T>) => setQuery(abstractQueryToQuery(query)),
-    [setQuery]
+    (query: Partial<T>) => setQuery(mergedOptions.convertToQuery(query)),
+    [setQuery, mergedOptions]
   )
 
   return {
     query: parsedQuery,
     setQuery: setAbstractQuery,
     resetQuery,
-    clearQuery,
   }
 }
 
 export type PaginationQuery = { page: number; size: number }
 
-export const usePagination = (
-  defaultQuery: PaginationQuery,
-  router: Router,
-  parse: ParseQuery<PaginationQuery>
+const parsePagination = (query: Query): Partial<PaginationQuery> => {
+  return {
+    page: queryValueToIntOrUndefined(query.page),
+    size: queryValueToIntOrUndefined(query.size),
+  }
+}
+
+export const useQueryAndPagination = <T extends AbstractQuery>(
+  defaultQuery: T,
+  parseQuery: ParseQuery<T>,
+  defaultPagination: PaginationQuery,
+  router: Router
 ) => {
-  const { query, setQuery, resetQuery, clearQuery } = useAbstractQuery(
+  const { query, setQuery, resetQuery } = useAbstractQuery(
     defaultQuery,
-    router,
-    parse
+    parseQuery,
+    router
   )
 
+  const {
+    query: pagination,
+    setQuery: setPagination,
+    resetQuery: resetPagination,
+  } = useAbstractQuery(defaultPagination, parsePagination, router)
+
   return {
-    page: query.page,
-    size: query.size,
-    setSize: (size: PaginationQuery['size']) => setQuery({ size }),
-    setPage: (page: PaginationQuery['page']) => setQuery({ page }),
-    resetPagination: resetQuery,
-    clearQuery,
+    query,
+    setQuery,
+    resetQuery,
+    page: pagination.page,
+    size: pagination.size,
+    setPage: (page: PaginationQuery['page']) => setPagination({ page }),
+    setSize: (size: PaginationQuery['size']) => setPagination({ size }),
+    setPagination,
+    resetPagination,
+    resetQueryAndPagination: () =>
+      setQuery({ ...defaultQuery, ...defaultPagination }),
   }
 }
