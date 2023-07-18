@@ -1,58 +1,130 @@
-import { useMemo } from 'react'
+import { useCallback, useMemo } from 'react'
 
 export type Query = Record<string, string | string[]>
 
+export type AbstractQueryValue = string | number | boolean
+
+export type AbstractQuery = Record<
+  string,
+  AbstractQueryValue | AbstractQueryValue[]
+>
+
 /**
- * @throws On failed parsing.
+ * Parses the query.
+ *
+ * @returns The parameters that could be parsed. An empty record if no parameter could be parsed.
+ * @throws If the parsing failed.
  */
-export type ParseQuery<T> = (query: Query) => T
+export type ParseQuery<T> = (query: Query) => Partial<T>
 
 export type Router = {
+  /**
+   * @returns The current query.
+   */
   getQuery: () => Query
+
   /**
    * Updates the query by merging the given query with the current query.
-   * If the query is bound to the URL, the user is navigated to the new URL.
+   * If the query is bound to the URL, the router navigates to the new URL.
    */
-  setQuery: (query: Query) => void
+  setQuery: (query: Partial<Query>) => void
+
+  /**
+   * Completely clears the query.
+   */
+  clearQuery: () => void
 }
 
-export const useQuery = <T extends Query>(
-  defaultQuery: T,
-  parse: ParseQuery<T>,
-  router: Router
-) => {
-  const resetQuery = () => router.setQuery(defaultQuery)
+export const useQuery = <T extends Query>(defaultQuery: T, router: Router) => {
+  const resetQuery = useCallback(
+    () => router.setQuery(defaultQuery),
+    [router, defaultQuery]
+  )
 
-  const parsedQuery = useMemo(() => {
-    const query = router.getQuery()
-    try {
-      return parse(query)
-    } catch (e) {
-      return undefined
-    }
-  }, [parse, router])
+  const clearQuery = useCallback(() => router.clearQuery(), [router])
+
+  const query = useMemo(() => router.getQuery(), [router])
 
   return {
-    query: parsedQuery,
-    setQuery: (query: T) => router.setQuery(query),
+    query,
+    setQuery: (query: Partial<T>) => router.setQuery(query),
     resetQuery,
+    clearQuery,
   }
 }
 
-// type PaginationQuery = {
-//   page: number
-//   size: number
-// }
+const abstractQueryToQuery = <T extends Partial<AbstractQuery>>(
+  abstractQuery: T
+) => {
+  const query: Query = {}
+  for (const [key, value] of Object.entries(abstractQuery)) {
+    if (value !== undefined) {
+      query[key] = value.toString()
+    }
+  }
+  return query
+}
 
-// export const usePagination = (
-//   defaultQuery: PaginationQuery,
-//   router: Router<PaginationQuery>
-// ) => {
-//   const { setQuery, query, resetQuery } = useQuery(defaultQuery, router)
+export const useAbstractQuery = <T extends AbstractQuery>(
+  defaultQuery: T,
+  router: Router,
+  parse: ParseQuery<T>
+) => {
+  const convertedDefaultQuery = useMemo(
+    () => abstractQueryToQuery(defaultQuery),
+    [defaultQuery]
+  )
 
-//   return {
-//     setPagination: setQuery,
-//     resetPagination: resetQuery,
-//     ...query,
-//   }
-// }
+  const { query, setQuery, resetQuery, clearQuery } = useQuery(
+    convertedDefaultQuery,
+    router
+  )
+
+  const parsedQuery = useMemo(() => {
+    let parsed: Partial<T>
+    try {
+      parsed = parse(query)
+    } catch (e) {
+      parsed = {}
+    }
+    return {
+      ...defaultQuery,
+      ...parsed,
+    }
+  }, [defaultQuery, parse, query])
+
+  const setAbstractQuery = useCallback(
+    (query: Partial<T>) => setQuery(abstractQueryToQuery(query)),
+    [setQuery]
+  )
+
+  return {
+    query: parsedQuery,
+    setQuery: setAbstractQuery,
+    resetQuery,
+    clearQuery,
+  }
+}
+
+export type PaginationQuery = { page: number; size: number }
+
+export const usePagination = (
+  defaultQuery: PaginationQuery,
+  router: Router,
+  parse: ParseQuery<PaginationQuery>
+) => {
+  const { query, setQuery, resetQuery, clearQuery } = useAbstractQuery(
+    defaultQuery,
+    router,
+    parse
+  )
+
+  return {
+    page: query.page,
+    size: query.size,
+    setSize: (size: PaginationQuery['size']) => setQuery({ size }),
+    setPage: (page: PaginationQuery['page']) => setQuery({ page }),
+    resetPagination: resetQuery,
+    clearQuery,
+  }
+}
