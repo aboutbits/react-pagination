@@ -45,8 +45,9 @@
   "private": false,
   "keywords": [
     "react",
+    "query",
     "pagination",
-    "hooks"
+    "zod"
   ],
   "author": "About Bits",
   "license": "MIT",
