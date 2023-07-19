@@ -180,14 +180,19 @@ describe('NextRouter', () => {
   test('setting a query key should not overwrite other query keys', () => {
     const search = 'Max'
     const department = 'IT'
+    const defaultAge = 42
 
     const schema = z.object({
       search: z.string().optional().catch(undefined),
       department: z.string().optional().catch(undefined),
+      age: z.string().pipe(z.coerce.number().optional()).catch(undefined),
     })
 
     const { result } = renderHook(() =>
-      useNextRouterQuery({ search: '', department: '' }, schema)
+      useNextRouterQuery(
+        { search: '', department: '', age: defaultAge },
+        schema
+      )
     )
 
     act(() => {
@@ -200,6 +205,7 @@ describe('NextRouter', () => {
 
     expect(result.current.query.search).toBe(search)
     expect(result.current.query.department).toBe(department)
+    expect(result.current.query.age).toBe(defaultAge)
   })
 
   test('unspecified query keys should be left untouched', () => {
