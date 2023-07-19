@@ -1,13 +1,13 @@
 import { ZodType, ZodTypeDef } from 'zod'
 import { PaginationQuery, AbstractQuery } from '../../engine'
 import {
-  useNextRouterQuery as useNextRouterQueryVanilla,
-  useNextRouterPagination as useNextRouterPaginationVanilla,
-  useNextRouterQueryAndPagination as useNextRouterQueryAndPaginationVanilla,
+  useQuery as useQueryVanilla,
+  usePagination as usePaginationVanilla,
+  useQueryAndPagination as useQueryAndPaginationVanilla,
 } from '../../routers/nextRouter'
 import { zodParser } from '../util'
 
-export const useNextRouterQuery = <
+export const useQuery = <
   TQuery extends AbstractQuery,
   // TODO: `TSchemaOutput` should not just extend `Partial<TQuery>`, but be exactly `Partial<TQuery>`, with not additional keys
   TSchemaOutput extends Partial<TQuery> = Partial<TQuery>,
@@ -16,9 +16,9 @@ export const useNextRouterQuery = <
 >(
   defaultQuery: TQuery,
   schemaQuery: ZodType<TSchemaOutput, TSchemaDef, TSchemaInput>
-) => useNextRouterQueryVanilla(defaultQuery, zodParser(schemaQuery))
+) => useQueryVanilla(defaultQuery, zodParser(schemaQuery))
 
-export const useNextRouterQueryAndPagination = <
+export const useQueryAndPagination = <
   TQuery extends AbstractQuery,
   TSchemaOutput extends Partial<TQuery> = Partial<TQuery>,
   TSchemaDef extends ZodTypeDef = ZodTypeDef,
@@ -28,11 +28,11 @@ export const useNextRouterQueryAndPagination = <
   schemaQuery: ZodType<TSchemaOutput, TSchemaDef, TSchemaInput>,
   defaultPagination?: PaginationQuery
 ) =>
-  useNextRouterQueryAndPaginationVanilla(
+  useQueryAndPaginationVanilla(
     defaultQuery,
     zodParser(schemaQuery),
     defaultPagination
   )
 
-export const useNextRouterPagination = (defaultPagination?: PaginationQuery) =>
-  useNextRouterPaginationVanilla(defaultPagination)
+export const usePagination = (defaultPagination?: PaginationQuery) =>
+  usePaginationVanilla(defaultPagination)

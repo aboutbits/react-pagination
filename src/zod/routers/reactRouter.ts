@@ -1,13 +1,13 @@
 import { ZodType, ZodTypeDef } from 'zod'
 import { PaginationQuery, AbstractQuery } from '../../engine'
 import {
-  useReactRouterQuery as useReactRouterQueryVanilla,
-  useReactRouterPagination as useReactRouterPaginationVanilla,
-  useReactRouterQueryAndPagination as useReactRouterQueryAndPaginationVanilla,
+  useQuery as useQueryVanilla,
+  usePagination as usePaginationVanilla,
+  useQueryAndPagination as useQueryAndPaginationVanilla,
 } from '../../routers/reactRouter'
 import { zodParser } from '../util'
 
-export const useReactRouterQuery = <
+export const useQuery = <
   TQuery extends AbstractQuery,
   // TODO: `TSchemaOutput` should not just extend `Partial<TQuery>`, but be exactly `Partial<TQuery>`, with not additional keys
   TSchemaOutput extends Partial<TQuery> = Partial<TQuery>,
@@ -16,9 +16,9 @@ export const useReactRouterQuery = <
 >(
   defaultQuery: TQuery,
   schemaQuery: ZodType<TSchemaOutput, TSchemaDef, TSchemaInput>
-) => useReactRouterQueryVanilla(defaultQuery, zodParser(schemaQuery))
+) => useQueryVanilla(defaultQuery, zodParser(schemaQuery))
 
-export const useReactRouterQueryAndPagination = <
+export const useQueryAndPagination = <
   TQuery extends AbstractQuery,
   TSchemaOutput extends Partial<TQuery> = Partial<TQuery>,
   TSchemaDef extends ZodTypeDef = ZodTypeDef,
@@ -28,11 +28,11 @@ export const useReactRouterQueryAndPagination = <
   schemaQuery: ZodType<TSchemaOutput, TSchemaDef, TSchemaInput>,
   defaultPagination?: PaginationQuery
 ) =>
-  useReactRouterQueryAndPaginationVanilla(
+  useQueryAndPaginationVanilla(
     defaultQuery,
     zodParser(schemaQuery),
     defaultPagination
   )
 
-export const useReactRouterPagination = (defaultPagination?: PaginationQuery) =>
-  useReactRouterPaginationVanilla(defaultPagination)
+export const usePagination = (defaultPagination?: PaginationQuery) =>
+  usePaginationVanilla(defaultPagination)

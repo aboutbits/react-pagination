@@ -4,10 +4,10 @@ import { z } from 'zod'
 import { vi } from 'vitest'
 import { NonNullableRecord } from '../../utils'
 import {
-  useNextRouterQuery,
-  useNextRouterPagination,
-  useNextRouterQueryAndPagination,
-} from '../../zod'
+  useQuery,
+  usePagination,
+  useQueryAndPagination,
+} from '../../zod/routers/nextRouter'
 
 vi.mock('next/router', () => require('next-router-mock'))
 
@@ -22,12 +22,12 @@ describe('NextRouter', () => {
 
   const useNextRouterQueryWithSearch = (
     defaultQuery: NonNullableRecord<z.infer<typeof searchSchema>>
-  ) => useNextRouterQuery(defaultQuery, searchSchema)
+  ) => useQuery(defaultQuery, searchSchema)
 
   test('should set default page and size', () => {
     const page = 0
     const size = 15
-    const { result } = renderHook(() => useNextRouterPagination({ page, size }))
+    const { result } = renderHook(() => usePagination({ page, size }))
 
     expect(result.current.page).toBe(page)
     expect(result.current.size).toBe(size)
@@ -36,7 +36,7 @@ describe('NextRouter', () => {
   test('should change page', () => {
     const page = 2
 
-    const { result } = renderHook(() => useNextRouterPagination())
+    const { result } = renderHook(() => usePagination())
 
     act(() => {
       result.current.setPage(page)
@@ -66,7 +66,7 @@ describe('NextRouter', () => {
     const page = 2
 
     const { result } = renderHook(() =>
-      useNextRouterQueryAndPagination({ search: '' }, searchSchema)
+      useQueryAndPagination({ search: '' }, searchSchema)
     )
 
     act(() => {
@@ -93,7 +93,7 @@ describe('NextRouter', () => {
   test('change default parameters', () => {
     const page = 1
     const size = 10
-    const { result } = renderHook(() => useNextRouterPagination({ page, size }))
+    const { result } = renderHook(() => usePagination({ page, size }))
 
     expect(result.current.page).toBe(page)
     expect(result.current.size).toBe(size)
@@ -106,7 +106,7 @@ describe('NextRouter', () => {
     const page = 2
 
     const { result } = renderHook(() =>
-      useNextRouterQueryAndPagination({ search: defaultSearch }, searchSchema)
+      useQueryAndPagination({ search: defaultSearch }, searchSchema)
     )
 
     act(() => {
@@ -148,7 +148,7 @@ describe('NextRouter', () => {
     const page = 2
 
     const { result } = renderHook(() =>
-      useNextRouterQueryAndPagination({ search: defaultSearch }, searchSchema)
+      useQueryAndPagination({ search: defaultSearch }, searchSchema)
     )
 
     act(() => {
@@ -189,10 +189,7 @@ describe('NextRouter', () => {
     })
 
     const { result } = renderHook(() =>
-      useNextRouterQuery(
-        { search: '', department: '', age: defaultAge },
-        schema
-      )
+      useQuery({ search: '', department: '', age: defaultAge }, schema)
     )
 
     act(() => {
@@ -212,9 +209,7 @@ describe('NextRouter', () => {
     const greeting = 'hello'
     router.query = { greeting }
 
-    const { result } = renderHook(() =>
-      useNextRouterQuery({ search: '' }, searchSchema)
-    )
+    const { result } = renderHook(() => useQuery({ search: '' }, searchSchema))
 
     act(() => {
       result.current.setQuery({ search: 'Max' })
@@ -230,7 +225,7 @@ describe('NextRouter', () => {
     router.query = { search: 'Max' }
 
     const { result } = renderHook(() =>
-      useNextRouterQuery({ search: defaultSearch }, searchSchema)
+      useQuery({ search: defaultSearch }, searchSchema)
     )
 
     act(() => {
@@ -245,7 +240,7 @@ describe('NextRouter', () => {
     const search = ''
 
     const { result } = renderHook(() =>
-      useNextRouterQuery({ search: 'Default search' }, searchSchema)
+      useQuery({ search: 'Default search' }, searchSchema)
     )
 
     act(() => {

@@ -2,10 +2,10 @@ import { act, renderHook } from '@testing-library/react'
 import { z } from 'zod'
 import { NonNullableRecord } from '../../utils'
 import {
-  useInMemoryQuery,
-  useInMemoryPagination,
-  useInMemoryQueryAndPagination,
-} from '../../zod'
+  useQuery,
+  usePagination,
+  useQueryAndPagination,
+} from '../../zod/routers/inMemory'
 
 describe('InMemory', () => {
   const searchSchema = z.object({
@@ -14,12 +14,12 @@ describe('InMemory', () => {
 
   const useInMemoryQueryWithSearch = (
     defaultQuery: NonNullableRecord<z.infer<typeof searchSchema>>
-  ) => useInMemoryQuery(defaultQuery, searchSchema)
+  ) => useQuery(defaultQuery, searchSchema)
 
   test('should set default page and size', () => {
     const page = 0
     const size = 15
-    const { result } = renderHook(() => useInMemoryPagination({ page, size }))
+    const { result } = renderHook(() => usePagination({ page, size }))
 
     expect(result.current.page).toBe(page)
     expect(result.current.size).toBe(size)
@@ -28,7 +28,7 @@ describe('InMemory', () => {
   test('should change page', () => {
     const page = 2
 
-    const { result } = renderHook(() => useInMemoryPagination())
+    const { result } = renderHook(() => usePagination())
 
     act(() => {
       result.current.setPage(page)
@@ -56,7 +56,7 @@ describe('InMemory', () => {
     const page = 2
 
     const { result } = renderHook(() =>
-      useInMemoryQueryAndPagination({ search: '' }, searchSchema)
+      useQueryAndPagination({ search: '' }, searchSchema)
     )
 
     act(() => {
@@ -80,7 +80,7 @@ describe('InMemory', () => {
   test('change default parameters', () => {
     const page = 1
     const size = 10
-    const { result } = renderHook(() => useInMemoryPagination({ page, size }))
+    const { result } = renderHook(() => usePagination({ page, size }))
 
     expect(result.current.page).toBe(page)
     expect(result.current.size).toBe(size)
@@ -93,7 +93,7 @@ describe('InMemory', () => {
     const page = 2
 
     const { result } = renderHook(() =>
-      useInMemoryQueryAndPagination({ search: defaultSearch }, searchSchema)
+      useQueryAndPagination({ search: defaultSearch }, searchSchema)
     )
 
     act(() => {
@@ -128,7 +128,7 @@ describe('InMemory', () => {
     const page = 2
 
     const { result } = renderHook(() =>
-      useInMemoryQueryAndPagination({ search: defaultSearch }, searchSchema)
+      useQueryAndPagination({ search: defaultSearch }, searchSchema)
     )
 
     act(() => {
@@ -162,7 +162,7 @@ describe('InMemory', () => {
     })
 
     const { result } = renderHook(() =>
-      useInMemoryQuery({ search: '', department: '' }, schema)
+      useQuery({ search: '', department: '' }, schema)
     )
 
     act(() => {
@@ -181,7 +181,7 @@ describe('InMemory', () => {
     const search = ''
 
     const { result } = renderHook(() =>
-      useInMemoryQuery({ search: 'Default search' }, searchSchema)
+      useQuery({ search: 'Default search' }, searchSchema)
     )
 
     act(() => {

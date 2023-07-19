@@ -1,13 +1,13 @@
 import { ZodType, ZodTypeDef } from 'zod'
 import { PaginationQuery, AbstractQuery } from '../../engine'
 import {
-  useInMemoryQuery as useInMemoryQueryVanilla,
-  useInMemoryPagination as useInMemoryPaginationVanilla,
-  useInMemoryQueryAndPagination as useInMemoryQueryAndPaginationVanilla,
+  useQuery as useQueryVanilla,
+  usePagination as usePaginationVanilla,
+  useQueryAndPagination as useQueryAndPaginationVanilla,
 } from '../../routers/inMemory'
 import { zodParser } from '../util'
 
-export const useInMemoryQuery = <
+export const useQuery = <
   TQuery extends AbstractQuery,
   // TODO: `TSchemaOutput` should not just extend `Partial<TQuery>`, but be exactly `Partial<TQuery>`, with not additional keys
   TSchemaOutput extends Partial<TQuery> = Partial<TQuery>,
@@ -16,9 +16,9 @@ export const useInMemoryQuery = <
 >(
   defaultQuery: TQuery,
   schemaQuery: ZodType<TSchemaOutput, TSchemaDef, TSchemaInput>
-) => useInMemoryQueryVanilla(defaultQuery, zodParser(schemaQuery))
+) => useQueryVanilla(defaultQuery, zodParser(schemaQuery))
 
-export const useInMemoryQueryAndPagination = <
+export const useQueryAndPagination = <
   TQuery extends AbstractQuery,
   TSchemaOutput extends Partial<TQuery> = Partial<TQuery>,
   TSchemaDef extends ZodTypeDef = ZodTypeDef,
@@ -28,11 +28,11 @@ export const useInMemoryQueryAndPagination = <
   schemaQuery: ZodType<TSchemaOutput, TSchemaDef, TSchemaInput>,
   defaultPagination?: PaginationQuery
 ) =>
-  useInMemoryQueryAndPaginationVanilla(
+  useQueryAndPaginationVanilla(
     defaultQuery,
     zodParser(schemaQuery),
     defaultPagination
   )
 
-export const useInMemoryPagination = (defaultPagination?: PaginationQuery) =>
-  useInMemoryPaginationVanilla(defaultPagination)
+export const usePagination = (defaultPagination?: PaginationQuery) =>
+  usePaginationVanilla(defaultPagination)

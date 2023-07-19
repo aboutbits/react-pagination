@@ -29,7 +29,7 @@ const useInMemoryRouter = (): Router => {
   }
 }
 
-export const useInMemoryQuery = <T extends AbstractQuery>(
+export const useQuery = <T extends AbstractQuery>(
   defaultQuery: T,
   parseQuery: ParseQuery<T>,
   options?: Partial<AbstractQueryOptions>
@@ -38,7 +38,7 @@ export const useInMemoryQuery = <T extends AbstractQuery>(
   return useAbstractQuery(defaultQuery, parseQuery, router, options)
 }
 
-export const useInMemoryQueryAndPagination = <T extends AbstractQuery>(
+export const useQueryAndPagination = <T extends AbstractQuery>(
   defaultQuery: T,
   parseQuery: ParseQuery<T>,
   defaultPagination?: PaginationQuery
@@ -52,8 +52,8 @@ export const useInMemoryQueryAndPagination = <T extends AbstractQuery>(
   )
 }
 
-export const useInMemoryPagination = (defaultPagination?: PaginationQuery) => {
+export const usePagination = (defaultPagination?: PaginationQuery) => {
   const { page, size, setPage, setSize, setPagination, resetPagination } =
-    useInMemoryQueryAndPagination({}, () => ({}), defaultPagination)
+    useQueryAndPagination({}, () => ({}), defaultPagination)
   return { page, size, setPage, setSize, setPagination, resetPagination }
 }

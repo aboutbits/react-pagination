@@ -2,19 +2,41 @@
   "name": "@aboutbits/react-pagination",
   "version": "1.0.2",
   "description": "Pagination hooks for React",
-  "main": "dist/cjs/index.js",
-  "module": "dist/esm/index.js",
-  "types": "dist/types/index.d.ts",
   "exports": {
     ".": {
-      "types": "./dist/types/index.d.ts",
-      "import": "./dist/esm/index.js",
-      "require": "./dist/cjs/index.js"
+      "types": "./dist/types/engine/index.d.ts",
+      "import": "./dist/esm/engine/index.js",
+      "require": "./dist/cjs/engine/index.js"
     },
-    "./zod": {
-      "types": "./dist/types/zod/index.d.ts",
-      "import": "./dist/esm/zod/index.js",
-      "require": "./dist/cjs/zod/index.js"
+    "./next-router": {
+      "types": "./dist/types/routers/nextRouter.d.ts",
+      "import": "./dist/esm/routers/nextRouter.js",
+      "require": "./dist/cjs/routers/nextRouter.js"
+    },
+    "./in-memory": {
+      "types": "./dist/types/routers/inMemory.d.ts",
+      "import": "./dist/esm/routers/inMemory.js",
+      "require": "./dist/cjs/routers/inMemory.js"
+    },
+    "./react-router": {
+      "types": "./dist/types/routers/reactRouter.d.ts",
+      "import": "./dist/esm/routers/reactRouter.js",
+      "require": "./dist/cjs/routers/reactRouter.js"
+    },
+    "./next-router/zod": {
+      "types": "./dist/types/zod/routers/nextRouter.d.ts",
+      "import": "./dist/esm/zod/routers/nextRouter.js",
+      "require": "./dist/cjs/zod/routers/nextRouter.js"
+    },
+    "./in-memory/zod": {
+      "types": "./dist/types/zod/routers/inMemory.d.ts",
+      "import": "./dist/esm/zod/routers/inMemory.js",
+      "require": "./dist/cjs/zod/routers/inMemory.js"
+    },
+    "./react-router/zod": {
+      "types": "./dist/types/zod/routers/reactRouter.d.ts",
+      "import": "./dist/esm/zod/routers/reactRouter.js",
+      "require": "./dist/cjs/zod/routers/reactRouter.js"
     }
   },
   "engines": {
