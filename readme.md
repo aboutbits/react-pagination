@@ -9,11 +9,10 @@ state or in the browser URL.
 ## Table of content
 
 - [Usage](#usage)
-  - [useQuery](#usequery)
-  - [usePagination](#usepagination)
-  - [useQueryAndPagination](#usequeryandpagination)
+  - [Example usage with Next.js](#example-usage-with-nextjs)
+  - [Example usage with React Router and zod](#example-usage-with-react-router-and-zod)
 - [Build & Publish](#build--publish)
-- [Information](#information)
+- [About](#about)
 
 ## Usage
 
@@ -41,7 +40,7 @@ The hooks exported from `@aboutbits/react-pagination/*/zod` are more convenient 
 
 Some examples follow, but we recommend having a look at the type definitions for more details about the API.
 
-#### Example usage with Next.js
+### Example usage with Next.js
 
 ```tsx
 import { Query } from '@aboutbits/react-pagination'
