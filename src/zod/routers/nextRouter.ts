@@ -6,11 +6,11 @@ import {
   useQueryAndPagination as useQueryAndPaginationVanilla,
 } from '../../routers/nextRouter'
 import { zodParser } from '../util'
+import { NonNullableRecord } from '../../utils'
 
 export const useQuery = <
-  TQuery extends AbstractQuery,
-  // TODO: `TSchemaOutput` should not just extend `Partial<TQuery>`, but be exactly `Partial<TQuery>`, with not additional keys
-  TSchemaOutput extends Partial<TQuery> = Partial<TQuery>,
+  TQuery extends NonNullableRecord<TSchemaOutput>,
+  TSchemaOutput extends Partial<AbstractQuery>,
   TSchemaDef extends ZodTypeDef = ZodTypeDef,
   TSchemaInput = TSchemaOutput
 >(
@@ -19,8 +19,8 @@ export const useQuery = <
 ) => useQueryVanilla(defaultQuery, zodParser(schemaQuery))
 
 export const useQueryAndPagination = <
-  TQuery extends AbstractQuery,
-  TSchemaOutput extends Partial<TQuery> = Partial<TQuery>,
+  TQuery extends NonNullableRecord<TSchemaOutput>,
+  TSchemaOutput extends Partial<AbstractQuery>,
   TSchemaDef extends ZodTypeDef = ZodTypeDef,
   TSchemaInput = TSchemaOutput
 >(
