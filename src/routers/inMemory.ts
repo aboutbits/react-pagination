@@ -41,19 +41,24 @@ export const useQuery = <T extends AbstractQuery>(
 export const useQueryAndPagination = <T extends AbstractQuery>(
   defaultQuery: T,
   parseQuery: ParseQuery<T>,
-  defaultPagination?: PaginationQuery
+  defaultPagination?: PaginationQuery,
+  options?: Partial<AbstractQueryOptions>
 ) => {
   const router = useInMemoryRouter()
   return useAbstractQueryAndPagination(
     defaultQuery,
     parseQuery,
     router,
-    defaultPagination
+    defaultPagination,
+    options
   )
 }
 
-export const usePagination = (defaultPagination?: PaginationQuery) => {
+export const usePagination = (
+  defaultPagination?: PaginationQuery,
+  options?: Partial<AbstractQueryOptions>
+) => {
   const { page, size, setPage, setSize, setPagination, resetPagination } =
-    useQueryAndPagination({}, () => ({}), defaultPagination)
+    useQueryAndPagination({}, () => ({}), defaultPagination, options)
   return { page, size, setPage, setSize, setPagination, resetPagination }
 }

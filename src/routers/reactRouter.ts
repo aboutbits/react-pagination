@@ -1,4 +1,5 @@
 import { useLocation, useNavigate } from 'react-router-dom'
+import { useMemo } from 'react'
 import {
   Query,
   AbstractQuery,
@@ -12,9 +13,24 @@ import {
 
 const QUERY_ARRAY_SEPARATOR = ','
 
-const useReactRouter = (): Router => {
+export type ReactRouterOptions = {
+  setQueryMethod: 'replace' | 'push'
+}
+
+const DEFAULT_REACT_ROUTER_OPTIONS: ReactRouterOptions = {
+  setQueryMethod: 'replace',
+}
+
+const useReactRouter = (
+  options: undefined | Partial<ReactRouterOptions>
+): Router => {
   const navigate = useNavigate()
   const { pathname, search } = useLocation()
+
+  const mergedOptions = useMemo(
+    () => ({ ...DEFAULT_REACT_ROUTER_OPTIONS, ...options }),
+    [options]
+  )
 
   return {
     getQuery: (defaultQuery) => {
@@ -48,7 +64,10 @@ const useReactRouter = (): Router => {
           urlSearchParams.set(key, encodedValues)
         }
       }
-      navigate({ pathname, search: urlSearchParams.toString() })
+      navigate(
+        { pathname, search: urlSearchParams.toString() },
+        { replace: mergedOptions.setQueryMethod === 'replace' }
+      )
     },
   }
 }
@@ -56,28 +75,33 @@ const useReactRouter = (): Router => {
 export const useQuery = <T extends AbstractQuery>(
   defaultQuery: T,
   parseQuery: ParseQuery<T>,
-  options?: Partial<AbstractQueryOptions>
+  options?: Partial<AbstractQueryOptions & ReactRouterOptions>
 ) => {
-  const router = useReactRouter()
+  const router = useReactRouter(options)
   return useAbstractQuery(defaultQuery, parseQuery, router, options)
 }
 
 export const useQueryAndPagination = <T extends AbstractQuery>(
   defaultQuery: T,
   parseQuery: ParseQuery<T>,
-  defaultPagination?: PaginationQuery
+  defaultPagination?: PaginationQuery,
+  options?: Partial<AbstractQueryOptions & ReactRouterOptions>
 ) => {
-  const router = useReactRouter()
+  const router = useReactRouter(options)
   return useAbstractQueryAndPagination(
     defaultQuery,
     parseQuery,
     router,
-    defaultPagination
+    defaultPagination,
+    options
   )
 }
 
-export const usePagination = (defaultPagination?: PaginationQuery) => {
+export const usePagination = (
+  defaultPagination?: PaginationQuery,
+  options?: Partial<AbstractQueryOptions & ReactRouterOptions>
+) => {
   const { page, size, setPage, setSize, setPagination, resetPagination } =
-    useQueryAndPagination({}, () => ({}), defaultPagination)
+    useQueryAndPagination({}, () => ({}), defaultPagination, options)
   return { page, size, setPage, setSize, setPagination, resetPagination }
 }
