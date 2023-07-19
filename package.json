@@ -12,9 +12,9 @@
       "require": "./dist/cjs/index.js"
     },
     "./zod": {
-      "types": "./dist/zod/types/index.d.ts",
-      "import": "./dist/zod/esm/index.js",
-      "require": "./dist/zod/cjs/index.js"
+      "types": "./dist/types/zod/index.d.ts",
+      "import": "./dist/esm/zod/index.js",
+      "require": "./dist/cjs/zod/index.js"
     }
   },
   "engines": {
