@@ -1,4 +1,4 @@
-import { Query } from './useQuery'
+import { Query } from './engine/query'
 
 export type NonNullableRecord<
   T extends Record<string | number | symbol, unknown>

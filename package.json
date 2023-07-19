@@ -5,7 +5,18 @@
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
   "types": "dist/types/index.d.ts",
-  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "dist/types/index.d.ts",
+      "import": "dist/esm/index.js",
+      "require": "dist/cjs/index.js"
+    },
+    "./zod": {
+      "types": "dist/zod/types/index.d.ts",
+      "import": "dist/zod/esm/index.js",
+      "require": "dist/zod/cjs/index.js"
+    }
+  },
   "engines": {
     "npm": "^8",
     "node": "^16"
@@ -73,19 +84,22 @@
     "rimraf": "^5.0.1",
     "typescript": "^5.1.6",
     "vite": "^4.4.4",
-    "vitest": "^0.33.0",
-    "zod": "^3.21.4"
+    "vitest": "^0.33.0"
   },
   "peerDependencies": {
     "next": "^12.0.0 || ^13.0.0",
     "react": "^16.0.0 || ^17.0.0 || ^18.0.0",
-    "react-router-dom": "^6.0.0"
+    "react-router-dom": "^6.0.0",
+    "zod": "^3.0.0"
   },
   "peerDependenciesMeta": {
     "next": {
       "optional": true
     },
     "react-router-dom": {
+      "optional": true
+    },
+    "zod": {
       "optional": true
     }
   }
