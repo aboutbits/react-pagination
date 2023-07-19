@@ -181,15 +181,32 @@ describe('NextRouter', () => {
     const search = 'Max'
     const department = 'IT'
     const defaultAge = 42
+    const defaultBirthDate = new Date()
+    defaultBirthDate.setMilliseconds(0)
+    const defaultNetWorth = BigInt(0xf8ffffffffffffffffffffffffff2fffn)
+    const defaultDarkMode: boolean | undefined = true
 
     const schema = z.object({
       search: z.string().optional().catch(undefined),
       department: z.string().optional().catch(undefined),
       age: z.string().pipe(z.coerce.number().optional()).catch(undefined),
+      birthDate: z.string().pipe(z.coerce.date().optional()).catch(undefined),
+      netWorth: z.string().pipe(z.coerce.bigint().optional()).catch(undefined),
+      darkMode: z.string().pipe(z.coerce.boolean().optional()).catch(undefined),
     })
 
     const { result } = renderHook(() =>
-      useQuery({ search: '', department: '', age: defaultAge }, schema)
+      useQuery(
+        {
+          search: '',
+          department: '',
+          age: defaultAge,
+          birthDate: defaultBirthDate,
+          netWorth: defaultNetWorth,
+          darkMode: defaultDarkMode,
+        },
+        schema
+      )
     )
 
     act(() => {
@@ -203,6 +220,8 @@ describe('NextRouter', () => {
     expect(result.current.query.search).toBe(search)
     expect(result.current.query.department).toBe(department)
     expect(result.current.query.age).toBe(defaultAge)
+    expect(result.current.query.birthDate).toEqual(defaultBirthDate)
+    expect(result.current.query.netWorth).toEqual(defaultNetWorth)
   })
 
   test('unspecified query keys should be left untouched', () => {
