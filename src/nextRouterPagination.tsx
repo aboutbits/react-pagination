@@ -1,7 +1,6 @@
 import { ParsedUrlQuery } from 'querystring'
 import { useRouter } from 'next/router'
 import { useCallback } from 'react'
-
 import { IndexType, IUseQueryAndPagination, QueryParameters } from './types'
 import { convert } from './utils'
 
@@ -64,7 +63,7 @@ export const useQueryAndPagination: IUseQueryAndPagination = function (config) {
         ) {
           delete params[parameter]
         } else {
-          params[parameter] = queryParameters[parameter].toString()
+          params[parameter] = queryParameters[parameter]?.toString()
         }
       }
 
@@ -75,7 +74,7 @@ export const useQueryAndPagination: IUseQueryAndPagination = function (config) {
         query: params,
       })
     },
-    [router]
+    [router, config?.defaultQueryParameters]
   )
 
   const clear = useCallback(() => {
@@ -93,7 +92,7 @@ export const useQueryAndPagination: IUseQueryAndPagination = function (config) {
     router.push({
       query: params,
     })
-  }, [router])
+  }, [router, config?.defaultQueryParameters])
 
   return {
     queryParameters: extractCurrentQueryParameters(

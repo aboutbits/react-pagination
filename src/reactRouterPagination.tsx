@@ -42,7 +42,7 @@ export const useQueryAndPagination: IUseQueryAndPagination = function (config) {
         ) {
           params.delete(parameter)
         } else {
-          params.set(parameter, queryParameters[parameter].toString())
+          params.set(parameter, queryParameters[parameter] as string)
         }
       }
 
@@ -54,7 +54,7 @@ export const useQueryAndPagination: IUseQueryAndPagination = function (config) {
         search: params.toString(),
       })
     },
-    [navigate, params]
+    [navigate, params, config?.defaultQueryParameters, routerUrl]
   )
 
   const clear = useCallback(() => {
@@ -69,7 +69,7 @@ export const useQueryAndPagination: IUseQueryAndPagination = function (config) {
       pathname: routerUrl,
       search: params.toString(),
     })
-  }, [navigate, params])
+  }, [navigate, params, config?.defaultQueryParameters, routerUrl])
 
   const setPage = useCallback(
     (page: number) => {
@@ -79,7 +79,7 @@ export const useQueryAndPagination: IUseQueryAndPagination = function (config) {
         search: params.toString(),
       })
     },
-    [navigate, params]
+    [navigate, params, routerUrl]
   )
 
   return {

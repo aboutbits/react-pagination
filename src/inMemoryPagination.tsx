@@ -10,36 +10,39 @@ export const useQueryAndPagination: IUseQueryAndPagination = function (config) {
       size: pageSize,
       queryParameters: config?.defaultQueryParameters || {},
     }),
-    []
+    [firstPage, pageSize, config?.defaultQueryParameters]
   )
 
   const [state, setState] = useState(initialState)
 
-  const updateQuery = useCallback((queryParameters: QueryParameters) => {
-    setState((currentState) => {
-      const updatedQueryParameters = {
-        ...currentState.queryParameters,
-        ...queryParameters,
-      }
-
-      for (const parameter in queryParameters) {
-        if (
-          !!config?.defaultQueryParameters &&
-          (config.defaultQueryParameters[parameter] === undefined ||
-            config.defaultQueryParameters[parameter] ===
-              queryParameters[parameter])
-        ) {
-          delete updatedQueryParameters[parameter]
+  const updateQuery = useCallback(
+    (queryParameters: QueryParameters) => {
+      setState((currentState) => {
+        const updatedQueryParameters = {
+          ...currentState.queryParameters,
+          ...queryParameters,
         }
-      }
 
-      return {
-        ...currentState,
-        page: 0,
-        queryParameters: updatedQueryParameters,
-      }
-    })
-  }, [])
+        for (const parameter in queryParameters) {
+          if (
+            !!config?.defaultQueryParameters &&
+            (config.defaultQueryParameters[parameter] === undefined ||
+              config.defaultQueryParameters[parameter] ===
+                queryParameters[parameter])
+          ) {
+            delete updatedQueryParameters[parameter]
+          }
+        }
+
+        return {
+          ...currentState,
+          page: 0,
+          queryParameters: updatedQueryParameters,
+        }
+      })
+    },
+    [config?.defaultQueryParameters]
+  )
 
   const clear = useCallback(() => {
     setState(() => {

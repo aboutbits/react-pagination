@@ -8,9 +8,10 @@
     "node": "^16"
   },
   "scripts": {
-    "build": "npm run build:node && npm run build:esm",
-    "build:node": "tsc",
-    "build:esm": "tsc --project tsconfig.esnext.json",
+    "build": "rimraf dist && npm run build:types && npm run build:esm && npm run build:cjs",
+    "build:esm": "tsc -p tsconfig.esm.json",
+    "build:cjs": "tsc -p tsconfig.cjs.json",
+    "build:types": "tsc -p tsconfig.types.json",
     "lint": "eslint --ext js,ts,tsx src",
     "lint:fix": "npm run lint -- --fix",
     "typecheck": "tsc --noEmit",
@@ -57,6 +58,8 @@
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-jest": "^26.5.3",
     "eslint-plugin-prettier": "^4.1.0",
+    "eslint-plugin-react": "^7.32.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
     "jest": "^28.1.1",
     "jest-environment-jsdom": "^28.1.1",
     "next": "^13.1.3",
@@ -65,8 +68,9 @@
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "react-router-dom": "^6.7.0",
+    "rimraf": "^5.0.1",
     "ts-jest": "^28.0.5",
-    "typescript": "^4.7.4"
+    "typescript": "^5.1.6"
   },
   "peerDependencies": {
     "next": "^12.0.0 || ^13.0.0",
