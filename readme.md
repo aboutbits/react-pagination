@@ -27,8 +27,8 @@ There are a variety of entry points from which to import the hooks `useQuery`, `
   - `@aboutbits/react-pagination/next-router`
   - `@aboutbits/react-pagination/next-router/zod`
 - For [React Router](https://reactrouter.com):
-- `@aboutbits/react-pagination/react-router`
-- `@aboutbits/react-pagination/react-router/zod`
+  - `@aboutbits/react-pagination/react-router`
+  - `@aboutbits/react-pagination/react-router/zod`
 - For an in-memory router that does not modify the browser history:
   - `@aboutbits/react-pagination/in-memory`
   - `@aboutbits/react-pagination/in-memory/zod`
