@@ -6,7 +6,6 @@ import {
 } from '../../engine'
 import {
   useQuery as useQueryVanilla,
-  usePagination as usePaginationVanilla,
   useQueryAndPagination as useQueryAndPaginationVanilla,
 } from '../../routers/reactRouter'
 import { zodParser } from '../util'
@@ -41,8 +40,3 @@ export const useQueryAndPagination = <
     defaultPagination,
     options
   )
-
-export const usePagination = (
-  defaultPagination?: PaginationQuery,
-  options?: Partial<AbstractQueryOptions & RouterWithHistoryOptions>
-) => usePaginationVanilla(defaultPagination, options)

@@ -1,11 +1,8 @@
 import { act, renderHook } from '@testing-library/react'
 import { z } from 'zod'
 import { NonNullableRecord } from '../../utils'
-import {
-  useQuery,
-  usePagination,
-  useQueryAndPagination,
-} from '../../zod/routers/inMemory'
+import { useQuery, useQueryAndPagination } from '../../zod/routers/inMemory'
+import { usePagination } from '../inMemory'
 
 describe('InMemory', () => {
   const searchSchema = z.object({

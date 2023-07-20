@@ -3,11 +3,8 @@ import router from 'next/router'
 import { z } from 'zod'
 import { vi } from 'vitest'
 import { NonNullableRecord } from '../../utils'
-import {
-  useQuery,
-  usePagination,
-  useQueryAndPagination,
-} from '../../zod/routers/nextRouter'
+import { useQuery, useQueryAndPagination } from '../../zod/routers/nextRouter'
+import { usePagination } from '../nextRouter'
 
 vi.mock('next/router', () => require('next-router-mock'))
 

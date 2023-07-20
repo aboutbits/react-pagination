@@ -2,11 +2,8 @@ import { act, renderHook } from '@testing-library/react'
 import { z } from 'zod'
 import { BrowserRouter } from 'react-router-dom'
 import { NonNullableRecord } from '../../utils'
-import {
-  useQuery,
-  usePagination,
-  useQueryAndPagination,
-} from '../../zod/routers/reactRouter'
+import { useQuery, useQueryAndPagination } from '../../zod/routers/reactRouter'
+import { usePagination } from '../reactRouter'
 
 const renderHookWithContext = <Result, Props>(
   render: (initialProps: Props) => Result
