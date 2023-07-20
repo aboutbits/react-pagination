@@ -8,14 +8,32 @@ import {
   AbstractQueryOptions,
 } from './query'
 
-export type PaginationQuery = { page: number; size: number }
-
-export type ChangeQueryOptions = { resetPage: boolean }
+export type PaginationQuery = {
+  /**
+   * The page index.
+   */
+  page: number
+  /**
+   * The size of one page.
+   */
+  size: number
+}
 
 const DEFAULT_PAGINATION: PaginationQuery = {
   page: 0,
   size: 15,
 }
+
+export type ChangeQueryOptions = {
+  /**
+   * Whether the page should be reset to its default value when the query is changed.
+   *
+   * @default `true`
+   */
+  resetPage: boolean
+}
+
+const DEFAULT_CHANGE_QUERY_OPTIONS: ChangeQueryOptions = { resetPage: true }
 
 const parsePagination = (query: Query): Partial<PaginationQuery> => {
   return {
@@ -23,8 +41,6 @@ const parsePagination = (query: Query): Partial<PaginationQuery> => {
     size: queryValueToIntOrUndefined(query.size),
   }
 }
-
-const DEFAULT_RESET_PAGE = true
 
 export const useAbstractQueryAndPagination = <T extends AbstractQuery>(
   defaultQuery: T,
@@ -63,23 +79,21 @@ export const useAbstractQueryAndPagination = <T extends AbstractQuery>(
   return {
     query,
     setQuery: (query: Partial<T>, options?: Partial<ChangeQueryOptions>) => {
-      const resetPage =
-        options?.resetPage === undefined
-          ? DEFAULT_RESET_PAGE
-          : options.resetPage
+      const mergedOptions = { ...DEFAULT_CHANGE_QUERY_OPTIONS, ...options }
       setQuery({
         ...query,
-        page: resetPage ? mergedDefaultPagination.page : undefined,
+        page: mergedOptions.resetPage
+          ? mergedDefaultPagination.page
+          : undefined,
       })
     },
     resetQuery: (options?: Partial<ChangeQueryOptions>) => {
-      const resetPage =
-        options?.resetPage === undefined
-          ? DEFAULT_RESET_PAGE
-          : options.resetPage
+      const mergedOptions = { ...DEFAULT_CHANGE_QUERY_OPTIONS, ...options }
       setQuery({
         ...defaultQuery,
-        page: resetPage ? mergedDefaultPagination.page : undefined,
+        page: mergedOptions.resetPage
+          ? mergedDefaultPagination.page
+          : undefined,
       })
     },
     page: pagination.page,

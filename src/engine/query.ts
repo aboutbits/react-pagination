@@ -50,6 +50,11 @@ export const useQuery = <T extends Query>(defaultQuery: T, router: Router) => {
 }
 
 export type AbstractQueryOptions = {
+  /**
+   * How the abstract query is converted to an actual query.
+   *
+   * @default Each value that is not undefined is converted to a string by calling `.toString()`.
+   */
   convertToQuery: (abstractQuery: Partial<AbstractQuery>) => Query
 }
 

@@ -10,19 +10,14 @@ import {
   useAbstractQueryAndPagination,
   Router,
 } from '../engine'
+import { QUERY_ARRAY_SEPARATOR, RouterWithHistoryOptions } from './shared'
 
-const QUERY_ARRAY_SEPARATOR = ','
-
-export type ReactRouterOptions = {
-  setQueryMethod: 'replace' | 'push'
-}
-
-const DEFAULT_REACT_ROUTER_OPTIONS: ReactRouterOptions = {
+const DEFAULT_REACT_ROUTER_OPTIONS: RouterWithHistoryOptions = {
   setQueryMethod: 'replace',
 }
 
 const useReactRouter = (
-  options: undefined | Partial<ReactRouterOptions>
+  options: undefined | Partial<RouterWithHistoryOptions>
 ): Router => {
   const navigate = useNavigate()
   const { pathname, search } = useLocation()
@@ -75,7 +70,7 @@ const useReactRouter = (
 export const useQuery = <T extends AbstractQuery>(
   defaultQuery: T,
   parseQuery: ParseQuery<T>,
-  options?: Partial<AbstractQueryOptions & ReactRouterOptions>
+  options?: Partial<AbstractQueryOptions & RouterWithHistoryOptions>
 ) => {
   const router = useReactRouter(options)
   return useAbstractQuery(defaultQuery, parseQuery, router, options)
@@ -85,7 +80,7 @@ export const useQueryAndPagination = <T extends AbstractQuery>(
   defaultQuery: T,
   parseQuery: ParseQuery<T>,
   defaultPagination?: PaginationQuery,
-  options?: Partial<AbstractQueryOptions & ReactRouterOptions>
+  options?: Partial<AbstractQueryOptions & RouterWithHistoryOptions>
 ) => {
   const router = useReactRouter(options)
   return useAbstractQueryAndPagination(
@@ -99,7 +94,7 @@ export const useQueryAndPagination = <T extends AbstractQuery>(
 
 export const usePagination = (
   defaultPagination?: PaginationQuery,
-  options?: Partial<AbstractQueryOptions & ReactRouterOptions>
+  options?: Partial<AbstractQueryOptions & RouterWithHistoryOptions>
 ) => {
   const { page, size, setPage, setSize, setPagination, resetPagination } =
     useQueryAndPagination({}, () => ({}), defaultPagination, options)
