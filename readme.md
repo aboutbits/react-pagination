@@ -1,130 +1,178 @@
-React Pagination
-=============
+# React Pagination
 
 [![npm package](https://badge.fury.io/js/%40aboutbits%2Freact-pagination.svg)](https://badge.fury.io/js/%40aboutbits%2Freact-pagination)
 [![license](https://img.shields.io/github/license/aboutbits/react-pagination)](https://github.com/aboutbits/react-pagination/blob/main/license.md)
 
-This package includes pagination hooks for React. The hooks support saving the query and pagination values in local
-state or in the browser URL.
+Query hooks for React with first-class support for TypeScript! Writing and reading the query, attached to the browser URL or in-memory, made easy!
 
 ## Table of content
 
 - [Usage](#usage)
-    - [useQueryAndPagination](#usequeryandpagination)
-- [Supported Implementations](#supported-implementations)
-    - [In Memory Pagination](#in-memory-pagination)
-    - [React-Router based pagination](#react-router-based-pagination)
-    - [NextJS Router based pagination](#nextjs-router-based-pagination)
+  - [Example usage with Next.js](#example-usage-with-nextjs)
+  - [Example usage with React Router and zod](#example-usage-with-react-router-and-zod)
 - [Build & Publish](#build--publish)
-- [Information](#information)
+- [About](#about)
 
 ## Usage
 
-First, you have to install the package:
+Install the package:
 
-```bash
+```sh
 npm install @aboutbits/react-pagination
 ```
 
-Second, you can make use of the `useQueryAndPagination` hook. This package implements 3 versions of this hook:
+There are a variety of entry points from which to import the hooks `useQuery`, `usePagination` and `useQueryAndPagination`:
 
-- [In Memory](#in-memory-pagination): Use this hook where you don't want to modify browser history. e.g. Dialogs
-- [React Router](#react-router-based-pagination): Use this hook if you want to keep track of the state in the URL and
-  your project is using React Router.
-- [NextJS Router](#nextjs-router-based-pagination): Use this hook if you want to keep track of the state in the URL and
-  your project is using NextJS.
+- For the [Next.js](https://nextjs.org/) router:
+  - `@aboutbits/react-pagination/next-router`
+  - `@aboutbits/react-pagination/next-router/zod`
+- For [React Router](https://reactrouter.com):
+- `@aboutbits/react-pagination/react-router`
+- `@aboutbits/react-pagination/react-router/zod`
+- For an in-memory router that does not modify the browser history:
+  - `@aboutbits/react-pagination/in-memory`
+  - `@aboutbits/react-pagination/in-memory/zod`
 
-### useQueryAndPagination
+The hooks exported from `@aboutbits/react-pagination/*/zod` are more convenient when using [zod](https://github.com/colinhacks/zod) for the validation of the query.
 
-This hook supports the combination of query parameters and pagination and manages the state of the query parameter values and the
-pagination values.
+`useQueryAndPagination` merges the functionality of `useQuery` and `usePagination`. Changing the query resets the page, but changing the page does not reset the query.
 
-#### The hook supports following configuration parameter object:
+Some examples follow, but we recommend having a look at the type definitions for more details about the API.
 
-|value|type|default|description|
-|---|---|---|---|
-|indexType|IndexType|IndexType.ZERO_BASED|It defines whether the pagination is zero or one based.|
-|pageSize|number|15|Page size of the pagination.|
-|defaultQueryParameters/Record<string, string>|{}|It defines the default value for each query parameter. This is used to remove a query parameter from the URL and also to clear the query.
-
-#### The hook returns the following object:
-
-|value|type|description|
-|---|---|---|
-|queryParameters|object|values of your query parameters|
-|page|number|value of the current page|
-|size|number|max elements in a single page|
-|actions|object|object with 3 functions: updateQuery, setPage, clear|
-
-#### Example usage with NextJS
+### Example usage with Next.js
 
 ```tsx
-import { useQueryAndPagination } from '@aboutbits/react-pagination/dist/nextRouterPagination'
+import { Query } from '@aboutbits/react-pagination'
+import { useQueryAndPagination } from '@aboutbits/react-pagination/next-router'
 
-const users = [
-    'Alex', 'Simon', 'Natan', 'Nadia', 'Moritz', 'Marie'
-]
+const users = ['Alex', 'Simon', 'Natan', 'Nadia', 'Moritz', 'Marie']
 
-function UserList() {
-    const { page, size, queryParameters, actions } = useQueryAndPagination({pageSize: 2})
+const parseSearch = (query: Query) => {
+  for (const [key, value] of Object.entries(query)) {
+    if (key === 'search' && !Array.isArray(value)) {
+      return { search: value }
+    }
+  }
+  return {}
+}
 
-    return (
-        <div>
-            <input onChange={(value) => actions.updateQuery({search: value})}/>
-            <button onClick={() => actions.clear()}>Clear Input</button>
-            <select onSelect={(value) => actions.setPage(value)}>
-                <option value={0}>First Page</option>
-                <option value={1}>Second Page</option>
-            </select>
+export function UserList() {
+  const { page, size, query, setQuery, setPage, resetQuery } =
+    useQueryAndPagination({ search: '' }, parseSearch)
 
-            <ul>
-                {users.filter(user => user.startsWith(queryParameters.search))
-                    .slice(page, page + size)
-                    .map(user => <li>{user}</li>)}
-            </ul>
-        </div>
-    )
+  return (
+    <div>
+      <input
+        value={query.search}
+        onChange={(event) => setQuery({ search: event.target.value })}
+      />
+      <button onClick={() => resetQuery()}>Clear Input</button>
+      <select
+        value={page}
+        onChange={(event) => setPage(parseInt(event.target.value))}
+      >
+        <option value="0">First Page</option>
+        <option value="1">Second Page</option>
+      </select>
+      <ul>
+        {users
+          .filter((user) =>
+            user.toLowerCase().startsWith(query.search.toLowerCase())
+          )
+          .slice(page * size, (page + 1) * size)
+          .map((user) => (
+            <li key={user}>{user}</li>
+          ))}
+      </ul>
+    </div>
+  )
 }
 ```
 
-## Supported implementations
-
-This package includes 3 different implementations of the above hook.
-
-- [In Memory](#in-memory-pagination)
-- [React Router](#react-router-based-pagination)
-- [NextJS Router](#nextjs-router-based-pagination)
-
-### In Memory Pagination
-
-Use this pagination hook if you want to keep track of the pagination in memory. This is very handy for dialogs.
+### Example usage with React Router and zod
 
 ```tsx
-import { useQueryAndPagination } from '@aboutbits/react-pagination/dist/inMemoryPagination'
-```
+import { useQueryAndPagination } from '@aboutbits/react-pagination/react-router/zod'
+import { z } from 'zod'
 
-### React-Router based pagination
+const userSchema = z.object({
+  name: z.string(),
+  // The input to the parser is going to be a string.
+  // We try to convert it to a number and default to undefined if the parsing fails.
+  // This continues the parsing of the remaining query.
+  // Another possibility would be to not catch errors, which would cancel the entire parsing
+  // if "age" cannot be converted to a number.
+  age: z.string().pipe(z.coerce.number().optional()).catch(undefined),
+})
 
-These are specific hooks for applications that use [React Router](https://reactrouter.com/) for routing.
+const users = [
+  { name: 'Alex', age: 10 },
+  { name: 'Simon', age: 24 },
+  { name: 'Natan', age: 88 },
+  { name: 'Nadia', age: 42 },
+  { name: 'Moritz', age: 35 },
+  { name: 'Marie', age: 17 },
+]
 
-```tsx
-import { useQueryAndPagination } from '@aboutbits/react-pagination/dist/reactRouterPagination'
-```
+export function UserList() {
+  const { page, size, query, setQuery, setPage, resetQuery } =
+    useQueryAndPagination({ name: '', age: 0 }, userSchema, {
+      page: 0,
+      size: 4,
+    })
 
-### NextJS Router based pagination
-
-These are specific hooks for applications that use [NextJS Router](https://nextjs.org/docs/api-reference/next/router)
-for routing.
-
-```tsx
-import { useQueryAndPagination } from '@aboutbits/react-pagination/dist/nextRouterPagination'
+  return (
+    <div>
+      <div>
+        Name:
+        <input
+          value={query.name}
+          onChange={(event) => setQuery({ name: event.target.value })}
+        />
+      </div>
+      <div>
+        Minimum age:
+        <input
+          value={query.age}
+          onChange={(event) => {
+            const value = event.target.value
+            const parsed = parseInt(value)
+            if (!isNaN(parsed)) {
+              setQuery({ age: parsed })
+            }
+          }}
+        />
+      </div>
+      <button onClick={() => resetQuery()}>Clear Input</button>
+      <select
+        value={page}
+        onChange={(event) => setPage(parseInt(event.target.value))}
+      >
+        <option value="0">First Page</option>
+        <option value="1">Second Page</option>
+      </select>
+      <ul>
+        {users
+          .filter(
+            (user) =>
+              user.name.toLowerCase().startsWith(query.name.toLowerCase()) &&
+              user.age >= query.age
+          )
+          .slice(page * size, (page + 1) * size)
+          .map((user) => (
+            <li key={user.name}>{user.name}</li>
+          ))}
+      </ul>
+    </div>
+  )
+}
 ```
 
 ## Build & Publish
 
 To publish the package commit all changes and push them to main. Then run one of the following commands locally:
 
-```bash
+```sh
 npm version patch
 npm version minor
 npm version major
@@ -132,7 +180,7 @@ npm version major
 
 ## Information
 
-About Bits is a company based in South Tyrol, Italy. You can find more information about us
+AboutBits is a company based in South Tyrol, Italy. You can find more information about us
 on [our website](https://aboutbits.it).
 
 ### Support

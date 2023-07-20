@@ -1,11 +1,20 @@
-export function convert(parameter: string | null, fallback: number): number {
-  if (parameter !== null) {
-    const converted = parseInt(parameter)
+import { Query } from './engine/query'
 
-    if (Number.isInteger(converted) && converted > 0) {
-      return converted
-    }
+export type NonNullableRecord<
+  T extends Record<string | number | symbol, unknown>
+> = {
+  [Key in keyof T]-?: NonNullable<T[Key]>
+}
+
+export const queryValueToIntOrUndefined = (
+  value: Query[keyof Query] | undefined
+): number | undefined => {
+  if (value === undefined || Array.isArray(value)) {
+    return undefined
   }
-
-  return fallback
+  const parsed = parseInt(value)
+  if (isNaN(parsed)) {
+    return undefined
+  }
+  return parsed
 }

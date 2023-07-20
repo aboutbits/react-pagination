@@ -2,7 +2,43 @@
   "name": "@aboutbits/react-pagination",
   "version": "1.0.2",
   "description": "Pagination hooks for React",
-  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./dist/types/engine/index.d.ts",
+      "import": "./dist/esm/engine/index.js",
+      "require": "./dist/cjs/engine/index.js"
+    },
+    "./next-router": {
+      "types": "./dist/types/routers/nextRouter.d.ts",
+      "import": "./dist/esm/routers/nextRouter.js",
+      "require": "./dist/cjs/routers/nextRouter.js"
+    },
+    "./in-memory": {
+      "types": "./dist/types/routers/inMemory.d.ts",
+      "import": "./dist/esm/routers/inMemory.js",
+      "require": "./dist/cjs/routers/inMemory.js"
+    },
+    "./react-router": {
+      "types": "./dist/types/routers/reactRouter.d.ts",
+      "import": "./dist/esm/routers/reactRouter.js",
+      "require": "./dist/cjs/routers/reactRouter.js"
+    },
+    "./next-router/zod": {
+      "types": "./dist/types/zod/routers/nextRouter.d.ts",
+      "import": "./dist/esm/zod/routers/nextRouter.js",
+      "require": "./dist/cjs/zod/routers/nextRouter.js"
+    },
+    "./in-memory/zod": {
+      "types": "./dist/types/zod/routers/inMemory.d.ts",
+      "import": "./dist/esm/zod/routers/inMemory.js",
+      "require": "./dist/cjs/zod/routers/inMemory.js"
+    },
+    "./react-router/zod": {
+      "types": "./dist/types/zod/routers/reactRouter.d.ts",
+      "import": "./dist/esm/zod/routers/reactRouter.js",
+      "require": "./dist/cjs/zod/routers/reactRouter.js"
+    }
+  },
   "engines": {
     "npm": "^8",
     "node": "^16"
@@ -12,13 +48,16 @@
     "build:esm": "tsc -p tsconfig.esm.json",
     "build:cjs": "tsc -p tsconfig.cjs.json",
     "build:types": "tsc -p tsconfig.types.json",
-    "lint": "eslint --ext js,ts,tsx src",
+    "lint": "eslint --ext js,ts,tsx --cache .",
     "lint:fix": "npm run lint -- --fix",
+    "test": "vitest run --passWithNoTests",
+    "test:watch": "vitest watch --passWithNoTests",
     "typecheck": "tsc --noEmit",
-    "test": "jest --verbose --passWithNoTests",
+    "checks": "npm run test && npm run lint && npm run typecheck",
+    "prepublishOnly": "npm run checks",
     "prepare": "npm run build",
-    "prepublishOnly": "npm run test && npm run lint",
-    "version": "npm run test && npm run lint && git add -A src",
+    "preversion": "npm run checks",
+    "version": "git add -A src",
     "postversion": "git push && git push --tags"
   },
   "repository": {
@@ -28,8 +67,9 @@
   "private": false,
   "keywords": [
     "react",
+    "query",
     "pagination",
-    "hooks"
+    "zod"
   ],
   "author": "About Bits",
   "license": "MIT",
@@ -47,7 +87,6 @@
   "devDependencies": {
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
-    "@types/jest": "^28.1.3",
     "@types/react": "^18.0.0",
     "@types/react-dom": "^18.0.0",
     "@types/react-router-dom": "^5.3.3",
@@ -56,12 +95,10 @@
     "eslint": "^8.18.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-import": "^2.26.0",
-    "eslint-plugin-jest": "^26.5.3",
     "eslint-plugin-prettier": "^4.1.0",
     "eslint-plugin-react": "^7.32.2",
     "eslint-plugin-react-hooks": "^4.6.0",
-    "jest": "^28.1.1",
-    "jest-environment-jsdom": "^28.1.1",
+    "jsdom": "^22.1.0",
     "next": "^13.1.3",
     "next-router-mock": "^0.7.4",
     "prettier": "^2.7.1",
@@ -69,19 +106,24 @@
     "react-dom": "^18.0.0",
     "react-router-dom": "^6.7.0",
     "rimraf": "^5.0.1",
-    "ts-jest": "^28.0.5",
-    "typescript": "^5.1.6"
+    "typescript": "^5.1.6",
+    "vite": "^4.4.4",
+    "vitest": "^0.33.0"
   },
   "peerDependencies": {
     "next": "^12.0.0 || ^13.0.0",
     "react": "^16.0.0 || ^17.0.0 || ^18.0.0",
-    "react-router-dom": "^6.0.0"
+    "react-router-dom": "^6.0.0",
+    "zod": "^3.0.0"
   },
   "peerDependenciesMeta": {
     "next": {
       "optional": true
     },
     "react-router-dom": {
+      "optional": true
+    },
+    "zod": {
       "optional": true
     }
   }
