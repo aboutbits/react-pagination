@@ -11,10 +11,14 @@ import {
 export type PaginationQuery = {
   /**
    * The page index.
+   *
+   * @default 0
    */
   page: number
   /**
    * The size of one page.
+   *
+   * @default 15
    */
   size: number
 }
@@ -28,7 +32,7 @@ export type ChangeQueryOptions = {
   /**
    * Whether the page should be reset to its default value when the query is changed.
    *
-   * @default `true`
+   * @default true
    */
   resetPage: boolean
 }
