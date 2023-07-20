@@ -21,7 +21,7 @@ Install the package:
 npm install @aboutbits/react-pagination
 ```
 
-There are a variety of entry points from which to import the hooks `useQuery`, `usePagiation` and `useQueryAndPagination`:
+There are a variety of entry points from which to import the hooks `useQuery`, `usePagination` and `useQueryAndPagination`:
 
 - For the [Next.js](https://nextjs.org/) router:
   - `@aboutbits/react-pagination/next-router`
@@ -178,7 +178,7 @@ npm version minor
 npm version major
 ```
 
-## About
+## Information
 
 AboutBits is a company based in South Tyrol, Italy. You can find more information about us
 on [our website](https://aboutbits.it).
