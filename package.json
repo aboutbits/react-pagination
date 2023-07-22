@@ -86,7 +86,7 @@
   },
   "devDependencies": {
     "@aboutbits/eslint-config": "^2.0.12",
-    "@aboutbits/prettier-config": "^1.4.0",
+    "@aboutbits/prettier-config": "^1.5.0",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@types/react": "^18.0.0",
