@@ -6,7 +6,7 @@ import { useQuery, useQueryAndPagination } from '../../zod/routers/reactRouter'
 import { usePagination } from '../reactRouter'
 
 const renderHookWithContext = <Result, Props>(
-  render: (initialProps: Props) => Result
+  render: (initialProps: Props) => Result,
 ) =>
   renderHook(render, {
     wrapper: ({ children }) => {
@@ -24,14 +24,14 @@ describe('ReactRouter', () => {
   })
 
   const useReactRouterQueryWithSearch = (
-    defaultQuery: NonNullableRecord<z.infer<typeof searchSchema>>
+    defaultQuery: NonNullableRecord<z.infer<typeof searchSchema>>,
   ) => useQuery(defaultQuery, searchSchema)
 
   test('should set default page and size', () => {
     const page = 0
     const size = 15
     const { result } = renderHookWithContext(() =>
-      usePagination({ page, size })
+      usePagination({ page, size }),
     )
 
     expect(result.current.page).toBe(page)
@@ -55,14 +55,14 @@ describe('ReactRouter', () => {
     const search = 'Max'
 
     const { result } = renderHookWithContext(() =>
-      useReactRouterQueryWithSearch({ search: '' })
+      useReactRouterQueryWithSearch({ search: '' }),
     )
 
     act(() => {
       result.current.setQuery({ search })
     })
 
-    expect(result.current.query?.search).toBe(search)
+    expect(result.current.query.search).toBe(search)
     expect(window.location.search).toBe(`?search=${search}`)
   })
 
@@ -71,7 +71,7 @@ describe('ReactRouter', () => {
     const page = 2
 
     const { result } = renderHookWithContext(() =>
-      useQueryAndPagination({ search: '' }, searchSchema)
+      useQueryAndPagination({ search: '' }, searchSchema),
     )
 
     act(() => {
@@ -97,7 +97,7 @@ describe('ReactRouter', () => {
     const page = 1
     const size = 10
     const { result } = renderHookWithContext(() =>
-      usePagination({ page, size })
+      usePagination({ page, size }),
     )
 
     expect(result.current.page).toBe(page)
@@ -111,7 +111,7 @@ describe('ReactRouter', () => {
     const page = 2
 
     const { result } = renderHookWithContext(() =>
-      useQueryAndPagination({ search: defaultSearch }, searchSchema)
+      useQueryAndPagination({ search: defaultSearch }, searchSchema),
     )
 
     act(() => {
@@ -149,7 +149,7 @@ describe('ReactRouter', () => {
     const page = 2
 
     const { result } = renderHookWithContext(() =>
-      useQueryAndPagination({ search: defaultSearch }, searchSchema)
+      useQueryAndPagination({ search: defaultSearch }, searchSchema),
     )
 
     act(() => {
@@ -186,7 +186,7 @@ describe('ReactRouter', () => {
     })
 
     const { result } = renderHookWithContext(() =>
-      useQuery({ search: '', department: '' }, schema)
+      useQuery({ search: '', department: '' }, schema),
     )
 
     act(() => {
@@ -207,7 +207,7 @@ describe('ReactRouter', () => {
     window.history.pushState({}, '', `/?greeting=${greeting}`)
 
     const { result } = renderHookWithContext(() =>
-      useQuery({ search: '' }, searchSchema)
+      useQuery({ search: '' }, searchSchema),
     )
 
     act(() => {
@@ -216,7 +216,7 @@ describe('ReactRouter', () => {
 
     expect(result.current.query.search).toBe(search)
     expect(window.location.search).toBe(
-      `?greeting=${greeting}&search=${search}`
+      `?greeting=${greeting}&search=${search}`,
     )
   })
 
@@ -226,7 +226,7 @@ describe('ReactRouter', () => {
     window.history.pushState({}, '', `/?search=Max`)
 
     const { result } = renderHookWithContext(() =>
-      useQuery({ search: defaultSearch }, searchSchema)
+      useQuery({ search: defaultSearch }, searchSchema),
     )
 
     act(() => {
@@ -241,7 +241,7 @@ describe('ReactRouter', () => {
     const search = ''
 
     const { result } = renderHookWithContext(() =>
-      useQuery({ search: 'Default search' }, searchSchema)
+      useQuery({ search: 'Default search' }, searchSchema),
     )
 
     act(() => {

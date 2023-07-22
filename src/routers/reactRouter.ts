@@ -17,14 +17,14 @@ const DEFAULT_REACT_ROUTER_OPTIONS: RouterWithHistoryOptions = {
 }
 
 const useReactRouter = (
-  options: undefined | Partial<RouterWithHistoryOptions>
+  options: undefined | Partial<RouterWithHistoryOptions>,
 ): Router => {
   const navigate = useNavigate()
   const { pathname, search } = useLocation()
 
   const mergedOptions = useMemo(
     () => ({ ...DEFAULT_REACT_ROUTER_OPTIONS, ...options }),
-    [options]
+    [options],
   )
 
   return {
@@ -61,7 +61,7 @@ const useReactRouter = (
       }
       navigate(
         { pathname, search: urlSearchParams.toString() },
-        { replace: mergedOptions.setQueryMethod === 'replace' }
+        { replace: mergedOptions.setQueryMethod === 'replace' },
       )
     },
   }
@@ -70,7 +70,7 @@ const useReactRouter = (
 export const useQuery = <T extends AbstractQuery>(
   defaultQuery: T,
   parseQuery: ParseQuery<T>,
-  options?: Partial<AbstractQueryOptions & RouterWithHistoryOptions>
+  options?: Partial<AbstractQueryOptions & RouterWithHistoryOptions>,
 ) => {
   const router = useReactRouter(options)
   return useAbstractQuery(defaultQuery, parseQuery, router, options)
@@ -80,7 +80,7 @@ export const useQueryAndPagination = <T extends AbstractQuery>(
   defaultQuery: T,
   parseQuery: ParseQuery<T>,
   defaultPagination?: PaginationQuery,
-  options?: Partial<AbstractQueryOptions & RouterWithHistoryOptions>
+  options?: Partial<AbstractQueryOptions & RouterWithHistoryOptions>,
 ) => {
   const router = useReactRouter(options)
   return useAbstractQueryAndPagination(
@@ -88,13 +88,13 @@ export const useQueryAndPagination = <T extends AbstractQuery>(
     parseQuery,
     router,
     defaultPagination,
-    options
+    options,
   )
 }
 
 export const usePagination = (
   defaultPagination?: PaginationQuery,
-  options?: Partial<AbstractQueryOptions & RouterWithHistoryOptions>
+  options?: Partial<AbstractQueryOptions & RouterWithHistoryOptions>,
 ) => {
   const { page, size, setPage, setSize, setPagination, resetPagination } =
     useQueryAndPagination({}, () => ({}), defaultPagination, options)

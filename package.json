@@ -48,7 +48,7 @@
     "build:esm": "tsc -p tsconfig.esm.json",
     "build:cjs": "tsc -p tsconfig.cjs.json",
     "build:types": "tsc -p tsconfig.types.json",
-    "lint": "eslint --ext js,ts,tsx --cache .",
+    "lint": "eslint --cache .",
     "lint:fix": "npm run lint -- --fix",
     "test": "vitest run --passWithNoTests",
     "test:watch": "vitest watch --passWithNoTests",
@@ -85,23 +85,23 @@
     "access": "public"
   },
   "devDependencies": {
+    "@aboutbits/eslint-config": "^2.0.12",
+    "@aboutbits/prettier-config": "^1.4.0",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@types/react": "^18.0.0",
     "@types/react-dom": "^18.0.0",
     "@types/react-router-dom": "^5.3.3",
-    "@typescript-eslint/eslint-plugin": "^5.30.0",
-    "@typescript-eslint/parser": "^5.30.0",
-    "eslint": "^8.18.0",
-    "eslint-config-prettier": "^8.5.0",
-    "eslint-plugin-import": "^2.26.0",
-    "eslint-plugin-prettier": "^4.1.0",
-    "eslint-plugin-react": "^7.32.2",
+    "@typescript-eslint/eslint-plugin": "^6.1.0",
+    "eslint": "^8.45.0",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-prettier": "^5.0.0",
+    "eslint-plugin-react": "^7.33.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "jsdom": "^22.1.0",
     "next": "^13.1.3",
     "next-router-mock": "^0.7.4",
-    "prettier": "^2.7.1",
+    "prettier": "^3.0.0",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "react-router-dom": "^6.7.0",
@@ -126,5 +126,6 @@
     "zod": {
       "optional": true
     }
-  }
+  },
+  "prettier": "@aboutbits/prettier-config"
 }

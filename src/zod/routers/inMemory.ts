@@ -15,27 +15,27 @@ export const useQuery = <
   TQuery extends NonNullableRecord<TSchemaOutput>,
   TSchemaOutput extends Partial<AbstractQuery>,
   TSchemaDef extends ZodTypeDef = ZodTypeDef,
-  TSchemaInput = TSchemaOutput
+  TSchemaInput = TSchemaOutput,
 >(
   defaultQuery: TQuery,
   schemaQuery: ZodType<TSchemaOutput, TSchemaDef, TSchemaInput>,
-  options?: Partial<AbstractQueryOptions>
+  options?: Partial<AbstractQueryOptions>,
 ) => useQueryVanilla(defaultQuery, zodParser(schemaQuery), options)
 
 export const useQueryAndPagination = <
   TQuery extends NonNullableRecord<TSchemaOutput>,
   TSchemaOutput extends Partial<AbstractQuery>,
   TSchemaDef extends ZodTypeDef = ZodTypeDef,
-  TSchemaInput = TSchemaOutput
+  TSchemaInput = TSchemaOutput,
 >(
   defaultQuery: TQuery,
   schemaQuery: ZodType<TSchemaOutput, TSchemaDef, TSchemaInput>,
   defaultPagination?: PaginationQuery,
-  options?: Partial<AbstractQueryOptions>
+  options?: Partial<AbstractQueryOptions>,
 ) =>
   useQueryAndPaginationVanilla(
     defaultQuery,
     zodParser(schemaQuery),
     defaultPagination,
-    options
+    options,
   )
