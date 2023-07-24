@@ -12,3 +12,6 @@
 
 # ESLint
 .eslintcache
+
+# TypeScript
+*.tsbuildinfo

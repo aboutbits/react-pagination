@@ -2,6 +2,7 @@
   "name": "@aboutbits/react-pagination",
   "version": "2.0.1",
   "description": "Pagination hooks for React",
+  "type": "module",
   "exports": {
     ".": {
       "types": "./dist/types/engine/index.d.ts",
@@ -87,6 +88,7 @@
   "devDependencies": {
     "@aboutbits/eslint-config": "^2.0.12",
     "@aboutbits/prettier-config": "^1.5.0",
+    "@aboutbits/ts-config": "^1.1.2",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@types/react": "^18.0.0",
