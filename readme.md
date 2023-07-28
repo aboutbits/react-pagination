@@ -42,8 +42,8 @@ Some examples follow, but we recommend having a look at the type definitions for
 ### Example usage with Next.js
 
 ```tsx
-import { Query } from '@aboutbits/react-pagination'
-import { useQueryAndPagination } from '@aboutbits/react-pagination/next-router'
+import { Query } from '@aboutbits/react-pagination/dist/esm/engine'
+import { useQueryAndPagination } from '@aboutbits/react-pagination/dist/esm/routers/nextRouter'
 
 const users = ['Alex', 'Simon', 'Natan', 'Nadia', 'Moritz', 'Marie']
 
@@ -77,7 +77,7 @@ export function UserList() {
       <ul>
         {users
           .filter((user) =>
-            user.toLowerCase().startsWith(query.search.toLowerCase())
+            user.toLowerCase().startsWith(query.search.toLowerCase()),
           )
           .slice(page * size, (page + 1) * size)
           .map((user) => (
@@ -92,7 +92,7 @@ export function UserList() {
 ### Example usage with React Router and zod
 
 ```tsx
-import { useQueryAndPagination } from '@aboutbits/react-pagination/react-router/zod'
+import { useQueryAndPagination } from '@aboutbits/react-pagination/dist/esm/zod/routers/reactRouter'
 import { z } from 'zod'
 
 const userSchema = z.object({
@@ -156,7 +156,7 @@ export function UserList() {
           .filter(
             (user) =>
               user.name.toLowerCase().startsWith(query.name.toLowerCase()) &&
-              user.age >= query.age
+              user.age >= query.age,
           )
           .slice(page * size, (page + 1) * size)
           .map((user) => (
