@@ -3,8 +3,11 @@ import router from 'next/router'
 import { z } from 'zod'
 import { vi } from 'vitest'
 import { NonNullableRecord } from '../../utils'
-import { useQuery, useQueryAndPagination } from '../../zod/routers/nextRouter'
-import { usePagination } from '../nextRouter'
+import {
+  useZodNextRouterQuery,
+  useZodNextRouterQueryAndPagination,
+} from '../../zod/routers/nextRouter'
+import { useNextRouterPagination } from '../nextRouter'
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-return
 vi.mock('next/router', () => require('next-router-mock'))
@@ -20,12 +23,12 @@ describe('NextRouter', () => {
 
   const useNextRouterQueryWithSearch = (
     defaultQuery: NonNullableRecord<z.infer<typeof searchSchema>>,
-  ) => useQuery(defaultQuery, searchSchema)
+  ) => useZodNextRouterQuery(defaultQuery, searchSchema)
 
   test('should set default page and size', () => {
     const page = 0
     const size = 15
-    const { result } = renderHook(() => usePagination({ page, size }))
+    const { result } = renderHook(() => useNextRouterPagination({ page, size }))
 
     expect(result.current.page).toBe(page)
     expect(result.current.size).toBe(size)
@@ -34,7 +37,7 @@ describe('NextRouter', () => {
   test('should change page', () => {
     const page = 2
 
-    const { result } = renderHook(() => usePagination())
+    const { result } = renderHook(() => useNextRouterPagination())
 
     act(() => {
       result.current.setPage(page)
@@ -64,7 +67,7 @@ describe('NextRouter', () => {
     const page = 2
 
     const { result } = renderHook(() =>
-      useQueryAndPagination({ search: '' }, searchSchema),
+      useZodNextRouterQueryAndPagination({ search: '' }, searchSchema),
     )
 
     act(() => {
@@ -91,7 +94,7 @@ describe('NextRouter', () => {
   test('change default parameters', () => {
     const page = 1
     const size = 10
-    const { result } = renderHook(() => usePagination({ page, size }))
+    const { result } = renderHook(() => useNextRouterPagination({ page, size }))
 
     expect(result.current.page).toBe(page)
     expect(result.current.size).toBe(size)
@@ -104,7 +107,10 @@ describe('NextRouter', () => {
     const page = 2
 
     const { result } = renderHook(() =>
-      useQueryAndPagination({ search: defaultSearch }, searchSchema),
+      useZodNextRouterQueryAndPagination(
+        { search: defaultSearch },
+        searchSchema,
+      ),
     )
 
     act(() => {
@@ -146,7 +152,10 @@ describe('NextRouter', () => {
     const page = 2
 
     const { result } = renderHook(() =>
-      useQueryAndPagination({ search: defaultSearch }, searchSchema),
+      useZodNextRouterQueryAndPagination(
+        { search: defaultSearch },
+        searchSchema,
+      ),
     )
 
     act(() => {
@@ -194,7 +203,7 @@ describe('NextRouter', () => {
     })
 
     const { result } = renderHook(() =>
-      useQuery(
+      useZodNextRouterQuery(
         {
           search: '',
           department: '',
@@ -226,7 +235,9 @@ describe('NextRouter', () => {
     const greeting = 'hello'
     router.query = { greeting }
 
-    const { result } = renderHook(() => useQuery({ search: '' }, searchSchema))
+    const { result } = renderHook(() =>
+      useZodNextRouterQuery({ search: '' }, searchSchema),
+    )
 
     act(() => {
       result.current.setQuery({ search: 'Max' })
@@ -242,7 +253,7 @@ describe('NextRouter', () => {
     router.query = { search: 'Max' }
 
     const { result } = renderHook(() =>
-      useQuery({ search: defaultSearch }, searchSchema),
+      useZodNextRouterQuery({ search: defaultSearch }, searchSchema),
     )
 
     act(() => {
@@ -257,7 +268,7 @@ describe('NextRouter', () => {
     const search = ''
 
     const { result } = renderHook(() =>
-      useQuery({ search: 'Default search' }, searchSchema),
+      useZodNextRouterQuery({ search: 'Default search' }, searchSchema),
     )
 
     act(() => {

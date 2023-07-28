@@ -67,7 +67,7 @@ const useReactRouter = (
   }
 }
 
-export const useQuery = <T extends AbstractQuery>(
+export const useReactRouterQuery = <T extends AbstractQuery>(
   defaultQuery: T,
   parseQuery: ParseQuery<T>,
   options?: Partial<AbstractQueryOptions & RouterWithHistoryOptions>,
@@ -76,7 +76,7 @@ export const useQuery = <T extends AbstractQuery>(
   return useAbstractQuery(defaultQuery, parseQuery, router, options)
 }
 
-export const useQueryAndPagination = <T extends AbstractQuery>(
+export const useReactRouterQueryAndPagination = <T extends AbstractQuery>(
   defaultQuery: T,
   parseQuery: ParseQuery<T>,
   defaultPagination?: PaginationQuery,
@@ -92,11 +92,11 @@ export const useQueryAndPagination = <T extends AbstractQuery>(
   )
 }
 
-export const usePagination = (
+export const useReactRouterPagination = (
   defaultPagination?: PaginationQuery,
   options?: Partial<AbstractQueryOptions & RouterWithHistoryOptions>,
 ) => {
   const { page, size, setPage, setSize, setPagination, resetPagination } =
-    useQueryAndPagination({}, () => ({}), defaultPagination, options)
+    useReactRouterQueryAndPagination({}, () => ({}), defaultPagination, options)
   return { page, size, setPage, setSize, setPagination, resetPagination }
 }

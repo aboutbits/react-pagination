@@ -5,9 +5,9 @@
   "type": "module",
   "exports": {
     ".": {
-      "types": "./dist/types/engine/index.d.ts",
-      "import": "./dist/esm/engine/index.js",
-      "require": "./dist/cjs/engine/index.js"
+      "types": "./dist/types/index.d.ts",
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.js"
     },
     "./next-router": {
       "types": "./dist/types/routers/nextRouter.d.ts",

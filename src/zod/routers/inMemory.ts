@@ -5,13 +5,13 @@ import {
   AbstractQueryOptions,
 } from '../../engine'
 import {
-  useQuery as useQueryVanilla,
-  useQueryAndPagination as useQueryAndPaginationVanilla,
+  useInMemoryQuery,
+  useInMemoryQueryAndPagination,
 } from '../../routers/inMemory'
 import { zodParser } from '../util'
 import { NonNullableRecord } from '../../utils'
 
-export const useQuery = <
+export const useZodInMemoryQuery = <
   TQuery extends NonNullableRecord<TSchemaOutput>,
   TSchemaOutput extends Partial<AbstractQuery>,
   TSchemaDef extends ZodTypeDef = ZodTypeDef,
@@ -20,9 +20,9 @@ export const useQuery = <
   defaultQuery: TQuery,
   schemaQuery: ZodType<TSchemaOutput, TSchemaDef, TSchemaInput>,
   options?: Partial<AbstractQueryOptions>,
-) => useQueryVanilla(defaultQuery, zodParser(schemaQuery), options)
+) => useInMemoryQuery(defaultQuery, zodParser(schemaQuery), options)
 
-export const useQueryAndPagination = <
+export const useZodInMemoryQueryAndPagination = <
   TQuery extends NonNullableRecord<TSchemaOutput>,
   TSchemaOutput extends Partial<AbstractQuery>,
   TSchemaDef extends ZodTypeDef = ZodTypeDef,
@@ -33,7 +33,7 @@ export const useQueryAndPagination = <
   defaultPagination?: PaginationQuery,
   options?: Partial<AbstractQueryOptions>,
 ) =>
-  useQueryAndPaginationVanilla(
+  useInMemoryQueryAndPagination(
     defaultQuery,
     zodParser(schemaQuery),
     defaultPagination,
