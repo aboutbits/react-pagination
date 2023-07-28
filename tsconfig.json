@@ -1,6 +1,7 @@
 {
   "extends": "@aboutbits/ts-config/react",
   "compilerOptions": {
+    "moduleResolution": "node",
     "skipLibCheck": true
   },
   "exclude": ["node_modules", "dist"],

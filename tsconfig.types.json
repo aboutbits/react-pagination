@@ -5,14 +5,9 @@
     "outDir": "./dist/types",
     "declaration": true,
     "declarationMap": true,
-    "removeComments": false
+    "removeComments": false,
+    "incremental": false
   },
-  "exclude": [
-    "src/vitest.ts",
-    "**/__test__/*",
-    "**/__tests__/*"
-  ],
-  "include": [
-    "src"
-  ]
+  "exclude": ["src/vitest.ts", "**/__test__/*", "**/__tests__/*"],
+  "include": ["src"]
 }
