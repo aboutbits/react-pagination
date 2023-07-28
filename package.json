@@ -11,10 +11,9 @@
     "dist/**/*"
   ],
   "scripts": {
-    "build": "rimraf dist && npm run build:types && npm run build:esm && npm run build:cjs",
+    "build": "rimraf dist && npm run build:esm && npm run build:cjs",
     "build:esm": "tsc -p tsconfig.esm.json",
     "build:cjs": "tsc -p tsconfig.cjs.json",
-    "build:types": "tsc -p tsconfig.types.json",
     "lint": "eslint --cache .",
     "lint:fix": "npm run lint -- --fix",
     "test": "vitest run --passWithNoTests",
