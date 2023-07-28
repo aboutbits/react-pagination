@@ -9,12 +9,11 @@ import {
   useQueryAndPagination as useQueryAndPaginationVanilla,
 } from '../../routers/nextRouter'
 import { zodParser } from '../util'
-import { NonNullableRecord } from '../../utils'
 import { RouterWithHistoryOptions } from '../../routers/shared'
 
 export const useQuery = <
-  TQuery extends NonNullableRecord<TSchemaOutput>,
-  TSchemaOutput extends Partial<AbstractQuery>,
+  TQuery extends AbstractQuery,
+  TSchemaOutput extends Partial<TQuery>,
   TSchemaDef extends ZodTypeDef = ZodTypeDef,
   TSchemaInput = TSchemaOutput,
 >(
@@ -24,8 +23,8 @@ export const useQuery = <
 ) => useQueryVanilla(defaultQuery, zodParser(schemaQuery), options)
 
 export const useQueryAndPagination = <
-  TQuery extends NonNullableRecord<TSchemaOutput>,
-  TSchemaOutput extends Partial<AbstractQuery>,
+  TQuery extends AbstractQuery,
+  TSchemaOutput extends Partial<TQuery>,
   TSchemaDef extends ZodTypeDef = ZodTypeDef,
   TSchemaInput = TSchemaOutput,
 >(

@@ -2,8 +2,13 @@ import { ZodType, ZodTypeDef } from 'zod'
 import { AbstractQuery, ParseQuery } from '../engine/query'
 
 export const zodParser =
-  <Output extends Partial<AbstractQuery>, Def extends ZodTypeDef, Input>(
-    schema: ZodType<Output, Def, Input>,
+  <
+    Output extends AbstractQuery,
+    TSchemaOutput extends ReturnType<ParseQuery<Output>>,
+    TSchemaDef extends ZodTypeDef,
+    TSchemaInput,
+  >(
+    schema: ZodType<TSchemaOutput, TSchemaDef, TSchemaInput>,
   ): ParseQuery<Output> =>
   (q) =>
     schema.parse(q)

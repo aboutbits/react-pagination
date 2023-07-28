@@ -182,7 +182,7 @@ describe('NextRouter', () => {
     const defaultBirthDate = new Date()
     defaultBirthDate.setMilliseconds(0)
     const defaultNetWorth = BigInt(0xf8ffffffffffffffffffffffffff2fffn)
-    const defaultDarkMode: boolean | undefined = true
+    const defaultDarkMode = true as boolean
 
     const schema = z.object({
       search: z.string().optional().catch(undefined),
