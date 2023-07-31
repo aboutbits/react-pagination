@@ -42,8 +42,8 @@ Some examples follow, but we recommend having a look at the type definitions for
 ### Example usage with Next.js
 
 ```tsx
-import { Query } from '@aboutbits/react-pagination/dist/esm/engine'
-import { useQueryAndPagination } from '@aboutbits/react-pagination/dist/esm/routers/nextRouter'
+import { Query } from '@aboutbits/react-pagination/dist/engine'
+import { useQueryAndPagination } from '@aboutbits/react-pagination/dist/routers/nextRouter'
 
 const users = ['Alex', 'Simon', 'Natan', 'Nadia', 'Moritz', 'Marie']
 
@@ -92,7 +92,7 @@ export function UserList() {
 ### Example usage with React Router and zod
 
 ```tsx
-import { useQueryAndPagination } from '@aboutbits/react-pagination/dist/esm/zod/routers/reactRouter'
+import { useQueryAndPagination } from '@aboutbits/react-pagination/dist/zod/routers/reactRouter'
 import { z } from 'zod'
 
 const userSchema = z.object({
