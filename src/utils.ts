@@ -1,13 +1,13 @@
 import { Query } from './engine/query'
 
 export type NonNullableRecord<
-  T extends Record<string | number | symbol, unknown>
+  T extends Record<string | number | symbol, unknown>,
 > = {
   [Key in keyof T]-?: NonNullable<T[Key]>
 }
 
 export const queryValueToIntOrUndefined = (
-  value: Query[keyof Query] | undefined
+  value: Query[keyof Query] | undefined,
 ): number | undefined => {
   if (value === undefined || Array.isArray(value)) {
     return undefined

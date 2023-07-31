@@ -35,16 +35,17 @@ export type Router = {
 }
 
 export const useQuery = <T extends Query>(defaultQuery: T, router: Router) => {
-  const resetQuery = useCallback(
-    () => router.setQuery(defaultQuery, defaultQuery),
-    [router, defaultQuery]
-  )
+  const resetQuery = useCallback(() => {
+    router.setQuery(defaultQuery, defaultQuery)
+  }, [router, defaultQuery])
 
   const query = router.getQuery(defaultQuery)
 
   return {
     query,
-    setQuery: (query: Partial<T>) => router.setQuery(query, defaultQuery),
+    setQuery: (query: Partial<T>) => {
+      router.setQuery(query, defaultQuery)
+    },
     resetQuery,
   }
 }
@@ -74,21 +75,21 @@ export const useAbstractQuery = <T extends AbstractQuery>(
   defaultQuery: T,
   parseQuery: ParseQuery<T>,
   router: Router,
-  options?: Partial<AbstractQueryOptions>
+  options?: Partial<AbstractQueryOptions>,
 ) => {
   const mergedOptions = useMemo(
     () => ({ ...DEFAULT_ABSTRACT_QUERY_OPTIONS, ...options }),
-    [options]
+    [options],
   )
 
   const convertedDefaultQuery = useMemo(
     () => mergedOptions.convertToQuery(defaultQuery),
-    [mergedOptions, defaultQuery]
+    [mergedOptions, defaultQuery],
   )
 
   const { query, setQuery, resetQuery } = useQuery(
     convertedDefaultQuery,
-    router
+    router,
   )
 
   const parsedQuery: T = useMemo(() => {
@@ -105,8 +106,10 @@ export const useAbstractQuery = <T extends AbstractQuery>(
   }, [defaultQuery, parseQuery, query])
 
   const setAbstractQuery = useCallback(
-    (query: Partial<T>) => setQuery(mergedOptions.convertToQuery(query)),
-    [setQuery, mergedOptions]
+    (query: Partial<T>) => {
+      setQuery(mergedOptions.convertToQuery(query))
+    },
+    [setQuery, mergedOptions],
   )
 
   return {

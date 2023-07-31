@@ -3,17 +3,12 @@
   "compilerOptions": {
     "module": "es2020",
     "outDir": "./dist/esm",
-    "declaration": false,
-    "declarationMap": false,
+    "declaration": true,
+    "declarationMap": true,
     "sourceMap": false,
-    "removeComments": true
+    "removeComments": true,
+    "incremental": false
   },
-  "exclude": [
-    "src/vitest.ts",
-    "**/__test__/*",
-    "**/__tests__/*"
-  ],
-  "include": [
-    "src"
-  ]
+  "exclude": ["src/vitest.ts", "**/__test__/*", "**/__tests__/*"],
+  "include": ["src"]
 }

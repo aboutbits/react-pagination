@@ -10,7 +10,7 @@ describe('InMemory', () => {
   })
 
   const useInMemoryQueryWithSearch = (
-    defaultQuery: NonNullableRecord<z.infer<typeof searchSchema>>
+    defaultQuery: NonNullableRecord<z.infer<typeof searchSchema>>,
   ) => useQuery(defaultQuery, searchSchema)
 
   test('should set default page and size', () => {
@@ -38,14 +38,14 @@ describe('InMemory', () => {
     const search = 'Max'
 
     const { result } = renderHook(() =>
-      useInMemoryQueryWithSearch({ search: '' })
+      useInMemoryQueryWithSearch({ search: '' }),
     )
 
     act(() => {
       result.current.setQuery({ search })
     })
 
-    expect(result.current.query?.search).toBe(search)
+    expect(result.current.query.search).toBe(search)
   })
 
   test('changing pagination should not reset the remaining query', () => {
@@ -53,7 +53,7 @@ describe('InMemory', () => {
     const page = 2
 
     const { result } = renderHook(() =>
-      useQueryAndPagination({ search: '' }, searchSchema)
+      useQueryAndPagination({ search: '' }, searchSchema),
     )
 
     act(() => {
@@ -90,7 +90,7 @@ describe('InMemory', () => {
     const page = 2
 
     const { result } = renderHook(() =>
-      useQueryAndPagination({ search: defaultSearch }, searchSchema)
+      useQueryAndPagination({ search: defaultSearch }, searchSchema),
     )
 
     act(() => {
@@ -125,7 +125,7 @@ describe('InMemory', () => {
     const page = 2
 
     const { result } = renderHook(() =>
-      useQueryAndPagination({ search: defaultSearch }, searchSchema)
+      useQueryAndPagination({ search: defaultSearch }, searchSchema),
     )
 
     act(() => {
@@ -159,7 +159,7 @@ describe('InMemory', () => {
     })
 
     const { result } = renderHook(() =>
-      useQuery({ search: '', department: '' }, schema)
+      useQuery({ search: '', department: '' }, schema),
     )
 
     act(() => {
@@ -178,7 +178,7 @@ describe('InMemory', () => {
     const search = ''
 
     const { result } = renderHook(() =>
-      useQuery({ search: 'Default search' }, searchSchema)
+      useQuery({ search: 'Default search' }, searchSchema),
     )
 
     act(() => {

@@ -2,53 +2,19 @@
   "name": "@aboutbits/react-pagination",
   "version": "2.0.1",
   "description": "Pagination hooks for React",
-  "exports": {
-    ".": {
-      "types": "./dist/types/engine/index.d.ts",
-      "import": "./dist/esm/engine/index.js",
-      "require": "./dist/cjs/engine/index.js"
-    },
-    "./next-router": {
-      "types": "./dist/types/routers/nextRouter.d.ts",
-      "import": "./dist/esm/routers/nextRouter.js",
-      "require": "./dist/cjs/routers/nextRouter.js"
-    },
-    "./in-memory": {
-      "types": "./dist/types/routers/inMemory.d.ts",
-      "import": "./dist/esm/routers/inMemory.js",
-      "require": "./dist/cjs/routers/inMemory.js"
-    },
-    "./react-router": {
-      "types": "./dist/types/routers/reactRouter.d.ts",
-      "import": "./dist/esm/routers/reactRouter.js",
-      "require": "./dist/cjs/routers/reactRouter.js"
-    },
-    "./next-router/zod": {
-      "types": "./dist/types/zod/routers/nextRouter.d.ts",
-      "import": "./dist/esm/zod/routers/nextRouter.js",
-      "require": "./dist/cjs/zod/routers/nextRouter.js"
-    },
-    "./in-memory/zod": {
-      "types": "./dist/types/zod/routers/inMemory.d.ts",
-      "import": "./dist/esm/zod/routers/inMemory.js",
-      "require": "./dist/cjs/zod/routers/inMemory.js"
-    },
-    "./react-router/zod": {
-      "types": "./dist/types/zod/routers/reactRouter.d.ts",
-      "import": "./dist/esm/zod/routers/reactRouter.js",
-      "require": "./dist/cjs/zod/routers/reactRouter.js"
-    }
-  },
   "engines": {
     "npm": "^8",
     "node": "^16"
   },
+  "files": [
+    "readme.md",
+    "dist/**/*"
+  ],
   "scripts": {
-    "build": "rimraf dist && npm run build:types && npm run build:esm && npm run build:cjs",
+    "build": "rimraf dist && npm run build:esm && npm run build:cjs",
     "build:esm": "tsc -p tsconfig.esm.json",
     "build:cjs": "tsc -p tsconfig.cjs.json",
-    "build:types": "tsc -p tsconfig.types.json",
-    "lint": "eslint --ext js,ts,tsx --cache .",
+    "lint": "eslint --cache .",
     "lint:fix": "npm run lint -- --fix",
     "test": "vitest run --passWithNoTests",
     "test:watch": "vitest watch --passWithNoTests",
@@ -77,31 +43,30 @@
     "url": "https://github.com/aboutbits/react-pagination/issues"
   },
   "homepage": "https://github.com/aboutbits/react-pagination#readme",
-  "files": [
-    "readme.md",
-    "dist/**/*"
-  ],
   "publishConfig": {
     "access": "public"
   },
   "devDependencies": {
+    "@aboutbits/eslint-config": "^2.0.12",
+    "@aboutbits/prettier-config": "^1.5.0",
+    "@aboutbits/ts-config": "^1.1.2",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@types/react": "^18.0.0",
     "@types/react-dom": "^18.0.0",
     "@types/react-router-dom": "^5.3.3",
-    "@typescript-eslint/eslint-plugin": "^5.30.0",
-    "@typescript-eslint/parser": "^5.30.0",
-    "eslint": "^8.18.0",
-    "eslint-config-prettier": "^8.5.0",
-    "eslint-plugin-import": "^2.26.0",
-    "eslint-plugin-prettier": "^4.1.0",
-    "eslint-plugin-react": "^7.32.2",
+    "@typescript-eslint/eslint-plugin": "^6.2.0",
+    "eslint": "^8.45.0",
+    "eslint-plugin-import": "^2.28.0",
+    "eslint-plugin-jsx-a11y": "^6.7.1",
+    "eslint-plugin-prettier": "^5.0.0",
+    "eslint-plugin-react": "^7.33.0",
     "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-tailwindcss": "^3.13.0",
     "jsdom": "^22.1.0",
     "next": "^13.1.3",
     "next-router-mock": "^0.7.4",
-    "prettier": "^2.7.1",
+    "prettier": "^3.0.0",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "react-router-dom": "^6.7.0",
@@ -126,5 +91,6 @@
     "zod": {
       "optional": true
     }
-  }
+  },
+  "prettier": "@aboutbits/prettier-config"
 }

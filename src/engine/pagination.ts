@@ -51,7 +51,7 @@ export const useAbstractQueryAndPagination = <T extends AbstractQuery>(
   parseQuery: ParseQuery<T>,
   router: Router,
   defaultPagination?: PaginationQuery,
-  options?: Partial<AbstractQueryOptions>
+  options?: Partial<AbstractQueryOptions>,
 ) => {
   const mergedDefaultPagination = {
     ...DEFAULT_PAGINATION,
@@ -66,7 +66,7 @@ export const useAbstractQueryAndPagination = <T extends AbstractQuery>(
     mergedDefaultQueryAndPagination,
     parseQuery,
     router,
-    options
+    options,
   )
 
   const {
@@ -77,7 +77,7 @@ export const useAbstractQueryAndPagination = <T extends AbstractQuery>(
     mergedDefaultPagination,
     parsePagination,
     router,
-    options
+    options,
   )
 
   return {
@@ -102,10 +102,16 @@ export const useAbstractQueryAndPagination = <T extends AbstractQuery>(
     },
     page: pagination.page,
     size: pagination.size,
-    setPage: (page: PaginationQuery['page']) => setPagination({ page }),
-    setSize: (size: PaginationQuery['size']) => setPagination({ size }),
+    setPage: (page: PaginationQuery['page']) => {
+      setPagination({ page })
+    },
+    setSize: (size: PaginationQuery['size']) => {
+      setPagination({ size })
+    },
     setPagination,
     resetPagination,
-    resetQueryAndPagination: () => setQuery(mergedDefaultQueryAndPagination),
+    resetQueryAndPagination: () => {
+      setQuery(mergedDefaultQueryAndPagination)
+    },
   }
 }

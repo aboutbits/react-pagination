@@ -2,18 +2,13 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "module": "commonjs",
-    "outDir": "./dist/cjs",
-    "declaration": false,
-    "declarationMap": false,
+    "outDir": "./dist",
+    "declaration": true,
+    "declarationMap": true,
     "sourceMap": false,
-    "removeComments": true
+    "removeComments": true,
+    "incremental": false
   },
-  "exclude": [
-    "src/vitest.ts",
-    "**/__test__/*",
-    "**/__tests__/*"
-  ],
-  "include": [
-    "src"
-  ]
+  "exclude": ["src/vitest.ts", "**/__test__/*", "**/__tests__/*"],
+  "include": ["src"]
 }

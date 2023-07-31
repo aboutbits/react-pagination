@@ -6,6 +6,7 @@ import { NonNullableRecord } from '../../utils'
 import { useQuery, useQueryAndPagination } from '../../zod/routers/nextRouter'
 import { usePagination } from '../nextRouter'
 
+// eslint-disable-next-line @typescript-eslint/no-unsafe-return
 vi.mock('next/router', () => require('next-router-mock'))
 
 describe('NextRouter', () => {
@@ -18,7 +19,7 @@ describe('NextRouter', () => {
   })
 
   const useNextRouterQueryWithSearch = (
-    defaultQuery: NonNullableRecord<z.infer<typeof searchSchema>>
+    defaultQuery: NonNullableRecord<z.infer<typeof searchSchema>>,
   ) => useQuery(defaultQuery, searchSchema)
 
   test('should set default page and size', () => {
@@ -47,14 +48,14 @@ describe('NextRouter', () => {
     const search = 'Max'
 
     const { result } = renderHook(() =>
-      useNextRouterQueryWithSearch({ search: '' })
+      useNextRouterQueryWithSearch({ search: '' }),
     )
 
     act(() => {
       result.current.setQuery({ search })
     })
 
-    expect(result.current.query?.search).toBe(search)
+    expect(result.current.query.search).toBe(search)
     expect(router.query.search).toBe(search)
   })
 
@@ -63,7 +64,7 @@ describe('NextRouter', () => {
     const page = 2
 
     const { result } = renderHook(() =>
-      useQueryAndPagination({ search: '' }, searchSchema)
+      useQueryAndPagination({ search: '' }, searchSchema),
     )
 
     act(() => {
@@ -103,7 +104,7 @@ describe('NextRouter', () => {
     const page = 2
 
     const { result } = renderHook(() =>
-      useQueryAndPagination({ search: defaultSearch }, searchSchema)
+      useQueryAndPagination({ search: defaultSearch }, searchSchema),
     )
 
     act(() => {
@@ -145,7 +146,7 @@ describe('NextRouter', () => {
     const page = 2
 
     const { result } = renderHook(() =>
-      useQueryAndPagination({ search: defaultSearch }, searchSchema)
+      useQueryAndPagination({ search: defaultSearch }, searchSchema),
     )
 
     act(() => {
@@ -202,8 +203,8 @@ describe('NextRouter', () => {
           netWorth: defaultNetWorth,
           darkMode: defaultDarkMode,
         },
-        schema
-      )
+        schema,
+      ),
     )
 
     act(() => {
@@ -241,7 +242,7 @@ describe('NextRouter', () => {
     router.query = { search: 'Max' }
 
     const { result } = renderHook(() =>
-      useQuery({ search: defaultSearch }, searchSchema)
+      useQuery({ search: defaultSearch }, searchSchema),
     )
 
     act(() => {
@@ -256,7 +257,7 @@ describe('NextRouter', () => {
     const search = ''
 
     const { result } = renderHook(() =>
-      useQuery({ search: 'Default search' }, searchSchema)
+      useQuery({ search: 'Default search' }, searchSchema),
     )
 
     act(() => {

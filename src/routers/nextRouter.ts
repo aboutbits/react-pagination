@@ -19,13 +19,13 @@ const DEFAULT_NEXT_ROUTER_OPTIONS: RouterWithHistoryOptions = {
 }
 
 const useNextRouter = (
-  options: undefined | Partial<RouterWithHistoryOptions>
+  options: undefined | Partial<RouterWithHistoryOptions>,
 ): Router => {
   const nextRouter = useRouter()
 
   const mergedOptions = useMemo(
     () => ({ ...DEFAULT_NEXT_ROUTER_OPTIONS, ...options }),
-    [options]
+    [options],
   )
 
   return {
@@ -40,15 +40,19 @@ const useNextRouter = (
     },
     setQuery: (query, defaultQuery) => {
       const newQuery = { ...nextRouter.query, ...query }
-      for (const [key, value] of Object.entries(query)) {
-        if (value === defaultQuery[key]) {
-          delete newQuery[key]
-        }
-      }
+      const newQueryWithoutDefaults = Object.fromEntries(
+        Object.entries(newQuery).filter(
+          ([key, value]) => value !== defaultQuery[key],
+        ),
+      )
       if (mergedOptions.setQueryMethod === 'push') {
-        nextRouter.push({ query: newQuery }, undefined, { shallow: true })
+        void nextRouter.push({ query: newQueryWithoutDefaults }, undefined, {
+          shallow: true,
+        })
       } else {
-        nextRouter.replace({ query: newQuery }, undefined, { shallow: true })
+        void nextRouter.replace({ query: newQueryWithoutDefaults }, undefined, {
+          shallow: true,
+        })
       }
     },
   }
@@ -57,7 +61,7 @@ const useNextRouter = (
 export const useQuery = <T extends AbstractQuery>(
   defaultQuery: T,
   parseQuery: ParseQuery<T>,
-  options?: Partial<AbstractQueryOptions & RouterWithHistoryOptions>
+  options?: Partial<AbstractQueryOptions & RouterWithHistoryOptions>,
 ) => {
   const router = useNextRouter(options)
   return useAbstractQuery(defaultQuery, parseQuery, router, options)
@@ -67,7 +71,7 @@ export const useQueryAndPagination = <T extends AbstractQuery>(
   defaultQuery: T,
   parseQuery: ParseQuery<T>,
   defaultPagination?: PaginationQuery,
-  options?: Partial<AbstractQueryOptions & RouterWithHistoryOptions>
+  options?: Partial<AbstractQueryOptions & RouterWithHistoryOptions>,
 ) => {
   const router = useNextRouter(options)
   return useAbstractQueryAndPagination(
@@ -75,13 +79,13 @@ export const useQueryAndPagination = <T extends AbstractQuery>(
     parseQuery,
     router,
     defaultPagination,
-    options
+    options,
   )
 }
 
 export const usePagination = (
   defaultPagination?: PaginationQuery,
-  options?: Partial<AbstractQueryOptions & RouterWithHistoryOptions>
+  options?: Partial<AbstractQueryOptions & RouterWithHistoryOptions>,
 ) => {
   const { page, size, setPage, setSize, setPagination, resetPagination } =
     useQueryAndPagination({}, () => ({}), defaultPagination, options)
