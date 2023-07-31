@@ -1,35 +1,22 @@
-import { ZodType, ZodTypeDef } from 'zod'
-import {
-  PaginationQuery,
-  AbstractQuery,
-  AbstractQueryOptions,
-} from '../../engine'
+import { z } from 'zod'
+import { PaginationQuery, AbstractQueryOptions } from '../../engine'
 import {
   useQuery as useQueryVanilla,
   useQueryAndPagination as useQueryAndPaginationVanilla,
 } from '../../routers/nextRouter'
 import { zodParser } from '../util'
 import { RouterWithHistoryOptions } from '../../routers/shared'
+import { NonNullableRecord } from '../../utils'
 
-export const useQuery = <
-  TQuery extends AbstractQuery,
-  TSchemaOutput extends Partial<TQuery>,
-  TSchemaDef extends ZodTypeDef = ZodTypeDef,
-  TSchemaInput = TSchemaOutput,
->(
-  defaultQuery: TQuery,
-  schemaQuery: ZodType<TSchemaOutput, TSchemaDef, TSchemaInput>,
+export const useQuery = <TSchema extends z.ZodTypeAny>(
+  defaultQuery: NonNullableRecord<z.output<TSchema>>,
+  schemaQuery: TSchema,
   options?: Partial<AbstractQueryOptions & RouterWithHistoryOptions>,
 ) => useQueryVanilla(defaultQuery, zodParser(schemaQuery), options)
 
-export const useQueryAndPagination = <
-  TQuery extends AbstractQuery,
-  TSchemaOutput extends Partial<TQuery>,
-  TSchemaDef extends ZodTypeDef = ZodTypeDef,
-  TSchemaInput = TSchemaOutput,
->(
-  defaultQuery: TQuery,
-  schemaQuery: ZodType<TSchemaOutput, TSchemaDef, TSchemaInput>,
+export const useQueryAndPagination = <TSchema extends z.ZodTypeAny>(
+  defaultQuery: NonNullableRecord<z.output<TSchema>>,
+  schemaQuery: TSchema,
   defaultPagination?: PaginationQuery,
   options?: Partial<AbstractQueryOptions & RouterWithHistoryOptions>,
 ) =>
