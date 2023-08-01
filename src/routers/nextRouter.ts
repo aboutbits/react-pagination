@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router'
-import { useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import {
   Query,
   ParseQuery,
@@ -22,16 +22,25 @@ const useNextRouter = (
   options: undefined | Partial<RouterWithHistoryOptions>,
 ): Router => {
   const nextRouter = useRouter()
+  const [nextRouterQuery, setNextRouterQuery] = useState<
+    typeof nextRouter.query
+  >({})
 
   const mergedOptions = useMemo(
     () => ({ ...DEFAULT_NEXT_ROUTER_OPTIONS, ...options }),
     [options],
   )
 
+  useEffect(() => {
+    if (nextRouter.isReady) {
+      setNextRouterQuery(nextRouter.query)
+    }
+  }, [nextRouter.isReady, nextRouter.query])
+
   return {
     getQuery: (defaultQuery) => {
       const query: Query = {}
-      for (const [key, value] of Object.entries(nextRouter.query)) {
+      for (const [key, value] of Object.entries(nextRouterQuery)) {
         if (value !== undefined) {
           query[key] = value
         }
@@ -39,7 +48,7 @@ const useNextRouter = (
       return { ...defaultQuery, ...query }
     },
     setQuery: (query, defaultQuery) => {
-      const newQuery = { ...nextRouter.query, ...query }
+      const newQuery = { ...nextRouterQuery, ...query }
       const newQueryWithoutDefaults = Object.fromEntries(
         Object.entries(newQuery).filter(
           ([key, value]) => value !== defaultQuery[key],
