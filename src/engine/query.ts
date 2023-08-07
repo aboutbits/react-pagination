@@ -24,17 +24,17 @@ export type ParseQuery<T> = (query: Query) => Partial<T>
 
 export type Router = {
   /**
-   * @returns The current query.
+   * @returns The current query. If a property is undefined by the current query, the corresponding property of the default query is taken, which might be undefined too.
    */
   getQuery: (defaultQuery: Query) => Query
 
   /**
-   * Updates the query by merging the given query with the current query.
+   * Updates the query by merging the given query with the current query. If a property is undefined by the given query and the current query, the corresponding default query is taken, which might be undefined too.
    */
   setQuery: (query: Partial<Query>, defaultQuery: Query) => void
 }
 
-export const useQuery = <T extends Query>(defaultQuery: T, router: Router) => {
+export const useQuery = <T extends Query>(router: Router, defaultQuery: T) => {
   const resetQuery = useCallback(() => {
     router.setQuery(defaultQuery, defaultQuery)
   }, [router, defaultQuery])
@@ -71,10 +71,13 @@ const DEFAULT_ABSTRACT_QUERY_OPTIONS: AbstractQueryOptions = {
   },
 }
 
-export const useAbstractQuery = <T extends AbstractQuery>(
-  defaultQuery: T,
-  parseQuery: ParseQuery<T>,
+export const useAbstractQuery = <
+  TQuery extends AbstractQuery,
+  TDefaultQuery extends Partial<TQuery>,
+>(
   router: Router,
+  parseQuery: ParseQuery<TQuery>,
+  defaultQuery: TDefaultQuery,
   options?: Partial<AbstractQueryOptions>,
 ) => {
   const mergedOptions = useMemo(
@@ -88,12 +91,12 @@ export const useAbstractQuery = <T extends AbstractQuery>(
   )
 
   const { query, setQuery, resetQuery } = useQuery(
-    convertedDefaultQuery,
     router,
+    convertedDefaultQuery,
   )
 
-  const parsedQuery: T = useMemo(() => {
-    let parsed: Partial<T>
+  const parsedQuery = useMemo(() => {
+    let parsed: Partial<TQuery>
     try {
       parsed = parseQuery(query)
     } catch (e) {
@@ -106,7 +109,7 @@ export const useAbstractQuery = <T extends AbstractQuery>(
   }, [defaultQuery, parseQuery, query])
 
   const setAbstractQuery = useCallback(
-    (query: Partial<T>) => {
+    (query: Partial<TQuery>) => {
       setQuery(mergedOptions.convertToQuery(query))
     },
     [setQuery, mergedOptions],

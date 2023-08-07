@@ -2,7 +2,6 @@ import { act, renderHook } from '@testing-library/react'
 import router from 'next/router'
 import { z } from 'zod'
 import { vi } from 'vitest'
-import { NonNullableRecord } from '../../utils'
 import { useQuery, useQueryAndPagination } from '../../zod/routers/nextRouter'
 import { usePagination } from '../nextRouter'
 
@@ -19,8 +18,8 @@ describe('NextRouter', () => {
   })
 
   const useNextRouterQueryWithSearch = (
-    defaultQuery: NonNullableRecord<z.infer<typeof searchSchema>>,
-  ) => useQuery(defaultQuery, searchSchema)
+    defaultQuery: Partial<z.infer<typeof searchSchema>> = {},
+  ) => useQuery(searchSchema, defaultQuery)
 
   test('should set default page and size', () => {
     const page = 0
@@ -64,7 +63,7 @@ describe('NextRouter', () => {
     const page = 2
 
     const { result } = renderHook(() =>
-      useQueryAndPagination({ search: '' }, searchSchema),
+      useQueryAndPagination(searchSchema, { search: '' }),
     )
 
     act(() => {
@@ -104,7 +103,7 @@ describe('NextRouter', () => {
     const page = 2
 
     const { result } = renderHook(() =>
-      useQueryAndPagination({ search: defaultSearch }, searchSchema),
+      useQueryAndPagination(searchSchema, { search: defaultSearch }),
     )
 
     act(() => {
@@ -146,7 +145,7 @@ describe('NextRouter', () => {
     const page = 2
 
     const { result } = renderHook(() =>
-      useQueryAndPagination({ search: defaultSearch }, searchSchema),
+      useQueryAndPagination(searchSchema, { search: defaultSearch }),
     )
 
     act(() => {
@@ -194,17 +193,14 @@ describe('NextRouter', () => {
     })
 
     const { result } = renderHook(() =>
-      useQuery(
-        {
-          search: '',
-          department: '',
-          age: defaultAge,
-          birthDate: defaultBirthDate,
-          netWorth: defaultNetWorth,
-          darkMode: defaultDarkMode,
-        },
-        schema,
-      ),
+      useQuery(schema, {
+        search: '',
+        department: '',
+        age: defaultAge,
+        birthDate: defaultBirthDate,
+        netWorth: defaultNetWorth,
+        darkMode: defaultDarkMode,
+      }),
     )
 
     act(() => {
@@ -226,7 +222,7 @@ describe('NextRouter', () => {
     const greeting = 'hello'
     router.query = { greeting }
 
-    const { result } = renderHook(() => useQuery({ search: '' }, searchSchema))
+    const { result } = renderHook(() => useQuery(searchSchema, { search: '' }))
 
     act(() => {
       result.current.setQuery({ search: 'Max' })
@@ -242,7 +238,7 @@ describe('NextRouter', () => {
     router.query = { search: 'Max' }
 
     const { result } = renderHook(() =>
-      useQuery({ search: defaultSearch }, searchSchema),
+      useQuery(searchSchema, { search: defaultSearch }),
     )
 
     act(() => {
@@ -257,7 +253,7 @@ describe('NextRouter', () => {
     const search = ''
 
     const { result } = renderHook(() =>
-      useQuery({ search: 'Default search' }, searchSchema),
+      useQuery(searchSchema, { search: 'Default search' }),
     )
 
     act(() => {
@@ -266,5 +262,26 @@ describe('NextRouter', () => {
 
     expect(result.current.query.search).toBe(search)
     expect(router.query.search).toBe(search)
+  })
+
+  test('passing no default query should return undefined for a property that is not in the query', () => {
+    const { result } = renderHook(() =>
+      useQuery(z.object({ department: z.string() })),
+    )
+
+    expect(result.current.query.department).toBeUndefined()
+  })
+
+  test('the query should be a merge of the default query and the current query', () => {
+    const defaultRole = 'ADMIN'
+
+    const { result } = renderHook(() =>
+      useQuery(z.object({ department: z.string(), role: z.string() }), {
+        role: defaultRole,
+      }),
+    )
+
+    expect(result.current.query.department).toBeUndefined()
+    expect(result.current.query.role).toBe(defaultRole)
   })
 })

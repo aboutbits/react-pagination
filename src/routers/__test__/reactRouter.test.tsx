@@ -1,7 +1,6 @@
 import { act, renderHook } from '@testing-library/react'
 import { z } from 'zod'
 import { BrowserRouter } from 'react-router-dom'
-import { NonNullableRecord } from '../../utils'
 import { useQuery, useQueryAndPagination } from '../../zod/routers/reactRouter'
 import { usePagination } from '../reactRouter'
 
@@ -24,8 +23,8 @@ describe('ReactRouter', () => {
   })
 
   const useReactRouterQueryWithSearch = (
-    defaultQuery: NonNullableRecord<z.infer<typeof searchSchema>>,
-  ) => useQuery(defaultQuery, searchSchema)
+    defaultQuery: Partial<z.infer<typeof searchSchema>> = {},
+  ) => useQuery(searchSchema, defaultQuery)
 
   test('should set default page and size', () => {
     const page = 0
@@ -71,7 +70,7 @@ describe('ReactRouter', () => {
     const page = 2
 
     const { result } = renderHookWithContext(() =>
-      useQueryAndPagination({ search: '' }, searchSchema),
+      useQueryAndPagination(searchSchema, { search: '' }),
     )
 
     act(() => {
@@ -111,7 +110,7 @@ describe('ReactRouter', () => {
     const page = 2
 
     const { result } = renderHookWithContext(() =>
-      useQueryAndPagination({ search: defaultSearch }, searchSchema),
+      useQueryAndPagination(searchSchema, { search: defaultSearch }),
     )
 
     act(() => {
@@ -149,7 +148,7 @@ describe('ReactRouter', () => {
     const page = 2
 
     const { result } = renderHookWithContext(() =>
-      useQueryAndPagination({ search: defaultSearch }, searchSchema),
+      useQueryAndPagination(searchSchema, { search: defaultSearch }),
     )
 
     act(() => {
@@ -186,7 +185,7 @@ describe('ReactRouter', () => {
     })
 
     const { result } = renderHookWithContext(() =>
-      useQuery({ search: '', department: '' }, schema),
+      useQuery(schema, { search: '', department: '' }),
     )
 
     act(() => {
@@ -207,7 +206,7 @@ describe('ReactRouter', () => {
     window.history.pushState({}, '', `/?greeting=${greeting}`)
 
     const { result } = renderHookWithContext(() =>
-      useQuery({ search: '' }, searchSchema),
+      useQuery(searchSchema, { search: '' }),
     )
 
     act(() => {
@@ -226,7 +225,7 @@ describe('ReactRouter', () => {
     window.history.pushState({}, '', `/?search=Max`)
 
     const { result } = renderHookWithContext(() =>
-      useQuery({ search: defaultSearch }, searchSchema),
+      useQuery(searchSchema, { search: defaultSearch }),
     )
 
     act(() => {
@@ -241,7 +240,7 @@ describe('ReactRouter', () => {
     const search = ''
 
     const { result } = renderHookWithContext(() =>
-      useQuery({ search: 'Default search' }, searchSchema),
+      useQuery(searchSchema, { search: 'Default search' }),
     )
 
     act(() => {

@@ -4,24 +4,29 @@ import {
   useQuery as useQueryVanilla,
   useQueryAndPagination as useQueryAndPaginationVanilla,
 } from '../../routers/inMemory'
-import { NonNullableRecord } from '../../utils'
 import { zodParser } from '../util'
 
-export const useQuery = <TSchema extends z.ZodTypeAny>(
-  defaultQuery: NonNullableRecord<z.output<TSchema>>,
+export const useQuery = <
+  TSchema extends z.ZodTypeAny,
+  TQuery extends z.output<TSchema>,
+>(
   schemaQuery: TSchema,
+  defaultQuery: Partial<TQuery> = {},
   options?: Partial<AbstractQueryOptions>,
-) => useQueryVanilla(defaultQuery, zodParser(schemaQuery), options)
+) => useQueryVanilla(zodParser(schemaQuery), defaultQuery, options)
 
-export const useQueryAndPagination = <TSchema extends z.ZodTypeAny>(
-  defaultQuery: NonNullableRecord<z.output<TSchema>>,
+export const useQueryAndPagination = <
+  TSchema extends z.ZodTypeAny,
+  TQuery extends z.output<TSchema>,
+>(
   schemaQuery: TSchema,
-  defaultPagination?: PaginationQuery,
+  defaultQuery: Partial<TQuery> = {},
+  defaultPagination?: Partial<PaginationQuery>,
   options?: Partial<AbstractQueryOptions>,
 ) =>
   useQueryAndPaginationVanilla(
-    defaultQuery,
     zodParser(schemaQuery),
+    defaultQuery,
     defaultPagination,
     options,
   )

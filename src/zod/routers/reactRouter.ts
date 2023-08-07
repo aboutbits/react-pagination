@@ -6,23 +6,28 @@ import {
 } from '../../routers/reactRouter'
 import { zodParser } from '../util'
 import { RouterWithHistoryOptions } from '../../routers/shared'
-import { NonNullableRecord } from '../../utils'
 
-export const useQuery = <TSchema extends z.ZodTypeAny>(
-  defaultQuery: NonNullableRecord<z.output<TSchema>>,
+export const useQuery = <
+  TSchema extends z.ZodTypeAny,
+  TQuery extends z.output<TSchema>,
+>(
   schemaQuery: TSchema,
+  defaultQuery: Partial<TQuery> = {},
   options?: Partial<AbstractQueryOptions & RouterWithHistoryOptions>,
-) => useQueryVanilla(defaultQuery, zodParser(schemaQuery), options)
+) => useQueryVanilla(zodParser(schemaQuery), defaultQuery, options)
 
-export const useQueryAndPagination = <TSchema extends z.ZodTypeAny>(
-  defaultQuery: NonNullableRecord<z.output<TSchema>>,
+export const useQueryAndPagination = <
+  TSchema extends z.ZodTypeAny,
+  TQuery extends z.output<TSchema>,
+>(
   schemaQuery: TSchema,
-  defaultPagination?: PaginationQuery,
+  defaultQuery: Partial<TQuery> = {},
+  defaultPagination?: Partial<PaginationQuery>,
   options?: Partial<AbstractQueryOptions & RouterWithHistoryOptions>,
 ) =>
   useQueryAndPaginationVanilla(
-    defaultQuery,
     zodParser(schemaQuery),
+    defaultQuery,
     defaultPagination,
     options,
   )

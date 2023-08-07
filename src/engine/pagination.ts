@@ -46,11 +46,14 @@ const parsePagination = (query: Query): Partial<PaginationQuery> => {
   }
 }
 
-export const useAbstractQueryAndPagination = <T extends AbstractQuery>(
-  defaultQuery: T,
-  parseQuery: ParseQuery<T>,
+export const useAbstractQueryAndPagination = <
+  TQuery extends AbstractQuery,
+  TDefaultQuery extends Partial<TQuery>,
+>(
   router: Router,
-  defaultPagination?: PaginationQuery,
+  parseQuery: ParseQuery<TQuery>,
+  defaultQuery: TDefaultQuery,
+  defaultPagination?: Partial<PaginationQuery>,
   options?: Partial<AbstractQueryOptions>,
 ) => {
   const mergedDefaultPagination = {
@@ -63,9 +66,9 @@ export const useAbstractQueryAndPagination = <T extends AbstractQuery>(
   }
 
   const { query, setQuery } = useAbstractQuery(
-    mergedDefaultQueryAndPagination,
-    parseQuery,
     router,
+    parseQuery,
+    mergedDefaultQueryAndPagination,
     options,
   )
 
@@ -74,15 +77,18 @@ export const useAbstractQueryAndPagination = <T extends AbstractQuery>(
     setQuery: setPagination,
     resetQuery: resetPagination,
   } = useAbstractQuery(
-    mergedDefaultPagination,
-    parsePagination,
     router,
+    parsePagination,
+    mergedDefaultPagination,
     options,
   )
 
   return {
     query,
-    setQuery: (query: Partial<T>, options?: Partial<ChangeQueryOptions>) => {
+    setQuery: (
+      query: Partial<TQuery>,
+      options?: Partial<ChangeQueryOptions>,
+    ) => {
       const mergedOptions = { ...DEFAULT_CHANGE_QUERY_OPTIONS, ...options }
       setQuery({
         ...query,
