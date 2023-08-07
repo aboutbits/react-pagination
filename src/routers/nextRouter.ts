@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router'
-import { useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import {
   Query,
   ParseQuery,
@@ -22,16 +22,25 @@ const useNextRouter = (
   options: undefined | Partial<RouterWithHistoryOptions>,
 ): Router => {
   const nextRouter = useRouter()
+  const [nextRouterQuery, setNextRouterQuery] = useState<
+    typeof nextRouter.query
+  >({})
 
   const mergedOptions = useMemo(
     () => ({ ...DEFAULT_NEXT_ROUTER_OPTIONS, ...options }),
     [options],
   )
 
+  useEffect(() => {
+    if (nextRouter.isReady) {
+      setNextRouterQuery(nextRouter.query)
+    }
+  }, [nextRouter.isReady, nextRouter.query])
+
   return {
     getQuery: (defaultQuery) => {
       const query: Query = {}
-      for (const [key, value] of Object.entries(nextRouter.query)) {
+      for (const [key, value] of Object.entries(nextRouterQuery)) {
         if (value !== undefined) {
           query[key] = value
         }
@@ -39,7 +48,7 @@ const useNextRouter = (
       return { ...defaultQuery, ...query }
     },
     setQuery: (query, defaultQuery) => {
-      const newQuery = { ...nextRouter.query, ...query }
+      const newQuery = { ...nextRouterQuery, ...query }
       const newQueryWithoutDefaults = Object.fromEntries(
         Object.entries(newQuery).filter(
           ([key, value]) => value !== defaultQuery[key],
@@ -58,36 +67,36 @@ const useNextRouter = (
   }
 }
 
-export const useQuery = <T extends AbstractQuery>(
-  defaultQuery: T,
-  parseQuery: ParseQuery<T>,
+export const useQuery = <TQuery extends AbstractQuery>(
+  parseQuery: ParseQuery<TQuery>,
+  defaultQuery: Partial<TQuery> = {},
   options?: Partial<AbstractQueryOptions & RouterWithHistoryOptions>,
 ) => {
   const router = useNextRouter(options)
-  return useAbstractQuery(defaultQuery, parseQuery, router, options)
+  return useAbstractQuery(router, parseQuery, defaultQuery, options)
 }
 
-export const useQueryAndPagination = <T extends AbstractQuery>(
-  defaultQuery: T,
-  parseQuery: ParseQuery<T>,
-  defaultPagination?: PaginationQuery,
+export const useQueryAndPagination = <TQuery extends AbstractQuery>(
+  parseQuery: ParseQuery<TQuery>,
+  defaultQuery: Partial<TQuery> = {},
+  defaultPagination?: Partial<PaginationQuery>,
   options?: Partial<AbstractQueryOptions & RouterWithHistoryOptions>,
 ) => {
   const router = useNextRouter(options)
   return useAbstractQueryAndPagination(
-    defaultQuery,
-    parseQuery,
     router,
+    parseQuery,
+    defaultQuery,
     defaultPagination,
     options,
   )
 }
 
 export const usePagination = (
-  defaultPagination?: PaginationQuery,
+  defaultPagination?: Partial<PaginationQuery>,
   options?: Partial<AbstractQueryOptions & RouterWithHistoryOptions>,
 ) => {
   const { page, size, setPage, setSize, setPagination, resetPagination } =
-    useQueryAndPagination({}, () => ({}), defaultPagination, options)
+    useQueryAndPagination(() => ({}), {}, defaultPagination, options)
   return { page, size, setPage, setSize, setPagination, resetPagination }
 }

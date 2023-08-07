@@ -58,7 +58,7 @@ const parseSearch = (query: Query) => {
 
 export function UserList() {
   const { page, size, query, setQuery, setPage, resetQuery } =
-    useQueryAndPagination({ search: '' }, parseSearch)
+    useQueryAndPagination(parseSearch, { search: '' })
 
   return (
     <div>
@@ -116,10 +116,14 @@ const users = [
 
 export function UserList() {
   const { page, size, query, setQuery, setPage, resetQuery } =
-    useQueryAndPagination({ name: '', age: 0 }, userSchema, {
-      page: 0,
-      size: 4,
-    })
+    useQueryAndPagination:
+      userSchema,
+      { name: '', age: 0 },
+      {
+        page: 0,
+        size: 4,
+      },
+    )
 
   return (
     <div>

@@ -1,6 +1,5 @@
 import { act, renderHook } from '@testing-library/react'
 import { z } from 'zod'
-import { NonNullableRecord } from '../../utils'
 import { useQuery, useQueryAndPagination } from '../../zod/routers/inMemory'
 import { usePagination } from '../inMemory'
 
@@ -10,8 +9,8 @@ describe('InMemory', () => {
   })
 
   const useInMemoryQueryWithSearch = (
-    defaultQuery: NonNullableRecord<z.infer<typeof searchSchema>>,
-  ) => useQuery(defaultQuery, searchSchema)
+    defaultQuery: Partial<z.output<typeof searchSchema>> = {},
+  ) => useQuery(searchSchema, defaultQuery)
 
   test('should set default page and size', () => {
     const page = 0
@@ -53,7 +52,7 @@ describe('InMemory', () => {
     const page = 2
 
     const { result } = renderHook(() =>
-      useQueryAndPagination({ search: '' }, searchSchema),
+      useQueryAndPagination(searchSchema, { search: '' }),
     )
 
     act(() => {
@@ -90,7 +89,7 @@ describe('InMemory', () => {
     const page = 2
 
     const { result } = renderHook(() =>
-      useQueryAndPagination({ search: defaultSearch }, searchSchema),
+      useQueryAndPagination(searchSchema, { search: defaultSearch }),
     )
 
     act(() => {
@@ -125,7 +124,7 @@ describe('InMemory', () => {
     const page = 2
 
     const { result } = renderHook(() =>
-      useQueryAndPagination({ search: defaultSearch }, searchSchema),
+      useQueryAndPagination(searchSchema, { search: defaultSearch }),
     )
 
     act(() => {
@@ -159,7 +158,7 @@ describe('InMemory', () => {
     })
 
     const { result } = renderHook(() =>
-      useQuery({ search: '', department: '' }, schema),
+      useQuery(schema, { search: '', department: '' }),
     )
 
     act(() => {
@@ -178,7 +177,7 @@ describe('InMemory', () => {
     const search = ''
 
     const { result } = renderHook(() =>
-      useQuery({ search: 'Default search' }, searchSchema),
+      useQuery(searchSchema, { search: 'Default search' }),
     )
 
     act(() => {
