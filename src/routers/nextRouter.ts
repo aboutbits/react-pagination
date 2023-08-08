@@ -24,7 +24,7 @@ const useNextRouter = (
   const nextRouter = useRouter()
   const [nextRouterQuery, setNextRouterQuery] = useState<
     typeof nextRouter.query
-  >({})
+  >(nextRouter.isReady ? nextRouter.query : {})
 
   const mergedOptions = useMemo(
     () => ({ ...DEFAULT_NEXT_ROUTER_OPTIONS, ...options }),
