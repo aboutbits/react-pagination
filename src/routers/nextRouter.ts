@@ -55,7 +55,7 @@ const useNextRouter = (
         })
       }
     },
-    isReady: nextRouter.isReady,
+    isQueryReady: nextRouter.isReady,
   }
 }
 
@@ -69,7 +69,7 @@ export const useQuery = <
 ) => {
   const router = useNextRouter(options)
   const result = useAbstractQuery(router, parseQuery, defaultQuery, options)
-  return { ...result, queryIsReady: router.isReady }
+  return { ...result, isQueryReady: router.isQueryReady }
 }
 
 export const useQueryAndPagination = <
@@ -89,7 +89,7 @@ export const useQueryAndPagination = <
     defaultPagination,
     options,
   )
-  return { ...result, queryIsReady: router.isReady }
+  return { ...result, isQueryReady: router.isQueryReady }
 }
 
 export const usePagination = (
@@ -103,7 +103,7 @@ export const usePagination = (
     setSize,
     setPagination,
     resetPagination,
-    queryIsReady,
+    isQueryReady,
   } = useQueryAndPagination(() => ({}), {}, defaultPagination, options)
   return {
     page,
@@ -112,6 +112,6 @@ export const usePagination = (
     setSize,
     setPagination,
     resetPagination,
-    queryIsReady,
+    isQueryReady,
   }
 }

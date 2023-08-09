@@ -35,7 +35,7 @@ export type Router = {
 }
 
 export type RouterSSR = Router & {
-  isReady: boolean
+  isQueryReady: boolean
 }
 
 export const useQuery = (router: Router, defaultQuery: Query) => {
