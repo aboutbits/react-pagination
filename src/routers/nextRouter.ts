@@ -66,7 +66,7 @@ export const useQuery = <TQuery extends AbstractQuery>(
 ) => {
   const router = useNextRouter(options)
   const result = useAbstractQuery(router, parseQuery, defaultQuery, options)
-  return { ...result, isReady: router.isReady }
+  return { ...result, queryIsReady: router.isReady }
 }
 
 export const useQueryAndPagination = <TQuery extends AbstractQuery>(
@@ -83,7 +83,7 @@ export const useQueryAndPagination = <TQuery extends AbstractQuery>(
     defaultPagination,
     options,
   )
-  return { ...result, isReady: router.isReady }
+  return { ...result, queryIsReady: router.isReady }
 }
 
 export const usePagination = (
@@ -97,7 +97,7 @@ export const usePagination = (
     setSize,
     setPagination,
     resetPagination,
-    isReady,
+    queryIsReady,
   } = useQueryAndPagination(() => ({}), {}, defaultPagination, options)
   return {
     page,
@@ -106,6 +106,6 @@ export const usePagination = (
     setSize,
     setPagination,
     resetPagination,
-    isReady,
+    queryIsReady,
   }
 }
