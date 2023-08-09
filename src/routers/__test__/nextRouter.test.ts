@@ -119,6 +119,31 @@ describe('NextRouter', () => {
     expectTypeOf(resultPagination.current.page).toEqualTypeOf<number>()
   })
 
+  test('passing a partial default query should return the default query values as not undefined and the remaining query values as possibly undefined', () => {
+    const querySchema = z.object({
+      role: z.string(),
+      name: z.string(),
+    })
+
+    const { result: resultQueryAndPagination } = renderHook(() =>
+      useQueryAndPagination(querySchema, { role: '' }),
+    )
+    expectTypeOf(
+      resultQueryAndPagination.current.query.role,
+    ).toEqualTypeOf<string>()
+    expectTypeOf(resultQueryAndPagination.current.query.name).toEqualTypeOf<
+      string | undefined
+    >()
+
+    const { result: resultQuery } = renderHook(() =>
+      useQuery(querySchema, { name: '' }),
+    )
+    expectTypeOf(resultQuery.current.query.role).toEqualTypeOf<
+      string | undefined
+    >()
+    expectTypeOf(resultQuery.current.query.name).toEqualTypeOf<string>()
+  })
+
   test('change default parameters', () => {
     const page = 1
     const size = 10

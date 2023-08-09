@@ -16,8 +16,8 @@ export const useQuery = <
   defaultQuery?: TDefaultQuery,
   options?: Partial<AbstractQueryOptions & RouterWithHistoryOptions>,
 ) =>
-  useQueryVanilla<TQuery, TDefaultQuery>(
-    zodParser(schemaQuery),
+  useQueryVanilla(
+    zodParser<TQuery, TSchema>(schemaQuery),
     defaultQuery,
     options,
   )
@@ -33,7 +33,7 @@ export const useQueryAndPagination = <
   options?: Partial<AbstractQueryOptions & RouterWithHistoryOptions>,
 ) =>
   useQueryAndPaginationVanilla(
-    zodParser(schemaQuery),
+    zodParser<TQuery, TSchema>(schemaQuery),
     defaultQuery,
     defaultPagination,
     options,
