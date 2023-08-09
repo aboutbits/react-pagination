@@ -89,6 +89,31 @@ export function UserList() {
 }
 ```
 
+### Example usage with Next.js, zod and no default query
+
+Notice that we let zod take a string and then coerce it to a number. If the coercion fails, we do not stop the whole parsing, but default the property to `undefined`.
+This allows us to still use `departmentId` if it is defined while `userId` is not and vice versa.
+
+```tsx
+import { useQueryAndPagination } from '@aboutbits/react-pagination/dist/zod/routers/nextRouter'
+import { z } from 'zod'
+
+export function Component() {
+  const { page, size, query, setQuery, setPage, resetQuery } =
+    useQueryAndPagination(
+      z.object({
+        departmentId: z
+          .string()
+          .pipe(z.coerce.number().optional())
+          .catch(undefined),
+        userId: z.string().pipe(z.coerce.number().optional()).catch(undefined),
+      }),
+    )
+
+  // ... do something
+}
+```
+
 ### Example usage with React Router and zod
 
 ```tsx
