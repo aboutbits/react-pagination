@@ -52,7 +52,7 @@ export const useAbstractQueryAndPagination = <
 >(
   router: Router,
   parseQuery: ParseQuery<TQuery>,
-  defaultQuery: TDefaultQuery,
+  defaultQuery: TDefaultQuery = {} as TDefaultQuery,
   defaultPagination?: Partial<PaginationQuery>,
   options?: Partial<AbstractQueryOptions>,
 ) => {

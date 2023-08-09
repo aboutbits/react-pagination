@@ -10,18 +10,25 @@ import { RouterWithHistoryOptions } from '../../routers/shared'
 export const useQuery = <
   TSchema extends z.ZodTypeAny,
   TQuery extends z.output<TSchema>,
+  TDefaultQuery extends Partial<TQuery>,
 >(
   schemaQuery: TSchema,
-  defaultQuery: Partial<TQuery> = {},
+  defaultQuery?: TDefaultQuery,
   options?: Partial<AbstractQueryOptions & RouterWithHistoryOptions>,
-) => useQueryVanilla(zodParser(schemaQuery), defaultQuery, options)
+) =>
+  useQueryVanilla<TQuery, TDefaultQuery>(
+    zodParser(schemaQuery),
+    defaultQuery,
+    options,
+  )
 
 export const useQueryAndPagination = <
   TSchema extends z.ZodTypeAny,
   TQuery extends z.output<TSchema>,
+  TDefaultQuery extends Partial<TQuery>,
 >(
   schemaQuery: TSchema,
-  defaultQuery: Partial<TQuery> = {},
+  defaultQuery?: TDefaultQuery,
   defaultPagination?: Partial<PaginationQuery>,
   options?: Partial<AbstractQueryOptions & RouterWithHistoryOptions>,
 ) =>

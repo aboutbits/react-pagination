@@ -38,7 +38,7 @@ export type RouterSSR = Router & {
   isReady: boolean
 }
 
-export const useQuery = <T extends Query>(router: Router, defaultQuery: T) => {
+export const useQuery = (router: Router, defaultQuery: Query) => {
   const resetQuery = useCallback(() => {
     router.setQuery(defaultQuery, defaultQuery)
   }, [router, defaultQuery])
@@ -47,7 +47,7 @@ export const useQuery = <T extends Query>(router: Router, defaultQuery: T) => {
 
   return {
     query,
-    setQuery: (query: Partial<T>) => {
+    setQuery: (query: Query) => {
       router.setQuery(query, defaultQuery)
     },
     resetQuery,
@@ -81,7 +81,7 @@ export const useAbstractQuery = <
 >(
   router: Router,
   parseQuery: ParseQuery<TQuery>,
-  defaultQuery: TDefaultQuery,
+  defaultQuery: TDefaultQuery = {} as TDefaultQuery,
   options?: Partial<AbstractQueryOptions>,
 ) => {
   const mergedOptions = useMemo(

@@ -67,18 +67,24 @@ const useReactRouter = (
   }
 }
 
-export const useQuery = <TQuery extends AbstractQuery>(
+export const useQuery = <
+  TQuery extends AbstractQuery,
+  TDefaultQuery extends Partial<TQuery>,
+>(
   parseQuery: ParseQuery<TQuery>,
-  defaultQuery: Partial<TQuery> = {},
+  defaultQuery?: TDefaultQuery,
   options?: Partial<AbstractQueryOptions & RouterWithHistoryOptions>,
 ) => {
   const router = useReactRouter(options)
   return useAbstractQuery(router, parseQuery, defaultQuery, options)
 }
 
-export const useQueryAndPagination = <TQuery extends AbstractQuery>(
+export const useQueryAndPagination = <
+  TQuery extends AbstractQuery,
+  TDefaultQuery extends Partial<TQuery>,
+>(
   parseQuery: ParseQuery<TQuery>,
-  defaultQuery: Partial<TQuery> = {},
+  defaultQuery?: TDefaultQuery,
   defaultPagination?: Partial<PaginationQuery>,
   options?: Partial<AbstractQueryOptions & RouterWithHistoryOptions>,
 ) => {

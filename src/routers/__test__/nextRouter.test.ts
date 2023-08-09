@@ -1,7 +1,7 @@
 import { act, renderHook } from '@testing-library/react'
 import router from 'next/router'
 import { z } from 'zod'
-import { vi } from 'vitest'
+import { expectTypeOf, vi } from 'vitest'
 import { useQuery, useQueryAndPagination } from '../../zod/routers/nextRouter'
 import { usePagination } from '../nextRouter'
 
@@ -82,9 +82,41 @@ describe('NextRouter', () => {
     })
 
     expect(result.current.query.search).toBe(search)
+    expectTypeOf(result.current.query.search).toEqualTypeOf<string>()
     expect(router.query.search).toBe(search)
     expect(result.current.page).toBe(0)
     expect(router.query.page).toBeUndefined()
+  })
+
+  test('passing no default query should return query values that are possibly undefined', () => {
+    const { result: resultQueryAndPagination } = renderHook(() =>
+      useQueryAndPagination(searchSchema),
+    )
+    expectTypeOf(resultQueryAndPagination.current.query.search).toEqualTypeOf<
+      string | undefined
+    >()
+
+    const { result: resultQuery } = renderHook(() => useQuery(searchSchema))
+    expectTypeOf(resultQuery.current.query.search).toEqualTypeOf<
+      string | undefined
+    >()
+  })
+
+  test('passing a default query should return query values that are not undefined', () => {
+    const { result: resultQueryAndPagination } = renderHook(() =>
+      useQueryAndPagination(searchSchema, { search: '' }),
+    )
+    expectTypeOf(
+      resultQueryAndPagination.current.query.search,
+    ).toEqualTypeOf<string>()
+
+    const { result: resultQuery } = renderHook(() =>
+      useQuery(searchSchema, { search: '' }),
+    )
+    expectTypeOf(resultQuery.current.query.search).toEqualTypeOf<string>()
+
+    const { result: resultPagination } = renderHook(() => usePagination())
+    expectTypeOf(resultPagination.current.page).toEqualTypeOf<number>()
   })
 
   test('change default parameters', () => {
@@ -261,6 +293,7 @@ describe('NextRouter', () => {
     })
 
     expect(result.current.query.search).toBe(search)
+    expectTypeOf(result.current.query.search).toEqualTypeOf<string>()
     expect(router.query.search).toBe(search)
   })
 
@@ -270,6 +303,9 @@ describe('NextRouter', () => {
     )
 
     expect(result.current.query.department).toBeUndefined()
+    expectTypeOf(result.current.query.department).toEqualTypeOf<
+      string | undefined
+    >()
   })
 
   test('the query should be a merge of the default query and the current query', () => {
