@@ -34,6 +34,10 @@ export type Router = {
   setQuery: (query: Partial<Query>, defaultQuery: Query) => void
 }
 
+export type RouterSSR = Router & {
+  isReady: boolean
+}
+
 export const useQuery = <T extends Query>(router: Router, defaultQuery: T) => {
   const resetQuery = useCallback(() => {
     router.setQuery(defaultQuery, defaultQuery)

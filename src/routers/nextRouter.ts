@@ -1,12 +1,12 @@
 import { useRouter } from 'next/router'
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import {
   Query,
   ParseQuery,
   useAbstractQuery,
-  Router,
   AbstractQuery,
   AbstractQueryOptions,
+  RouterSSR,
 } from '../engine/query'
 import {
   PaginationQuery,
@@ -20,27 +20,18 @@ const DEFAULT_NEXT_ROUTER_OPTIONS: RouterWithHistoryOptions = {
 
 const useNextRouter = (
   options: undefined | Partial<RouterWithHistoryOptions>,
-): Router => {
+): RouterSSR => {
   const nextRouter = useRouter()
-  const [nextRouterQuery, setNextRouterQuery] = useState<
-    typeof nextRouter.query
-  >(nextRouter.isReady ? nextRouter.query : {})
 
   const mergedOptions = useMemo(
     () => ({ ...DEFAULT_NEXT_ROUTER_OPTIONS, ...options }),
     [options],
   )
 
-  useEffect(() => {
-    if (nextRouter.isReady) {
-      setNextRouterQuery(nextRouter.query)
-    }
-  }, [nextRouter.isReady, nextRouter.query])
-
   return {
     getQuery: (defaultQuery) => {
       const query: Query = {}
-      for (const [key, value] of Object.entries(nextRouterQuery)) {
+      for (const [key, value] of Object.entries(nextRouter.query)) {
         if (value !== undefined) {
           query[key] = value
         }
@@ -48,7 +39,7 @@ const useNextRouter = (
       return { ...defaultQuery, ...query }
     },
     setQuery: (query, defaultQuery) => {
-      const newQuery = { ...nextRouterQuery, ...query }
+      const newQuery = { ...nextRouter.query, ...query }
       const newQueryWithoutDefaults = Object.fromEntries(
         Object.entries(newQuery).filter(
           ([key, value]) => value !== defaultQuery[key],
@@ -64,6 +55,7 @@ const useNextRouter = (
         })
       }
     },
+    isReady: nextRouter.isReady,
   }
 }
 
@@ -73,7 +65,8 @@ export const useQuery = <TQuery extends AbstractQuery>(
   options?: Partial<AbstractQueryOptions & RouterWithHistoryOptions>,
 ) => {
   const router = useNextRouter(options)
-  return useAbstractQuery(router, parseQuery, defaultQuery, options)
+  const result = useAbstractQuery(router, parseQuery, defaultQuery, options)
+  return { ...result, isReady: router.isReady }
 }
 
 export const useQueryAndPagination = <TQuery extends AbstractQuery>(
@@ -83,20 +76,36 @@ export const useQueryAndPagination = <TQuery extends AbstractQuery>(
   options?: Partial<AbstractQueryOptions & RouterWithHistoryOptions>,
 ) => {
   const router = useNextRouter(options)
-  return useAbstractQueryAndPagination(
+  const result = useAbstractQueryAndPagination(
     router,
     parseQuery,
     defaultQuery,
     defaultPagination,
     options,
   )
+  return { ...result, isReady: router.isReady }
 }
 
 export const usePagination = (
   defaultPagination?: Partial<PaginationQuery>,
   options?: Partial<AbstractQueryOptions & RouterWithHistoryOptions>,
 ) => {
-  const { page, size, setPage, setSize, setPagination, resetPagination } =
-    useQueryAndPagination(() => ({}), {}, defaultPagination, options)
-  return { page, size, setPage, setSize, setPagination, resetPagination }
+  const {
+    page,
+    size,
+    setPage,
+    setSize,
+    setPagination,
+    resetPagination,
+    isReady,
+  } = useQueryAndPagination(() => ({}), {}, defaultPagination, options)
+  return {
+    page,
+    size,
+    setPage,
+    setSize,
+    setPagination,
+    resetPagination,
+    isReady,
+  }
 }
