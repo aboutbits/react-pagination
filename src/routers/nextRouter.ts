@@ -6,7 +6,7 @@ import {
   useAbstractQuery,
   AbstractQuery,
   AbstractQueryOptions,
-  RouterSSR,
+  Router,
 } from '../engine/query'
 import {
   PaginationQuery,
@@ -20,7 +20,7 @@ const DEFAULT_NEXT_ROUTER_OPTIONS: RouterWithHistoryOptions = {
 
 const useNextRouter = (
   options: undefined | Partial<RouterWithHistoryOptions>,
-): RouterSSR => {
+): Router => {
   const nextRouter = useRouter()
 
   const mergedOptions = useMemo(
@@ -55,7 +55,6 @@ const useNextRouter = (
         })
       }
     },
-    isQueryReady: nextRouter.isReady,
   }
 }
 
@@ -68,8 +67,7 @@ export const useQuery = <
   options?: Partial<AbstractQueryOptions & RouterWithHistoryOptions>,
 ) => {
   const router = useNextRouter(options)
-  const result = useAbstractQuery(router, parseQuery, defaultQuery, options)
-  return { ...result, isQueryReady: router.isQueryReady }
+  return useAbstractQuery(router, parseQuery, defaultQuery, options)
 }
 
 export const useQueryAndPagination = <
@@ -82,29 +80,21 @@ export const useQueryAndPagination = <
   options?: Partial<AbstractQueryOptions & RouterWithHistoryOptions>,
 ) => {
   const router = useNextRouter(options)
-  const result = useAbstractQueryAndPagination(
+  return useAbstractQueryAndPagination(
     router,
     parseQuery,
     defaultQuery,
     defaultPagination,
     options,
   )
-  return { ...result, isQueryReady: router.isQueryReady }
 }
 
 export const usePagination = (
   defaultPagination?: Partial<PaginationQuery>,
   options?: Partial<AbstractQueryOptions & RouterWithHistoryOptions>,
 ) => {
-  const {
-    page,
-    size,
-    setPage,
-    setSize,
-    setPagination,
-    resetPagination,
-    isQueryReady,
-  } = useQueryAndPagination(() => ({}), {}, defaultPagination, options)
+  const { page, size, setPage, setSize, setPagination, resetPagination } =
+    useQueryAndPagination(() => ({}), {}, defaultPagination, options)
   return {
     page,
     size,
@@ -112,6 +102,5 @@ export const usePagination = (
     setSize,
     setPagination,
     resetPagination,
-    isQueryReady,
   }
 }
