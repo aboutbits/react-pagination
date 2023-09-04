@@ -1,6 +1,6 @@
 {
   "name": "@aboutbits/react-pagination",
-  "version": "3.0.4",
+  "version": "3.1.0",
   "description": "Pagination hooks for React",
   "engines": {
     "npm": "^8",
