@@ -8,7 +8,6 @@ export type AbstractQueryValueElement =
   | boolean
   | Date
   | bigint
-  | null
 
 export type AbstractQuery = Record<
   string,
@@ -55,7 +54,7 @@ export type AbstractQueryOptions = {
   /**
    * How the abstract query is converted to an actual query.
    *
-   * @default Each value that is not undefined and is converted to a string. `null` is converted to an empty string, while other values are converted calling `String(value)`.
+   * @default Each value that is not undefined is converted to a string by calling `.toString()`.
    */
   convertToQuery: (abstractQuery: Partial<AbstractQuery>) => Query
 }
@@ -65,7 +64,7 @@ const DEFAULT_ABSTRACT_QUERY_OPTIONS: AbstractQueryOptions = {
     const query: Query = {}
     for (const [key, value] of Object.entries(abstractQuery)) {
       if (value !== undefined) {
-        query[key] = value === null ? '' : String(value)
+        query[key] = value.toString()
       }
     }
     return query

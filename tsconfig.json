@@ -1,7 +1,6 @@
 {
   "extends": "@aboutbits/ts-config/react",
   "compilerOptions": {
-    "module": "es2020",
     "moduleResolution": "node",
     "skipLibCheck": true
   },

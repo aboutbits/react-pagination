@@ -5,7 +5,8 @@ import { expectTypeOf, vi } from 'vitest'
 import { useQuery, useQueryAndPagination } from '../../zod/routers/nextRouter'
 import { usePagination } from '../nextRouter'
 
-vi.mock('next/router', async () => await import('next-router-mock'))
+// eslint-disable-next-line @typescript-eslint/no-unsafe-return
+vi.mock('next/router', () => require('next-router-mock'))
 
 describe('NextRouter', () => {
   beforeEach(() => {
