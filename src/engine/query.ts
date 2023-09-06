@@ -35,17 +35,22 @@ export type Router = {
 }
 
 export const useQuery = (router: Router, defaultQuery: Query) => {
+  const query = router.getQuery(defaultQuery)
+
+  const setQuery = useCallback(
+    (query: Query) => {
+      router.setQuery(query, defaultQuery)
+    },
+    [router, defaultQuery],
+  )
+
   const resetQuery = useCallback(() => {
     router.setQuery(defaultQuery, defaultQuery)
   }, [router, defaultQuery])
 
-  const query = router.getQuery(defaultQuery)
-
   return {
     query,
-    setQuery: (query: Query) => {
-      router.setQuery(query, defaultQuery)
-    },
+    setQuery,
     resetQuery,
   }
 }
