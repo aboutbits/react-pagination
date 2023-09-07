@@ -1,5 +1,5 @@
 import { useLocation, useNavigate } from 'react-router-dom'
-import { useMemo } from 'react'
+import { useCallback, useMemo } from 'react'
 import {
   Query,
   AbstractQuery,
@@ -27,8 +27,8 @@ const useReactRouter = (
     [options],
   )
 
-  return {
-    getQuery: (defaultQuery) => {
+  const getQuery = useCallback(
+    (defaultQuery: Query) => {
       const query: Query = {}
       for (const [key, value] of new URLSearchParams(search).entries()) {
         const decodedValues = value
@@ -41,7 +41,11 @@ const useReactRouter = (
       }
       return { ...defaultQuery, ...query }
     },
-    setQuery: (query, defaultQuery) => {
+    [search],
+  )
+
+  const setQuery = useCallback(
+    (query: Partial<Query>, defaultQuery: Query) => {
       const urlSearchParams = new URLSearchParams(search)
       for (const [key, value] of Object.entries(query)) {
         if (value === defaultQuery[key]) {
@@ -64,7 +68,16 @@ const useReactRouter = (
         { replace: mergedOptions.setQueryMethod === 'replace' },
       )
     },
-  }
+    [mergedOptions.setQueryMethod, navigate, pathname, search],
+  )
+
+  return useMemo(
+    () => ({
+      getQuery,
+      setQuery,
+    }),
+    [getQuery, setQuery],
+  )
 }
 
 export const useQuery = <
