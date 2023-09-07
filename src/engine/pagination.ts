@@ -1,3 +1,4 @@
+import { useCallback, useMemo } from 'react'
 import { queryValueToIntOrUndefined } from '../utils'
 import {
   Query,
@@ -56,14 +57,21 @@ export const useAbstractQueryAndPagination = <
   defaultPagination?: Partial<PaginationQuery>,
   options?: Partial<AbstractQueryOptions>,
 ) => {
-  const mergedDefaultPagination = {
-    ...DEFAULT_PAGINATION,
-    ...defaultPagination,
-  }
-  const mergedDefaultQueryAndPagination = {
-    ...defaultQuery,
-    ...mergedDefaultPagination,
-  }
+  const mergedDefaultPagination = useMemo(
+    () => ({
+      ...DEFAULT_PAGINATION,
+      ...defaultPagination,
+    }),
+    [defaultPagination],
+  )
+
+  const mergedDefaultQueryAndPagination = useMemo(
+    () => ({
+      ...defaultQuery,
+      ...mergedDefaultPagination,
+    }),
+    [defaultQuery, mergedDefaultPagination],
+  )
 
   const { query, setQuery } = useAbstractQuery(
     router,
@@ -83,12 +91,8 @@ export const useAbstractQueryAndPagination = <
     options,
   )
 
-  return {
-    query,
-    setQuery: (
-      query: Partial<TQuery>,
-      options?: Partial<ChangeQueryOptions>,
-    ) => {
+  const setQueryWithoutPagination = useCallback(
+    (query: Partial<TQuery>, options?: Partial<ChangeQueryOptions>) => {
       const mergedOptions = { ...DEFAULT_CHANGE_QUERY_OPTIONS, ...options }
       setQuery({
         ...query,
@@ -97,7 +101,11 @@ export const useAbstractQueryAndPagination = <
           : undefined,
       })
     },
-    resetQuery: (options?: Partial<ChangeQueryOptions>) => {
+    [setQuery, mergedDefaultPagination.page],
+  )
+
+  const resetQuery = useCallback(
+    (options?: Partial<ChangeQueryOptions>) => {
       const mergedOptions = { ...DEFAULT_CHANGE_QUERY_OPTIONS, ...options }
       setQuery({
         ...defaultQuery,
@@ -106,18 +114,37 @@ export const useAbstractQueryAndPagination = <
           : undefined,
       })
     },
-    page: pagination.page,
-    size: pagination.size,
-    setPage: (page: PaginationQuery['page']) => {
+    [defaultQuery, mergedDefaultPagination.page, setQuery],
+  )
+
+  const setPage = useCallback(
+    (page: PaginationQuery['page']) => {
       setPagination({ page })
     },
-    setSize: (size: PaginationQuery['size']) => {
+    [setPagination],
+  )
+
+  const setSize = useCallback(
+    (size: PaginationQuery['size']) => {
       setPagination({ size })
     },
+    [setPagination],
+  )
+
+  const resetQueryAndPagination = useCallback(() => {
+    setQuery(mergedDefaultQueryAndPagination)
+  }, [setQuery, mergedDefaultQueryAndPagination])
+
+  return {
+    query,
+    setQuery: setQueryWithoutPagination,
+    resetQuery,
+    page: pagination.page,
+    size: pagination.size,
+    setPage,
+    setSize,
     setPagination,
     resetPagination,
-    resetQueryAndPagination: () => {
-      setQuery(mergedDefaultQueryAndPagination)
-    },
+    resetQueryAndPagination,
   }
 }

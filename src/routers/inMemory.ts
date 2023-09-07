@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import {
   AbstractQuery,
   AbstractQueryOptions,
@@ -13,11 +13,15 @@ import {
 const useInMemoryRouter = (): Router => {
   const [inMemoryQuery, setInMemoryQuery] = useState<Query>({})
 
-  return {
-    getQuery: (defaultQuery) => {
+  const getQuery = useCallback(
+    (defaultQuery: Query) => {
       return { ...defaultQuery, ...inMemoryQuery }
     },
-    setQuery: (query) => {
+    [inMemoryQuery],
+  )
+
+  const setQuery = useCallback(
+    (query: Partial<Query>) => {
       const sanitizedQuery: Query = {}
       for (const [key, value] of Object.entries(query)) {
         if (value !== undefined) {
@@ -26,7 +30,16 @@ const useInMemoryRouter = (): Router => {
       }
       setInMemoryQuery({ ...inMemoryQuery, ...sanitizedQuery })
     },
-  }
+    [inMemoryQuery],
+  )
+
+  return useMemo(
+    () => ({
+      getQuery,
+      setQuery,
+    }),
+    [getQuery, setQuery],
+  )
 }
 
 export const useQuery = <

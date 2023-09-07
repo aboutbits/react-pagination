@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router'
-import { useMemo } from 'react'
+import { useCallback, useMemo } from 'react'
 import {
   Query,
   ParseQuery,
@@ -28,8 +28,8 @@ const useNextRouter = (
     [options],
   )
 
-  return {
-    getQuery: (defaultQuery) => {
+  const getQuery = useCallback(
+    (defaultQuery: Query) => {
       const query: Query = {}
       for (const [key, value] of Object.entries(nextRouter.query)) {
         if (value !== undefined) {
@@ -38,7 +38,11 @@ const useNextRouter = (
       }
       return { ...defaultQuery, ...query }
     },
-    setQuery: (query, defaultQuery) => {
+    [nextRouter.query],
+  )
+
+  const setQuery = useCallback(
+    (query: Partial<Query>, defaultQuery: Query) => {
       const newQuery = { ...nextRouter.query, ...query }
       const newQueryWithoutDefaults = Object.fromEntries(
         Object.entries(newQuery).filter(
@@ -55,7 +59,16 @@ const useNextRouter = (
         })
       }
     },
-  }
+    [nextRouter, mergedOptions],
+  )
+
+  return useMemo(
+    () => ({
+      getQuery,
+      setQuery,
+    }),
+    [getQuery, setQuery],
+  )
 }
 
 export const useQuery = <
