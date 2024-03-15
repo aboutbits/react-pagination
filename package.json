@@ -3,8 +3,8 @@
   "version": "3.0.7",
   "description": "Pagination hooks for React",
   "engines": {
-    "npm": "^8",
-    "node": "^16"
+    "npm": ">=8",
+    "node": ">=16"
   },
   "files": [
     "readme.md",
