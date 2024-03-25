@@ -2,14 +2,35 @@
   "name": "@aboutbits/react-pagination",
   "version": "3.0.8",
   "description": "Pagination hooks for React",
-  "engines": {
-    "npm": ">=8",
-    "node": ">=16"
+  "author": "About Bits",
+  "license": "MIT",
+  "homepage": "https://github.com/aboutbits/react-pagination",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aboutbits/react-pagination"
   },
+  "bugs": {
+    "url": "https://github.com/aboutbits/react-pagination/issues"
+  },
+  "keywords": [
+    "react",
+    "query",
+    "pagination",
+    "zod"
+  ],
+  "private": false,
+  "publishConfig": {
+    "access": "public"
+  },
+  "type": "module",
   "files": [
     "readme.md",
     "dist/**/*"
   ],
+  "engines": {
+    "npm": ">=8",
+    "node": ">=16"
+  },
   "scripts": {
     "build": "rimraf dist && npm run build:esm && npm run build:cjs",
     "build:esm": "tsc -p tsconfig.esm.json",
@@ -26,57 +47,39 @@
     "version": "git add -A src",
     "postversion": "git push && git push --tags"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/aboutbits/react-pagination"
-  },
-  "private": false,
-  "keywords": [
-    "react",
-    "query",
-    "pagination",
-    "zod"
-  ],
-  "author": "About Bits",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/aboutbits/react-pagination/issues"
-  },
-  "homepage": "https://github.com/aboutbits/react-pagination#readme",
-  "publishConfig": {
-    "access": "public"
-  },
   "devDependencies": {
-    "@aboutbits/eslint-config": "^2.0.12",
-    "@aboutbits/prettier-config": "^1.5.0",
-    "@aboutbits/ts-config": "^1.1.2",
-    "@testing-library/jest-dom": "^5.16.5",
-    "@testing-library/react": "^13.4.0",
-    "@types/react": "^18.0.0",
-    "@types/react-dom": "^18.0.0",
+    "@aboutbits/eslint-config": "^2.2.4",
+    "@aboutbits/prettier-config": "^1.6.1",
+    "@aboutbits/ts-config": "^1.1.3",
+    "@testing-library/jest-dom": "^6.4.2",
+    "@testing-library/react": "^14.2.2",
+    "@types/jest": "^29.5.12",
+    "@types/react": "^18.2.70",
+    "@types/react-dom": "^18.2.22",
     "@types/react-router-dom": "^5.3.3",
-    "@typescript-eslint/eslint-plugin": "^6.2.0",
-    "eslint": "^8.45.0",
-    "eslint-plugin-import": "^2.28.0",
-    "eslint-plugin-jsx-a11y": "^6.7.1",
-    "eslint-plugin-prettier": "^5.0.0",
-    "eslint-plugin-react": "^7.33.0",
+    "@typescript-eslint/eslint-plugin": "^7.3.1",
+    "eslint": "^8.57.0",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-jest": "^27.9.0",
+    "eslint-plugin-jsx-a11y": "^6.8.0",
+    "eslint-plugin-prettier": "^5.1.3",
+    "eslint-plugin-react": "^7.34.1",
     "eslint-plugin-react-hooks": "^4.6.0",
-    "eslint-plugin-tailwindcss": "^3.13.0",
-    "jsdom": "^22.1.0",
-    "next": "^13.1.3",
-    "next-router-mock": "^0.7.4",
-    "prettier": "^3.0.0",
-    "react": "^18.0.0",
-    "react-dom": "^18.0.0",
-    "react-router-dom": "^6.7.0",
-    "rimraf": "^5.0.1",
-    "typescript": "^5.1.6",
-    "vite": "^4.4.4",
-    "vitest": "^0.33.0"
+    "eslint-plugin-tailwindcss": "^3.15.1",
+    "jsdom": "^24.0.0",
+    "next": "^14.1.4",
+    "next-router-mock": "^0.9.12",
+    "prettier": "^3.2.5",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.22.3",
+    "rimraf": "^5.0.5",
+    "typescript": "^5.4.3",
+    "vite": "^5.2.6",
+    "vitest": "^1.4.0"
   },
   "peerDependencies": {
-    "next": "^12.0.0 || ^13.0.0",
+    "next": "^12.0.0 || ^13.0.0 || ^14.0.0",
     "react": "^16.0.0 || ^17.0.0 || ^18.0.0",
     "react-router-dom": "^6.0.0",
     "zod": "^3.0.0"
