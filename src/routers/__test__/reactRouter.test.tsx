@@ -47,7 +47,7 @@ describe('ReactRouter', () => {
     })
 
     expect(result.current.page).toBe(page)
-    expect(window.location.search).toBe(`?page=${page}`)
+    expect(window.location.search).toBe(`?page=${page.toString()}`)
   })
 
   test('should change search', () => {
@@ -81,7 +81,9 @@ describe('ReactRouter', () => {
       result.current.setPage(page)
     })
 
-    expect(window.location.search).toBe(`?search=${search}&page=${page}`)
+    expect(window.location.search).toBe(
+      `?search=${search}&page=${page.toString()}`,
+    )
 
     act(() => {
       result.current.resetPagination()
@@ -123,7 +125,9 @@ describe('ReactRouter', () => {
 
     expect(result.current.query.search).toBe(search1)
     expect(result.current.page).toBe(page)
-    expect(window.location.search).toBe(`?search=${search1}&page=${page}`)
+    expect(window.location.search).toBe(
+      `?search=${search1}&page=${page.toString()}`,
+    )
 
     act(() => {
       result.current.setQuery({ search: search2 })
@@ -156,7 +160,7 @@ describe('ReactRouter', () => {
     })
 
     expect(result.current.page).toBe(page)
-    expect(window.location.search).toBe(`?page=${page}`)
+    expect(window.location.search).toBe(`?page=${page.toString()}`)
 
     act(() => {
       result.current.setQuery({ search }, { resetPage: false })
@@ -164,7 +168,9 @@ describe('ReactRouter', () => {
 
     expect(result.current.query.search).toBe(search)
     expect(result.current.page).toBe(page)
-    expect(window.location.search).toBe(`?page=${page}&search=${search}`)
+    expect(window.location.search).toBe(
+      `?page=${page.toString()}&search=${search}`,
+    )
 
     act(() => {
       result.current.resetQuery({ resetPage: false })
@@ -172,7 +178,7 @@ describe('ReactRouter', () => {
 
     expect(result.current.query.search).toBe(defaultSearch)
     expect(result.current.page).toBe(page)
-    expect(window.location.search).toBe(`?page=${page}`)
+    expect(window.location.search).toBe(`?page=${page.toString()}`)
   })
 
   test('setting a query key should not overwrite other query keys', () => {
