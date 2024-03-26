@@ -22,8 +22,7 @@
   "publishConfig": {
     "access": "public"
   },
-  "main": "dist/cjs/index.js",
-  "module": "dist/esm/index.js",
+  "type": "module",
   "prettier": "@aboutbits/prettier-config",
   "files": [
     "readme.md",
