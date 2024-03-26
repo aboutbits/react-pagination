@@ -22,7 +22,8 @@
   "publishConfig": {
     "access": "public"
   },
-  "type": "module",
+  "main": "dist",
+  "module": "dist/esm",
   "prettier": "@aboutbits/prettier-config",
   "files": [
     "readme.md",
