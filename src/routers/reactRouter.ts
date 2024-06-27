@@ -30,8 +30,9 @@ const useReactRouter = (
   const getQuery = useCallback(
     (defaultQuery: Query) => {
       const query: Query = {}
-      for (const key of new URLSearchParams(search).keys()) {
-        const value = new URLSearchParams(search).getAll(key)
+      const urlSearchParams = new URLSearchParams(search)
+      for (const key of urlSearchParams.keys()) {
+        const value = urlSearchParams.getAll(key)
         query[key] = value.length === 1 ? (value[0] as string) : value
       }
       return { ...defaultQuery, ...query }
