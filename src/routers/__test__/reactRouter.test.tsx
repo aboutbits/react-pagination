@@ -20,6 +20,7 @@ describe('ReactRouter', () => {
 
   const searchSchema = z.object({
     search: z.string().optional().catch(undefined),
+    options: z.string().or(z.array(z.string())).optional().catch(undefined),
   })
 
   const useReactRouterQueryWithSearch = (
@@ -225,13 +226,17 @@ describe('ReactRouter', () => {
     )
   })
 
-  test('query keys with default value should not be stored in the url', () => {
-    const defaultSearch = ''
+  test('query keys with default value by reset should not be stored in the url', () => {
+    const defaultSearch = 'Default'
+    const defaultOptions = ['A', 'B']
 
-    window.history.pushState({}, '', `/?search=Max`)
+    window.history.pushState({}, '', `/?search=Max&options=X&options=Y`)
 
     const { result } = renderHookWithContext(() =>
-      useQuery(searchSchema, { search: defaultSearch }),
+      useQuery(searchSchema, {
+        search: defaultSearch,
+        options: defaultOptions,
+      }),
     )
 
     act(() => {
@@ -239,6 +244,32 @@ describe('ReactRouter', () => {
     })
 
     expect(result.current.query.search).toBe(defaultSearch)
+    expect(result.current.query.options).toStrictEqual(defaultOptions)
+    expect(window.location.search).toBe('')
+  })
+
+  test('query keys with default value by set should not be stored in the url', () => {
+    const defaultSearch = 'Default'
+    const defaultOptions = ['A', 'B']
+
+    window.history.pushState({}, '', `/?search=Max&options=X&options=Y`)
+
+    const { result } = renderHookWithContext(() =>
+      useQuery(searchSchema, {
+        search: defaultSearch,
+        options: defaultOptions,
+      }),
+    )
+
+    act(() => {
+      result.current.setQuery({
+        search: defaultSearch,
+        options: defaultOptions,
+      })
+    })
+
+    expect(result.current.query.search).toBe(defaultSearch)
+    expect(result.current.query.options).toStrictEqual(defaultOptions)
     expect(window.location.search).toBe('')
   })
 

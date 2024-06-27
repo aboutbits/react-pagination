@@ -15,6 +15,7 @@ describe('NextRouter', () => {
 
   const searchSchema = z.object({
     search: z.string().optional().catch(undefined),
+    options: z.string().or(z.array(z.string())).optional().catch(undefined),
   })
 
   const useNextRouterQueryWithSearch = (
@@ -289,13 +290,17 @@ describe('NextRouter', () => {
     expect(router.query.greeting).toBe(greeting)
   })
 
-  test('query keys with default value should not be stored in the url', () => {
-    const defaultSearch = ''
+  test('query keys with default value by reset should not be stored in the url', () => {
+    const defaultSearch = 'Default'
+    const defaultOptions = ['A', 'B']
 
-    router.query = { search: 'Max' }
+    router.query = { search: 'Max', options: ['X', 'Y'] }
 
     const { result } = renderHook(() =>
-      useQuery(searchSchema, { search: defaultSearch }),
+      useQuery(searchSchema, {
+        search: defaultSearch,
+        options: defaultOptions,
+      }),
     )
 
     act(() => {
@@ -303,6 +308,32 @@ describe('NextRouter', () => {
     })
 
     expect(result.current.query.search).toBe(defaultSearch)
+    expect(result.current.query.options).toStrictEqual(defaultOptions)
+    expect(router.query.search).toBeUndefined()
+  })
+
+  test('query keys with default value by set should not be stored in the url', () => {
+    const defaultSearch = 'Default'
+    const defaultOptions = ['A', 'B']
+
+    router.query = { search: 'Max', options: ['X', 'Y'] }
+
+    const { result } = renderHook(() =>
+      useQuery(searchSchema, {
+        search: defaultSearch,
+        options: defaultOptions,
+      }),
+    )
+
+    act(() => {
+      result.current.setQuery({
+        search: defaultSearch,
+        options: defaultOptions,
+      })
+    })
+
+    expect(result.current.query.search).toBe(defaultSearch)
+    expect(result.current.query.options).toStrictEqual(defaultOptions)
     expect(router.query.search).toBeUndefined()
   })
 

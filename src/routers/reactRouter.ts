@@ -43,19 +43,26 @@ const useReactRouter = (
     (query: Partial<Query>, defaultQuery: Query) => {
       const urlSearchParams = new URLSearchParams(search)
       for (const [key, value] of Object.entries(query)) {
-        if (value === defaultQuery[key]) {
-          urlSearchParams.delete(key)
-        } else if (value !== undefined) {
-          const [firstValue, ...restValues] = Array.isArray(value)
-            ? value
-            : [value]
+        if (value !== undefined) {
+          const defaultValue = defaultQuery[key]
 
-          if (firstValue !== undefined) {
-            urlSearchParams.set(key, firstValue)
-          }
+          if (
+            defaultValue !== undefined &&
+            value.toString() === defaultValue.toString()
+          ) {
+            urlSearchParams.delete(key)
+          } else {
+            const [firstValue, ...restValues] = Array.isArray(value)
+              ? value
+              : [value]
 
-          for (const restValue of restValues) {
-            urlSearchParams.append(key, restValue)
+            if (firstValue !== undefined) {
+              urlSearchParams.set(key, firstValue)
+            }
+
+            for (const restValue of restValues) {
+              urlSearchParams.append(key, restValue)
+            }
           }
         }
       }
