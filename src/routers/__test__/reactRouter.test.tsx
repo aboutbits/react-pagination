@@ -256,4 +256,28 @@ describe('ReactRouter', () => {
     expect(result.current.query.search).toBe(search)
     expect(window.location.search).toBe(`?search=`)
   })
+
+  test('should handle array query parameters with single and multiple options', () => {
+    const optionsSchema = z.object({
+      options: z.string().or(z.array(z.string())),
+    })
+
+    const { result } = renderHookWithContext(() =>
+      useQuery(optionsSchema, { options: [] }),
+    )
+
+    act(() => {
+      result.current.setQuery({ options: ['A'] })
+    })
+
+    expect(result.current.query.options).toStrictEqual('A')
+    expect(window.location.search).toBe(`?options=A`)
+
+    act(() => {
+      result.current.setQuery({ options: ['A', 'B'] })
+    })
+
+    expect(result.current.query.options).toStrictEqual(['A', 'B'])
+    expect(window.location.search).toBe(`?options=A&options=B`)
+  })
 })
