@@ -15,6 +15,7 @@ describe('NextRouter', () => {
 
   const searchSchema = z.object({
     search: z.string().optional().catch(undefined),
+    options: z.string().or(z.array(z.string())).optional().catch(undefined),
   })
 
   const useNextRouterQueryWithSearch = (
@@ -289,13 +290,17 @@ describe('NextRouter', () => {
     expect(router.query.greeting).toBe(greeting)
   })
 
-  test('query keys with default value should not be stored in the url', () => {
-    const defaultSearch = ''
+  test('query keys with default value by reset should not be stored in the url', () => {
+    const defaultSearch = 'Default'
+    const defaultOptions = ['A', 'B']
 
-    router.query = { search: 'Max' }
+    router.query = { search: 'Max', options: ['X', 'Y'] }
 
     const { result } = renderHook(() =>
-      useQuery(searchSchema, { search: defaultSearch }),
+      useQuery(searchSchema, {
+        search: defaultSearch,
+        options: defaultOptions,
+      }),
     )
 
     act(() => {
@@ -303,6 +308,32 @@ describe('NextRouter', () => {
     })
 
     expect(result.current.query.search).toBe(defaultSearch)
+    expect(result.current.query.options).toStrictEqual(defaultOptions)
+    expect(router.query.search).toBeUndefined()
+  })
+
+  test('query keys with default value by set should not be stored in the url', () => {
+    const defaultSearch = 'Default'
+    const defaultOptions = ['A', 'B']
+
+    router.query = { search: 'Max', options: ['X', 'Y'] }
+
+    const { result } = renderHook(() =>
+      useQuery(searchSchema, {
+        search: defaultSearch,
+        options: defaultOptions,
+      }),
+    )
+
+    act(() => {
+      result.current.setQuery({
+        search: defaultSearch,
+        options: defaultOptions,
+      })
+    })
+
+    expect(result.current.query.search).toBe(defaultSearch)
+    expect(result.current.query.options).toStrictEqual(defaultOptions)
     expect(router.query.search).toBeUndefined()
   })
 
@@ -344,5 +375,29 @@ describe('NextRouter', () => {
 
     expect(result.current.query.department).toBeUndefined()
     expect(result.current.query.role).toBe(defaultRole)
+  })
+
+  test('should handle array query parameters with single and multiple options', () => {
+    const optionsSchema = z.object({
+      options: z.array(z.string()),
+    })
+
+    const { result } = renderHook(() =>
+      useQuery(optionsSchema, { options: [] }),
+    )
+
+    act(() => {
+      result.current.setQuery({ options: ['A'] })
+    })
+
+    expect(result.current.query.options).toStrictEqual(['A'])
+    expect(router.query.options).toStrictEqual(['A'])
+
+    act(() => {
+      result.current.setQuery({ options: ['A', 'B'] })
+    })
+
+    expect(result.current.query.options).toStrictEqual(['A', 'B'])
+    expect(router.query.options).toStrictEqual(['A', 'B'])
   })
 })

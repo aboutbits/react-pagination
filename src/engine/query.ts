@@ -68,8 +68,12 @@ const DEFAULT_ABSTRACT_QUERY_OPTIONS: AbstractQueryOptions = {
   convertToQuery: (abstractQuery) => {
     const query: Query = {}
     for (const [key, value] of Object.entries(abstractQuery)) {
-      if (value !== undefined) {
-        query[key] = value.toString()
+      if (Array.isArray(value)) {
+        query[key] = value.map((v) => v.toString())
+      } else {
+        if (value !== undefined) {
+          query[key] = value.toString()
+        }
       }
     }
     return query

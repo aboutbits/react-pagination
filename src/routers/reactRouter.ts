@@ -10,7 +10,7 @@ import {
   useAbstractQueryAndPagination,
   Router,
 } from '../engine'
-import { QUERY_ARRAY_SEPARATOR, RouterWithHistoryOptions } from './shared'
+import { RouterWithHistoryOptions } from './shared'
 
 const DEFAULT_REACT_ROUTER_OPTIONS: RouterWithHistoryOptions = {
   setQueryMethod: 'replace',
@@ -30,14 +30,10 @@ const useReactRouter = (
   const getQuery = useCallback(
     (defaultQuery: Query) => {
       const query: Query = {}
-      for (const [key, value] of new URLSearchParams(search).entries()) {
-        const decodedValues = value
-          .split(QUERY_ARRAY_SEPARATOR)
-          .map((v) => decodeURIComponent(v))
-        query[key] =
-          decodedValues.length === 1
-            ? (decodedValues[0] as string)
-            : decodedValues
+      const urlSearchParams = new URLSearchParams(search)
+      for (const key of urlSearchParams.keys()) {
+        const value = urlSearchParams.getAll(key)
+        query[key] = value.length === 1 ? (value[0] as string) : value
       }
       return { ...defaultQuery, ...query }
     },
@@ -48,19 +44,27 @@ const useReactRouter = (
     (query: Partial<Query>, defaultQuery: Query) => {
       const urlSearchParams = new URLSearchParams(search)
       for (const [key, value] of Object.entries(query)) {
-        if (value === defaultQuery[key]) {
-          urlSearchParams.delete(key)
-        } else if (value !== undefined) {
-          let values: string[]
-          if (Array.isArray(value)) {
-            values = value
+        if (value !== undefined) {
+          const defaultValue = defaultQuery[key]
+
+          if (
+            defaultValue !== undefined &&
+            value.toString() === defaultValue.toString()
+          ) {
+            urlSearchParams.delete(key)
           } else {
-            values = [value]
+            const [firstValue, ...restValues] = Array.isArray(value)
+              ? value
+              : [value]
+
+            if (firstValue !== undefined) {
+              urlSearchParams.set(key, firstValue)
+            }
+
+            for (const restValue of restValues) {
+              urlSearchParams.append(key, restValue)
+            }
           }
-          const encodedValues = values
-            .map((v) => encodeURIComponent(v))
-            .join(QUERY_ARRAY_SEPARATOR)
-          urlSearchParams.set(key, encodedValues)
         }
       }
       navigate(
