@@ -40,10 +40,6 @@ export type ChangeQueryOptions = {
 
 const DEFAULT_CHANGE_QUERY_OPTIONS: ChangeQueryOptions = { resetPage: true }
 
-const DEFAULT_PARSE_QUERY: ParseQuery<AbstractQuery> = () => ({})
-
-const DEFAULT_QUERY: Partial<AbstractQuery> = {}
-
 const parsePagination = (query: Query): Partial<PaginationQuery> => {
   return {
     page: queryValueToIntOrUndefined(query.page),
@@ -56,8 +52,8 @@ export const useAbstractQueryAndPagination = <
   TDefaultQuery extends Partial<TQuery>,
 >(
   router: Router,
-  parseQuery: ParseQuery<TQuery> = DEFAULT_PARSE_QUERY as ParseQuery<TQuery>,
-  defaultQuery: TDefaultQuery = DEFAULT_QUERY as TDefaultQuery,
+  parseQuery: ParseQuery<TQuery> = () => ({}),
+  defaultQuery: TDefaultQuery = {} as TDefaultQuery,
   defaultPagination?: Partial<PaginationQuery>,
   options?: Partial<AbstractQueryOptions>,
 ) => {
