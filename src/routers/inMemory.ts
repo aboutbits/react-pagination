@@ -77,7 +77,13 @@ export const usePagination = (
   defaultPagination?: Partial<PaginationQuery>,
   options?: Partial<AbstractQueryOptions>,
 ) => {
-  const { page, size, setPage, setSize, setPagination, resetPagination } =
-    useQueryAndPagination(() => ({}), {}, defaultPagination, options)
+  const router = useInMemoryRouter()
+  const { page, size, setPage, setSize, setPagination, resetPagination } =  useAbstractQueryAndPagination(
+    router,
+    undefined,
+    undefined,
+    defaultPagination,
+    options,
+  )
   return { page, size, setPage, setSize, setPagination, resetPagination }
 }
