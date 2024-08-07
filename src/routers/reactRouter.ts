@@ -120,12 +120,13 @@ export const usePagination = (
   options?: Partial<AbstractQueryOptions & RouterWithHistoryOptions>,
 ) => {
   const router = useReactRouter(options)
-  const { page, size, setPage, setSize, setPagination, resetPagination } =  useAbstractQueryAndPagination(
-    router,
-    undefined,
-    undefined,
-    defaultPagination,
-    options,
-  )
+  const { page, size, setPage, setSize, setPagination, resetPagination } =
+    useAbstractQueryAndPagination(
+      router,
+      undefined,
+      undefined,
+      defaultPagination,
+      options,
+    )
   return { page, size, setPage, setSize, setPagination, resetPagination }
 }
