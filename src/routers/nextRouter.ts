@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router'
-import { useCallback, useMemo } from 'react'
+import { useCallback, useMemo, useRef } from 'react'
 import {
   Query,
   ParseQuery,
@@ -23,43 +23,52 @@ const useNextRouter = (
 ): Router => {
   const nextRouter = useRouter()
 
+  // Make sure Next router has a stable reference to use in callbacks
+  const routerRef = useRef(nextRouter)
+  routerRef.current = nextRouter
+
   const mergedOptions = useMemo(
     () => ({ ...DEFAULT_NEXT_ROUTER_OPTIONS, ...options }),
     [options],
   )
 
-  const getQuery = useCallback(
-    (defaultQuery: Query) => {
-      const query: Query = {}
-      for (const [key, value] of Object.entries(nextRouter.query)) {
-        if (value !== undefined) {
-          query[key] = value
-        }
+  const getQuery = useCallback((defaultQuery: Query) => {
+    const query: Query = {}
+    for (const [key, value] of Object.entries(routerRef.current.query)) {
+      if (value !== undefined) {
+        query[key] = value
       }
-      return { ...defaultQuery, ...query }
-    },
-    [nextRouter.query],
-  )
+    }
+    return { ...defaultQuery, ...query }
+  }, [])
 
   const setQuery = useCallback(
     (query: Partial<Query>, defaultQuery: Query) => {
-      const newQuery = { ...nextRouter.query, ...query }
+      const newQuery = { ...routerRef.current.query, ...query }
       const newQueryWithoutDefaults = Object.fromEntries(
         Object.entries(newQuery).filter(
           ([key, value]) => value !== defaultQuery[key],
         ),
       )
       if (mergedOptions.setQueryMethod === 'push') {
-        void nextRouter.push({ query: newQueryWithoutDefaults }, undefined, {
-          shallow: true,
-        })
+        void routerRef.current.push(
+          { query: newQueryWithoutDefaults },
+          undefined,
+          {
+            shallow: true,
+          },
+        )
       } else {
-        void nextRouter.replace({ query: newQueryWithoutDefaults }, undefined, {
-          shallow: true,
-        })
+        void routerRef.current.replace(
+          { query: newQueryWithoutDefaults },
+          undefined,
+          {
+            shallow: true,
+          },
+        )
       }
     },
-    [nextRouter, mergedOptions],
+    [mergedOptions],
   )
 
   return useMemo(
@@ -106,14 +115,14 @@ export const usePagination = (
   defaultPagination?: Partial<PaginationQuery>,
   options?: Partial<AbstractQueryOptions & RouterWithHistoryOptions>,
 ) => {
+  const router = useNextRouter(options)
   const { page, size, setPage, setSize, setPagination, resetPagination } =
-    useQueryAndPagination(() => ({}), {}, defaultPagination, options)
-  return {
-    page,
-    size,
-    setPage,
-    setSize,
-    setPagination,
-    resetPagination,
-  }
+    useAbstractQueryAndPagination(
+      router,
+      undefined,
+      undefined,
+      defaultPagination,
+      options,
+    )
+  return { page, size, setPage, setSize, setPagination, resetPagination }
 }
