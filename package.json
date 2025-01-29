@@ -1,6 +1,6 @@
 {
   "name": "@aboutbits/react-pagination",
-  "version": "3.1.2",
+  "version": "3.1.3-beta.0",
   "description": "Pagination hooks for React",
   "author": "About Bits",
   "license": "MIT",
