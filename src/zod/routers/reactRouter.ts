@@ -1,11 +1,11 @@
 import { z } from 'zod'
-import { PaginationQuery, AbstractQueryOptions } from '../../engine'
+import { AbstractQueryOptions, PaginationQuery } from '../../engine'
 import {
   useQuery as useQueryVanilla,
   useQueryAndPagination as useQueryAndPaginationVanilla,
 } from '../../routers/reactRouter'
-import { zodParser } from '../util'
 import { RouterWithHistoryOptions } from '../../routers/shared'
+import { zodParser } from '../util'
 
 export const useQuery = <
   TSchema extends z.ZodTypeAny,

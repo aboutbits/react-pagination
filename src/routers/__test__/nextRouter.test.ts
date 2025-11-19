@@ -1,7 +1,7 @@
 import { act, renderHook } from '@testing-library/react'
 import router from 'next/router'
-import { z } from 'zod'
 import { expectTypeOf, vi } from 'vitest'
+import { z } from 'zod'
 import { useQuery, useQueryAndPagination } from '../../zod/routers/nextRouter'
 import { usePagination } from '../nextRouter'
 
