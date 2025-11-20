@@ -1,14 +1,14 @@
-import { useLocation, useNavigate } from 'react-router-dom'
 import { useCallback, useMemo } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
 import {
-  Query,
   AbstractQuery,
-  ParseQuery,
   AbstractQueryOptions,
-  useAbstractQuery,
   PaginationQuery,
-  useAbstractQueryAndPagination,
+  ParseQuery,
+  Query,
   Router,
+  useAbstractQuery,
+  useAbstractQueryAndPagination,
 } from '../engine'
 import { RouterWithHistoryOptions } from './shared'
 
@@ -33,7 +33,8 @@ const useReactRouter = (
       const urlSearchParams = new URLSearchParams(search)
       for (const key of urlSearchParams.keys()) {
         const value = urlSearchParams.getAll(key)
-        query[key] = value.length === 1 ? (value[0] as string) : value
+        query[key] =
+          value.length === 1 && value[0] !== undefined ? value[0] : value
       }
       return { ...defaultQuery, ...query }
     },
