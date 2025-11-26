@@ -1,12 +1,12 @@
 import { useCallback, useMemo } from 'react'
 import { queryValueToIntOrUndefined } from '../utils'
 import {
-  Query,
   AbstractQuery,
-  ParseQuery,
-  useAbstractQuery,
-  Router,
   AbstractQueryOptions,
+  ParseQuery,
+  Query,
+  Router,
+  useAbstractQuery,
 } from './query'
 
 export type PaginationQuery = {

@@ -1,17 +1,17 @@
 import { useRouter } from 'next/router'
 import { useCallback, useMemo, useRef } from 'react'
 import {
-  Query,
-  ParseQuery,
-  useAbstractQuery,
-  AbstractQuery,
-  AbstractQueryOptions,
-  Router,
-} from '../engine/query'
-import {
   PaginationQuery,
   useAbstractQueryAndPagination,
 } from '../engine/pagination'
+import {
+  AbstractQuery,
+  AbstractQueryOptions,
+  ParseQuery,
+  Query,
+  Router,
+  useAbstractQuery,
+} from '../engine/query'
 import { RouterWithHistoryOptions } from './shared'
 
 const DEFAULT_NEXT_ROUTER_OPTIONS: RouterWithHistoryOptions = {
