@@ -2,17 +2,7 @@ import { useCallback, useMemo } from 'react'
 
 export type Query = Record<string, string | string[]>
 
-export type AbstractQueryValueElement =
-  | string
-  | number
-  | boolean
-  | Date
-  | bigint
-
-export type AbstractQuery = Record<
-  string,
-  AbstractQueryValueElement | AbstractQueryValueElement[]
->
+export type AbstractQuery = Record<string, unknown>
 
 /**
  * Parses the query.
@@ -59,7 +49,7 @@ export type AbstractQueryOptions = {
   /**
    * How the abstract query is converted to an actual query.
    *
-   * @default Each value that is not undefined is converted to a string by calling `.toString()`.
+   * @default Each value that is not undefined is converted to a string by calling `.toString()` or removed if not stringifyable.
    */
   convertToQuery: (abstractQuery: Partial<AbstractQuery>) => Query
 }
@@ -69,10 +59,19 @@ const DEFAULT_ABSTRACT_QUERY_OPTIONS: AbstractQueryOptions = {
     const query: Query = {}
     for (const [key, value] of Object.entries(abstractQuery)) {
       if (Array.isArray(value)) {
-        query[key] = value.map((v) => v.toString())
+        query[key] = value.map((v: unknown) =>
+          typeof v?.toString === 'function'
+            ? // eslint-disable-next-line @typescript-eslint/no-base-to-string
+              v.toString()
+            : '',
+        )
       } else {
         if (value !== undefined) {
-          query[key] = value.toString()
+          query[key] =
+            typeof value?.toString === 'function'
+              ? // eslint-disable-next-line @typescript-eslint/no-base-to-string
+                value.toString()
+              : ''
         }
       }
     }
