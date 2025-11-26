@@ -2,13 +2,6 @@ import { useCallback, useMemo } from 'react'
 
 export type Query = Record<string, string | string[]>
 
-export type AbstractQueryValueElement =
-  | string
-  | number
-  | boolean
-  | Date
-  | bigint
-
 export type AbstractQuery = Record<string, unknown>
 
 /**
