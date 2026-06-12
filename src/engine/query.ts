@@ -107,7 +107,7 @@ export const useAbstractQuery = <
     let parsed: Partial<TQuery>
     try {
       parsed = parseQuery(query)
-    } catch (e) {
+    } catch {
       parsed = {}
     }
     return {

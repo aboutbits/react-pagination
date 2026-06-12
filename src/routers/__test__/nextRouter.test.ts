@@ -5,8 +5,7 @@ import { z } from 'zod'
 import { useQuery, useQueryAndPagination } from '../../zod/routers/nextRouter'
 import { usePagination } from '../nextRouter'
 
-// eslint-disable-next-line @typescript-eslint/no-unsafe-return
-vi.mock('next/router', () => require('next-router-mock'))
+vi.mock('next/router', () => import('next-router-mock'))
 
 describe('NextRouter', () => {
   beforeEach(() => {
@@ -238,7 +237,7 @@ describe('NextRouter', () => {
     const defaultAge = 42
     const defaultBirthDate = new Date()
     defaultBirthDate.setMilliseconds(0)
-    const defaultNetWorth = BigInt(0xf8ffffffffffffffffffffffffff2fffn)
+    const defaultNetWorth = 0xf8ffffffffffffffffffffffffff2fffn
     const defaultDarkMode = true as boolean
 
     const schema = z.object({
