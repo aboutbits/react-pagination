@@ -25,6 +25,7 @@ const useNextRouter = (
 
   // Make sure Next router has a stable reference to use in callbacks
   const routerRef = useRef(nextRouter)
+  // eslint-disable-next-line react-hooks/refs
   routerRef.current = nextRouter
 
   const mergedOptions = useMemo(
