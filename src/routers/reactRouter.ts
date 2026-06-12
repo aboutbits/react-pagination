@@ -48,10 +48,7 @@ const useReactRouter = (
         if (value !== undefined) {
           const defaultValue = defaultQuery[key]
 
-          if (
-            defaultValue !== undefined &&
-            value.toString() === defaultValue.toString()
-          ) {
+          if (value.toString() === defaultValue?.toString()) {
             urlSearchParams.delete(key)
           } else {
             const [firstValue, ...restValues] = Array.isArray(value)
