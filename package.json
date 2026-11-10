@@ -32,7 +32,7 @@
   ],
   "engines": {
     "npm": ">=10",
-    "node": ">=22"
+    "node": ">=20.9"
   },
   "scripts": {
     "build": "rimraf dist && npm run build:esm && npm run build:cjs",

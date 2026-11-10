@@ -12,8 +12,7 @@ import { zodParser } from '../util'
 
 export const useQuery = <
   TSchema extends z.ZodType<AbstractQuery>,
-  TQuery extends z.output<TSchema>,
-  TDefaultQuery extends Partial<TQuery>,
+  TDefaultQuery extends Partial<z.output<TSchema>>,
 >(
   schemaQuery: TSchema,
   defaultQuery?: TDefaultQuery,
@@ -22,8 +21,7 @@ export const useQuery = <
 
 export const useQueryAndPagination = <
   TSchema extends z.ZodType<AbstractQuery>,
-  TQuery extends z.output<TSchema>,
-  TDefaultQuery extends Partial<TQuery>,
+  TDefaultQuery extends Partial<z.output<TSchema>>,
 >(
   schemaQuery: TSchema,
   defaultQuery?: TDefaultQuery,
