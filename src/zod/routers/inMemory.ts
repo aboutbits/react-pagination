@@ -1,5 +1,9 @@
 import { z } from 'zod'
-import { AbstractQueryOptions, PaginationQuery } from '../../engine'
+import {
+  AbstractQuery,
+  AbstractQueryOptions,
+  PaginationQuery,
+} from '../../engine'
 import {
   useQuery as useQueryVanilla,
   useQueryAndPagination as useQueryAndPaginationVanilla,
@@ -7,22 +11,17 @@ import {
 import { zodParser } from '../util'
 
 export const useQuery = <
-  TSchema extends z.ZodTypeAny,
+  TSchema extends z.ZodType<AbstractQuery>,
   TQuery extends z.output<TSchema>,
   TDefaultQuery extends Partial<TQuery>,
 >(
   schemaQuery: TSchema,
   defaultQuery?: TDefaultQuery,
   options?: Partial<AbstractQueryOptions>,
-) =>
-  useQueryVanilla(
-    zodParser<TQuery, TSchema>(schemaQuery),
-    defaultQuery,
-    options,
-  )
+) => useQueryVanilla(zodParser(schemaQuery), defaultQuery, options)
 
 export const useQueryAndPagination = <
-  TSchema extends z.ZodTypeAny,
+  TSchema extends z.ZodType<AbstractQuery>,
   TQuery extends z.output<TSchema>,
   TDefaultQuery extends Partial<TQuery>,
 >(
@@ -32,7 +31,7 @@ export const useQueryAndPagination = <
   options?: Partial<AbstractQueryOptions>,
 ) =>
   useQueryAndPaginationVanilla(
-    zodParser<TQuery, TSchema>(schemaQuery),
+    zodParser(schemaQuery),
     defaultQuery,
     defaultPagination,
     options,

@@ -9,7 +9,7 @@ Query hooks for React with first-class support for TypeScript! Writing and readi
 
 - [Usage](#usage)
   - [Example usage with Next.js](#example-usage-with-nextjs)
-  - [Example usage with React Router and zod](#example-usage-with-react-router-and-zod)
+  - [Example usage with Next.js and zod](#example-usage-with-nextjs-and-zod)
 - [Build & Publish](#build--publish)
 - [About](#about)
 
@@ -26,9 +26,6 @@ There are a variety of entry points from which to import the hooks `useQuery`, `
 - For the [Next.js](https://nextjs.org/) router:
   - `@aboutbits/react-pagination/next-router`
   - `@aboutbits/react-pagination/next-router/zod`
-- For [React Router](https://reactrouter.com):
-  - `@aboutbits/react-pagination/react-router`
-  - `@aboutbits/react-pagination/react-router/zod`
 - For an in-memory router that does not modify the browser history:
   - `@aboutbits/react-pagination/in-memory`
   - `@aboutbits/react-pagination/in-memory/zod`
@@ -104,9 +101,14 @@ export function Component() {
       z.object({
         departmentId: z
           .string()
-          .pipe(z.coerce.number().optional())
+          .pipe(z.coerce.number<string>())
+          .optional()
           .catch(undefined),
-        userId: z.string().pipe(z.coerce.number().optional()).catch(undefined),
+        userId: z
+          .string()
+          .pipe(z.coerce.number<string>())
+          .optional()
+          .catch(undefined),
       }),
     )
 
@@ -114,10 +116,10 @@ export function Component() {
 }
 ```
 
-### Example usage with React Router and zod
+### Example usage with Next.js and zod
 
 ```tsx
-import { useQueryAndPagination } from '@aboutbits/react-pagination/dist/zod/routers/reactRouter'
+import { useQueryAndPagination } from '@aboutbits/react-pagination/dist/zod/routers/nextRouter'
 import { z } from 'zod'
 
 const userSchema = z.object({
@@ -127,7 +129,7 @@ const userSchema = z.object({
   // This continues the parsing of the remaining query.
   // Another possibility would be to not catch errors, which would cancel the entire parsing
   // if "age" cannot be converted to a number.
-  age: z.string().pipe(z.coerce.number().optional()).catch(undefined),
+  age: z.string().pipe(z.coerce.number<string>()).optional().catch(undefined),
 })
 
 const users = [
@@ -141,7 +143,7 @@ const users = [
 
 export function UserList() {
   const { page, size, query, setQuery, setPage, resetQuery } =
-    useQueryAndPagination:
+    useQueryAndPagination(
       userSchema,
       { name: '', age: 0 },
       {
@@ -202,6 +204,7 @@ export function UserList() {
 To build and publish the package, visit the GitHub Actions page of the repository.
 
 You can choose between two workflows:
+
 - `Release Package` to publish a new version of the package.
 - `Pre-Release Package` to publish a new pre-release version of the package.
 
