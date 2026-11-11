@@ -243,10 +243,26 @@ describe('NextRouter', () => {
     const schema = z.object({
       search: z.string().optional().catch(undefined),
       department: z.string().optional().catch(undefined),
-      age: z.string().pipe(z.coerce.number().optional()).catch(undefined),
-      birthDate: z.string().pipe(z.coerce.date().optional()).catch(undefined),
-      netWorth: z.string().pipe(z.coerce.bigint().optional()).catch(undefined),
-      darkMode: z.string().pipe(z.coerce.boolean().optional()).catch(undefined),
+      age: z
+        .string()
+        .pipe(z.coerce.number<string>())
+        .optional()
+        .catch(undefined),
+      birthDate: z
+        .string()
+        .pipe(z.coerce.date<string>())
+        .optional()
+        .catch(undefined),
+      netWorth: z
+        .string()
+        .pipe(z.coerce.bigint<string>())
+        .optional()
+        .catch(undefined),
+      darkMode: z
+        .string()
+        .pipe(z.coerce.boolean<string>())
+        .optional()
+        .catch(undefined),
     })
 
     const { result } = renderHook(() =>

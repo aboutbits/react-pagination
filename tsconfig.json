@@ -1,8 +1,8 @@
 {
   "extends": "@aboutbits/ts-config/react",
   "compilerOptions": {
-    "module": "es2020",
-    "moduleResolution": "node",
+    "module": "esnext",
+    "moduleResolution": "bundler",
     "skipLibCheck": true
   },
   "exclude": ["node_modules", "dist"],
