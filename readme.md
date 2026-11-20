@@ -32,6 +32,8 @@ There are a variety of entry points from which to import the hooks `useQuery`, `
 
 The hooks exported from `@aboutbits/react-pagination/*/zod` are more convenient when using [zod](https://github.com/colinhacks/zod) for the validation of the query.
 
+`@aboutbits/react-pagination/zod` exports `zodParser`, which turns a zod schema into a `ParseQuery` for use with a custom router.
+
 `useQueryAndPagination` merges the functionality of `useQuery` and `usePagination`. Changing the query resets the page, but changing the page does not reset the query.
 
 Some examples follow, but we recommend having a look at the type definitions for more details about the API.

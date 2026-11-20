@@ -88,6 +88,7 @@
     "./in-memory/zod": "./dist/in-memory/zod.js",
     "./next-router": "./dist/next-router/index.js",
     "./next-router/zod": "./dist/next-router/zod.js",
+    "./zod": "./dist/zod/index.js",
     "./package.json": "./package.json"
   }
 }

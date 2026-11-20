@@ -7,6 +7,7 @@ export default defineConfig({
     'next-router/zod': 'src/zod/routers/nextRouter.ts',
     'in-memory/index': 'src/routers/inMemory.ts',
     'in-memory/zod': 'src/zod/routers/inMemory.ts',
+    'zod/index': 'src/zod/util.ts',
   },
   format: 'esm',
   platform: 'neutral',
