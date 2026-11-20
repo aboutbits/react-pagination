@@ -14,6 +14,8 @@ import {
 } from '../engine/query'
 import { RouterWithHistoryOptions } from './shared'
 
+export type { RouterWithHistoryOptions } from './shared'
+
 const DEFAULT_NEXT_ROUTER_OPTIONS: RouterWithHistoryOptions = {
   setQueryMethod: 'replace',
 }

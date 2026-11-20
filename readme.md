@@ -32,6 +32,8 @@ There are a variety of entry points from which to import the hooks `useQuery`, `
 
 The hooks exported from `@aboutbits/react-pagination/*/zod` are more convenient when using [zod](https://github.com/colinhacks/zod) for the validation of the query.
 
+`@aboutbits/react-pagination/zod` exports `zodParser`, which turns a zod schema into a `ParseQuery` for use with a custom router.
+
 `useQueryAndPagination` merges the functionality of `useQuery` and `usePagination`. Changing the query resets the page, but changing the page does not reset the query.
 
 Some examples follow, but we recommend having a look at the type definitions for more details about the API.
@@ -39,8 +41,8 @@ Some examples follow, but we recommend having a look at the type definitions for
 ### Example usage with Next.js
 
 ```tsx
-import { Query } from '@aboutbits/react-pagination/dist/engine'
-import { useQueryAndPagination } from '@aboutbits/react-pagination/dist/routers/nextRouter'
+import { Query } from '@aboutbits/react-pagination'
+import { useQueryAndPagination } from '@aboutbits/react-pagination/next-router'
 
 const users = ['Alex', 'Simon', 'Natan', 'Nadia', 'Moritz', 'Marie']
 
@@ -92,7 +94,7 @@ Notice that we let zod take a string and then coerce it to a number. If the coer
 This allows us to still use `departmentId` if it is defined while `userId` is not and vice versa.
 
 ```tsx
-import { useQueryAndPagination } from '@aboutbits/react-pagination/dist/zod/routers/nextRouter'
+import { useQueryAndPagination } from '@aboutbits/react-pagination/next-router/zod'
 import { z } from 'zod'
 
 export function Component() {
@@ -119,7 +121,7 @@ export function Component() {
 ### Example usage with Next.js and zod
 
 ```tsx
-import { useQueryAndPagination } from '@aboutbits/react-pagination/dist/zod/routers/nextRouter'
+import { useQueryAndPagination } from '@aboutbits/react-pagination/next-router/zod'
 import { z } from 'zod'
 
 const userSchema = z.object({
