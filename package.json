@@ -23,21 +23,18 @@
     "registry": "https://npm.pkg.github.com",
     "access": "public"
   },
-  "main": "dist",
-  "module": "dist/esm",
+  "type": "module",
   "prettier": "@aboutbits/prettier-config",
   "files": [
     "readme.md",
-    "dist/**/*"
+    "dist"
   ],
   "engines": {
     "npm": ">=11",
     "node": "^26"
   },
   "scripts": {
-    "build": "rimraf dist && npm run build:esm && npm run build:cjs",
-    "build:esm": "tsc -p tsconfig.esm.json",
-    "build:cjs": "tsc -p tsconfig.cjs.json",
+    "build": "tsdown",
     "lint": "eslint --cache",
     "lint:fix": "npm run lint -- --fix",
     "test": "vitest run --passWithNoTests",
@@ -66,7 +63,7 @@
     "prettier": "^3.9.10",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",
-    "rimraf": "^6.1.4",
+    "tsdown": "^0.23.7",
     "typescript": "~6.0.3",
     "vite": "^8.3.7",
     "vitest": "^5.1.0",
@@ -84,5 +81,13 @@
     "zod": {
       "optional": true
     }
+  },
+  "exports": {
+    ".": "./dist/index.js",
+    "./in-memory": "./dist/in-memory/index.js",
+    "./in-memory/zod": "./dist/in-memory/zod.js",
+    "./next-router": "./dist/next-router/index.js",
+    "./next-router/zod": "./dist/next-router/zod.js",
+    "./package.json": "./package.json"
   }
 }

@@ -39,8 +39,8 @@ Some examples follow, but we recommend having a look at the type definitions for
 ### Example usage with Next.js
 
 ```tsx
-import { Query } from '@aboutbits/react-pagination/dist/engine'
-import { useQueryAndPagination } from '@aboutbits/react-pagination/dist/routers/nextRouter'
+import { Query } from '@aboutbits/react-pagination'
+import { useQueryAndPagination } from '@aboutbits/react-pagination/next-router'
 
 const users = ['Alex', 'Simon', 'Natan', 'Nadia', 'Moritz', 'Marie']
 
@@ -92,7 +92,7 @@ Notice that we let zod take a string and then coerce it to a number. If the coer
 This allows us to still use `departmentId` if it is defined while `userId` is not and vice versa.
 
 ```tsx
-import { useQueryAndPagination } from '@aboutbits/react-pagination/dist/zod/routers/nextRouter'
+import { useQueryAndPagination } from '@aboutbits/react-pagination/next-router/zod'
 import { z } from 'zod'
 
 export function Component() {
@@ -119,7 +119,7 @@ export function Component() {
 ### Example usage with Next.js and zod
 
 ```tsx
-import { useQueryAndPagination } from '@aboutbits/react-pagination/dist/zod/routers/nextRouter'
+import { useQueryAndPagination } from '@aboutbits/react-pagination/next-router/zod'
 import { z } from 'zod'
 
 const userSchema = z.object({
