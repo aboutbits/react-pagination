@@ -12,4 +12,8 @@ export default defineConfig({
   platform: 'neutral',
   dts: true,
   exports: true,
+  outputOptions: {
+    // next has no "exports" map, so Node's ESM loader needs the real file name
+    paths: { 'next/router': 'next/router.js' },
+  },
 })
